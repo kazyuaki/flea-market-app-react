@@ -11,3 +11,6 @@ vendor/
 
 # logs
 *.log
+
+# Docker
+docker/mysql/data/
