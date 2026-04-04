@@ -1,14 +1,20 @@
-version: '3.8'
-
 services:
-  app:
-    build: ./backend
+  php:
+    build: ./docker/php
     volumes:
-      - ./backend:/var/www
-    ports:
-      - "8000:8000"
+      - ./api:/var/www
     depends_on:
       - db
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./api:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
 
   db:
     image: mysql:8.0
@@ -17,12 +23,19 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
-
-  frontend:
-    build: ./docker/node
     volumes:
-      - ./frontend:/app
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+
+  node:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./node:/app
+    environment:
+      VITE_API_PROXY_TARGET: http://nginx
     ports:
       - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     stdin_open: true
     tty: true
