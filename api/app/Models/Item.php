@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Item extends Model
+{
+    // アイテムの属性を定義
+    protected $fillable = [
+        'user_id',
+        'name',
+        'brand',
+        'price',
+        'description',
+        'image_url',
+        'condition',
+        'status',
+    ];
+
+    // アイテムの属性の型を定義
+    protected $casts = [
+        'price' => 'integer',
+    ];
+
+    // アイテムとユーザーのリレーション
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // // アイテムとお気に入りのリレーション
+    // public function favorites()
+    // {
+    //     return $this->hasMany(Favorite::class);
+    // }
+
+    // // アイテムとコメントのリレーション
+    // public function comments()
+    // {
+    //     return $this->hasMany(Comment::class);
+    // }
+}
