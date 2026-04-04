@@ -16,10 +16,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('brand')->nullable();
-            $table->integer('price')->unsigned();
+            $table->tinyInteger('price')->unsigned();
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();
-            $table->string('condition')->nullable();
+            $table->tinyInteger('condition')->nullable();
+            $table->string('status')->default('available');
             $table->timestamps();
         });
     }
