@@ -32,15 +32,20 @@ class Item extends Model
         return $this->belongsTo(User::class);
     }
 
-    // // アイテムとお気に入りのリレーション
-    // public function favorites()
-    // {
-    //     return $this->hasMany(Favorite::class);
-    // }
+    // アイテムとお気に入りのリレーション
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
 
-    // // アイテムとコメントのリレーション
-    // public function comments()
-    // {
-    //     return $this->hasMany(Comment::class);
-    // }
+    // アイテムとコメントのリレーション
+    public function comments()
+    {
+        return $this->hasMany('App\\Models\\Comment');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }
