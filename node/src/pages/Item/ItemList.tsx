@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import Header from "../components/Header"
+import Header from "../../components/Header/Header"
 import './ItemList.css'
-import ItemCard from '../components/ItemCard'
+import ItemCard from '../../components/Item/ItemCard'
 
 // 商品の型定義
 type Item = {

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import ItemList from './pages/ItemList'
+import ItemList from './pages/Item/ItemList'
+import ItemDetail from './pages/Item/ItemDetail'
 
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/items" element={<ItemList />} />
+        <Route path="/items/:id" element={<ItemDetail />} />
       </Routes>
     </BrowserRouter>
   )
