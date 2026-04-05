@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
+    use HasFactory;
+
     // アイテムの属性を定義
     protected $fillable = [
         'user_id',

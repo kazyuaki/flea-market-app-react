@@ -84,7 +84,15 @@ export default function ItemList() {
         </div>
 
         <div className="items">
-          {items.length === 0 && (
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : items.length > 0 ? (
+            items.map(item => (
+              <ItemCard key={item.id} item={item} />
+            ))
+          ) : (
             <p className="empty">商品がありません</p>
           )}
         </div>

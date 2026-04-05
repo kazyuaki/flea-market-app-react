@@ -1,3 +1,5 @@
+import noImage from '../assets/noimage.png'
+
 type Item = {
   id: number
   name: string
@@ -10,10 +12,9 @@ export default function ItemCard({ item }: { item: Item }) {
     <div style={{ width: '150px', position: 'relative' }}>
       {/* 画像 */}
       <img
-        src={item.image_url || 'https://via.placeholder.com/150'}
+        src={item.image_url || noImage}
         alt={item.name}
-        width="150"
-        height="150"
+        className="w-[150px] h-[150px] object-cover"
       />
 
       {/* 商品名 */}
@@ -21,14 +22,7 @@ export default function ItemCard({ item }: { item: Item }) {
 
       {/* SOLD */}
       {item.status === 'sold' && (
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          background: 'red',
-          color: 'white',
-          padding: '5px'
-        }}>
+        <div className="absolute top-0 left-0 bg-red-500 text-white text-xs px-2 py-1">
           SOLD
         </div>
       )}
