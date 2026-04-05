@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import Header from "../components/Header"
+import './ItemList.css'
 import ItemCard from '../components/ItemCard'
 
 // 商品の型定義
@@ -61,37 +62,33 @@ export default function ItemList() {
   }, [activeTab])
   
   return (
-    <div>
+    <div className="page">
       <Header />
 
-      {/* タブ */}
-      <div style={{ display: 'flex', gap: '20px' }}>
-        <Link
-          to="/items"
-          style={{ color: activeTab === 'recommend' ? 'red' : 'black' }}
-        >
-          おすすめ
-        </Link>
+      <div className="container">
 
-        <Link
-          to="/items?tab=mylist"
-          style={{ color: activeTab === 'mylist' ? 'red' : 'black' }}
-        >
-          マイリスト
-        </Link>
-      </div>
+        <div className="tabs">
+          <Link
+            to="/items"
+            className={`tab ${activeTab === 'recommend' ? 'active-recommend' : ''}`}
+          >
+            おすすめ
+          </Link>
 
-      {/* 商品一覧 */}
-      <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : items.length > 0 ? (
-          items.map(item => <ItemCard key={item.id} item={item} />)
-        ) : (
-          <p>商品がありません</p>
-        )}
+          <Link
+            to="/items?tab=mylist"
+            className={`tab ${activeTab === 'mylist' ? 'active-mylist' : ''}`}
+          >
+            マイリスト
+          </Link>
+        </div>
+
+        <div className="items">
+          {items.length === 0 && (
+            <p className="empty">商品がありません</p>
+          )}
+        </div>
+        
       </div>
     </div>
   )
