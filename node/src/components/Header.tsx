@@ -1,31 +1,27 @@
 import logo from '../assets/logo.svg'
+import './Header.css'
 
 
 export default function Header() {
   return (
-    <header style={{
-      background: 'black',
-      color: 'white',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '10px 20px'
-    }}>
-      {/* ロゴ */}
-          <img src={logo} alt="ロゴ" />
-          
-      {/* 検索 */}
-      <input
-        type="text"
-        placeholder="なにをお探しですか？"
-        style={{ width: '300px' }}
-      />
+    <header className="header">
+      {/* 左 */}
+      <div className="header-logo-wrap">
+        <img src={logo} alt="ロゴ" className="header-logo" />
+      </div>
 
-      {/* ナビ */}
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <button>ログアウト</button>
-        <button>マイページ</button>
-        <button style={{ background: 'white', color: 'black' }}>出品</button>
+      {/* 右 */}
+      <div className="header-right">
+        <input
+          type="text"
+          placeholder="なにをお探しですか？"
+          className="header-search"
+        />
+        <span className="header-link">ログアウト</span>
+        <span className="header-link">マイページ</span>
+        <button className="header-button" type="button">
+          出品
+        </button>
       </div>
     </header>
   )
