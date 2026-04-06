@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import Header from "../../components/Header/Header"
 // import './ItemDetail.css'
 import noImage from '../../assets/noimage.png'
+import heart from '../../assets/heart.svg'
+import bubble from '../../assets/speech-bubble.png'
 
 // カテゴリーの型定義
 type Category = {
@@ -14,6 +16,7 @@ type Category = {
 type Item = {
   id: number
   name: string
+  brand: string
   price: number
   description: string
   image_url: string
@@ -21,7 +24,13 @@ type Item = {
   status: string
   favorites_count: number
   comments_count: number
+  comments?: {
+    id: number
+    content: string
+    user_name: string
+  }
   categories: Category[]
+  color: string
 }
 
 export default function ItemDetail() {
@@ -32,17 +41,17 @@ export default function ItemDetail() {
 
   useEffect(() => {
     let cancelled = false
-  
+
     const fetchData = async () => {
       try {
         setLoading(true)
         setError(null)
-      
+
         const res = await fetch(`/api/items/${id}`)
         if (!res.ok) throw new Error()
-        
+
         const data = await res.json()
-  
+
         if (!cancelled) {
           setItem(data.data)
         }
@@ -95,8 +104,8 @@ export default function ItemDetail() {
         <div className="flex-1">
 
           {/* 商品名 */}
-          <h1 className="text-2xl font-bold">{item.name}</h1>
-          <p className="text-gray-400 text-sm">ブランド名</p>
+          <h1 className="text-3xl font-bold">{item.name}</h1>
+          <p className="text-gray-500 text-m">{item.brand}</p>
 
           {/* 価格 */}
           <p className="text-xl mt-4">
@@ -106,8 +115,14 @@ export default function ItemDetail() {
 
           {/* アイコン */}
           <div className="flex gap-6 mt-3 text-gray-500">
-            <span>♡ {item.favorites_count}</span>
-            <span>💬 {item.comments_count}</span>
+            <div className='column items-center'>
+              <img src={heart} alt="お気に入り" className="w-5 h-5" />
+              <span> {item.favorites_count}</span>
+            </div>
+            <div>
+              <img src={bubble} alt="コメント" className="w-5 h-5" />
+              <span>{item.comments_count}</span>
+            </div>
           </div>
   
           {/* ボタン */}
@@ -117,27 +132,58 @@ export default function ItemDetail() {
 
           {/* 商品情報 */}
           <div className="mt-6">
-            <h2 className="font-bold mb-2">商品の情報</h2>
+            <h2 className="text-2xl font-bold mb-2">商品説明</h2>
 
-            <div className="text-sm">
-              <p>カテゴリー：{item.categories.map(c => c.name).join(' / ')}</p>
-              <p>商品の状態：{conditionMap[item.condition]}</p>
+            <div className="text-sm mt-5 column gap-8">
+              <p>カラー：{ item.color}</p>
+              <p>{item.description}</p>
+            </div>
+
+            <div className="text-sm mt-10 gap-3">
+              <h2 className="text-xl font-bold mb-5">商品の情報</h2>
+              <div className="flex gap-6">
+                <p className='font-bold'>カテゴリー</p>
+                <p>{item.categories.map(c => c.name).join(' / ')}</p>
+              </div>
+
+              <div className="flex gap-6 mt-5">
+                <p className='font-bold'>商品の状態</p>
+                <p>{conditionMap[item.condition]}</p>
+              </div>
+                <p className="mt-10">{item.description}</p>
             </div>
           </div>
 
           {/* コメント */}
           <div className="mt-8">
-            <h2 className="font-bold mb-2">コメント(1)</h2>
+            <h2 className="text-xl text-gray-600 font-bold mb-2">
+              コメント({item.comments_count})
+            </h2>
 
-            <div className="bg-gray-200 p-3 rounded text-sm">
-              こちらにコメントが入ります。
+            <div className="bg-gray-100 p-3 rounded text-sm">
+              {/* ユーザー情報 */}
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-gray-300 rounded-full" />
+                <p className="font-bold">
+                  {item.comments?.user_name ?? ''}
+                </p>
+              </div>
+
+              {/* コメント本文 */}
+              <p className="text-gray-600">
+                {item.comments?.content ?? ''}
+              </p>
+
             </div>
 
-            <textarea
-              className="w-full border mt-4 p-2 rounded"
-              rows={4}
-              placeholder="コメントを入力"
-            />
+            <div className='mt-3'>
+              <h2 className="font-bold">商品へのコメント</h2>
+              <textarea
+                className="w-full border mt-4 p-2 rounded"
+                rows={4}
+                placeholder="コメントを入力"
+              />
+            </div>
 
             <button className="mt-3 w-full bg-red-500 text-white py-2 rounded">
               コメントを送信する

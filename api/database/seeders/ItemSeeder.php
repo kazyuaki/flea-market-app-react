@@ -17,6 +17,8 @@ class ItemSeeder extends Seeder
             [
                 'name' => '腕時計',
                 'price' => 15000,
+                'color' => 'ブラック',
+                'brand' => 'アルマーニ',
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Armani+Mens+Clock.jpg',
                 'condition' => 1,
@@ -24,6 +26,8 @@ class ItemSeeder extends Seeder
             [
                 'name' => 'HDD',
                 'price' => 5000,
+                'color' => 'シルバー',
+                'brand' => 'Western Digital',
                 'description' => '高速で信頼性の高いハードディスク',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/HDD+Hard+Disk.jpg',
                 'condition' => 2,
@@ -31,6 +35,8 @@ class ItemSeeder extends Seeder
             [
                 'name' => '玉ねぎ3束',
                 'price' => 300,
+                'color' => 'オレンジ',
+                'brand' => null,
                 'description' => '新鮮な玉ねぎ3束のセット',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/iLoveIMG+d.jpg',
                 'condition' => 3,
@@ -38,6 +44,8 @@ class ItemSeeder extends Seeder
             [
                 'name' => '革靴',
                 'price' => 4000,
+                'color' => 'ブラウン',
+                'brand' => 'リーガル',
                 'description' => 'クラシックなデザインの革靴',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Leather+Shoes+Product+Photo.jpg',
                 'condition' => 4,
@@ -45,6 +53,8 @@ class ItemSeeder extends Seeder
             [
                 'name' => 'ノートPC',
                 'price' => 45000,
+                'color' => 'グレー',
+                'brand' => 'Dell',
                 'description' => '高性能なノートパソコン',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Living+Room+Laptop.jpg',
                 'condition' => 1,
@@ -52,6 +62,8 @@ class ItemSeeder extends Seeder
             [
                 'name' => 'マイク',
                 'price' => 8000,
+                'color' => 'ブラック',
+                'brand' => 'Shure',
                 'description' => '高音質のレコーディング用マイク',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Music+Mic+4632231.jpg',
                 'condition' => 2,
@@ -59,6 +71,8 @@ class ItemSeeder extends Seeder
             [
                 'name' => 'ショルダーバッグ',
                 'price' => 3500,
+                'color' => 'ベージュ',
+                'brand' => 'コーチ',
                 'description' => 'おしゃれなショルダーバッグ',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Purse+fashion+pocket.jpg',
                 'condition' => 3,
@@ -73,6 +87,8 @@ class ItemSeeder extends Seeder
             [
                 'name' => 'コーヒーミル',
                 'price' => 4000,
+                'color' => 'シルバー', 
+                'brand' => 'HARIO',
                 'description' => '手動のコーヒーミル',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Waitress+with+Coffee+Grinder.jpg',
                 'condition' => 1,
@@ -80,6 +96,8 @@ class ItemSeeder extends Seeder
             [
                 'name' => 'メイクセット',
                 'price' => 2500,
+                'color' => 'ピンク',
+                'brand' => 'セザンヌ',
                 'description' => '便利なメイクアップセット',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/%E5%A4%96%E5%87%BA%E3%83%A1%E3%82%A4%E3%82%AF%E3%82%A2%E3%83%83%E3%83%95%E3%82%9A%E3%82%BB%E3%83%83%E3%83%88.jpg',
                 'condition' => 2,
@@ -91,16 +109,33 @@ class ItemSeeder extends Seeder
             // 0〜4 → A, 5〜9 → B
             $userId = $index < 5 ? $sellerA->id : $sellerB->id;
 
-            Item::create([
+            $createdItem = Item::create([
                 'user_id' => $userId,
                 'name' => $item['name'],
-                'brand' => null,
+                'brand' => $item['brand'] ?? null,
+                'color' => $item['color'] ?? null,
                 'price' => $item['price'],
                 'description' => $item['description'],
                 'image_url' => $item['image_url'],
                 'condition' => $item['condition'],
                 'status' => 'available',
             ]);
+
+            // カテゴリ割り当て
+            $categoryMap = [
+                '腕時計' => [1],
+                'HDD' => [2],
+                '玉ねぎ3束' => [3],
+                '革靴' => [1],
+                'ノートPC' => [2],
+                'マイク' => [2],
+                'ショルダーバッグ' => [1],
+                'タンブラー' => [4],
+                'コーヒーミル' => [4],
+                'メイクセット' => [1],
+            ];
+
+            $createdItem->categories()->attach($categoryMap[$item['name']] ?? []);
         }
     }
 }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('brand')->nullable();
+            $table->string('color')->nullable();
             $table->integer('price')->unsigned();
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();

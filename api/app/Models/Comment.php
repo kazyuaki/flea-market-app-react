@@ -11,6 +11,7 @@ class Comment extends Model
         'content',
     ];
 
+    // コメントとアイテムのリレーション
     public function item()
     {
         return $this->belongsTo(Item::class);
