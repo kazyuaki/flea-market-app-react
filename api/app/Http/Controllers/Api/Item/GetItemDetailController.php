@@ -10,7 +10,10 @@ class GetItemDetailController extends Controller
 {
     public function __invoke(Request $request, $id)
     {
-        $item = Item::with(['categories'])
+        $item = Item::with([
+            'categories',
+            'comments.user', // コメントとそのユーザー情報を一緒に取得
+        ])
             ->withCount(['favorites', 'comments'])
             ->findOrFail($id);
 
