@@ -1,0 +1,6 @@
+export const CONDITION_MAP: Record<number, string> = {
+  1: '良好',
+  2: '目立った傷や汚れなし',
+  3: 'やや傷や汚れあり',
+  4: '状態が悪い',
+}
