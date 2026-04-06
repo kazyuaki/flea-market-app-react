@@ -14,6 +14,7 @@ type Category = {
 type Item = {
   id: number
   name: string
+  brand: string
   price: number
   description: string
   image_url: string
@@ -21,6 +22,7 @@ type Item = {
   status: string
   favorites_count: number
   comments_count: number
+  // comment: string
   categories: Category[]
 }
 
@@ -32,17 +34,17 @@ export default function ItemDetail() {
 
   useEffect(() => {
     let cancelled = false
-  
+
     const fetchData = async () => {
       try {
         setLoading(true)
         setError(null)
-      
+
         const res = await fetch(`/api/items/${id}`)
         if (!res.ok) throw new Error()
-        
+
         const data = await res.json()
-  
+
         if (!cancelled) {
           setItem(data.data)
         }
@@ -96,7 +98,7 @@ export default function ItemDetail() {
 
           {/* 商品名 */}
           <h1 className="text-2xl font-bold">{item.name}</h1>
-          <p className="text-gray-400 text-sm">ブランド名</p>
+          <p className="text-gray-400 text-sm">{item.brand}</p>
 
           {/* 価格 */}
           <p className="text-xl mt-4">
@@ -130,7 +132,7 @@ export default function ItemDetail() {
             <h2 className="font-bold mb-2">コメント(1)</h2>
 
             <div className="bg-gray-200 p-3 rounded text-sm">
-              こちらにコメントが入ります。
+              <p className="font-bold">{item.comment}</p>
             </div>
 
             <textarea

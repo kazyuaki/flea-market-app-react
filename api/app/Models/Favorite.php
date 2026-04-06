@@ -11,6 +11,7 @@ class Favorite extends Model
         'item_id',
     ];
 
+    // お気に入りとユーザーのリレーション
     public function item()
     {
         return $this->belongsTo(Item::class);

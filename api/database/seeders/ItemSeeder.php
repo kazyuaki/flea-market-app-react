@@ -91,7 +91,7 @@ class ItemSeeder extends Seeder
             // 0〜4 → A, 5〜9 → B
             $userId = $index < 5 ? $sellerA->id : $sellerB->id;
 
-            Item::create([
+            $createdItem = Item::create([
                 'user_id' => $userId,
                 'name' => $item['name'],
                 'brand' => null,
@@ -101,6 +101,22 @@ class ItemSeeder extends Seeder
                 'condition' => $item['condition'],
                 'status' => 'available',
             ]);
+
+            // カテゴリ割り当て
+            $categoryMap = [
+                '腕時計' => [1],
+                'HDD' => [2],
+                '玉ねぎ3束' => [3],
+                '革靴' => [1],
+                'ノートPC' => [2],
+                'マイク' => [2],
+                'ショルダーバッグ' => [1],
+                'タンブラー' => [4],
+                'コーヒーミル' => [4],
+                'メイクセット' => [1],
+            ];
+
+            $createdItem->categories()->attach($categoryMap[$item['name']] ?? []);
         }
     }
 }
