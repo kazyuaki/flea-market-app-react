@@ -11,6 +11,12 @@ class Comment extends Model
         'content',
     ];
 
+    // コメントとユーザーのリレーション
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     // コメントとアイテムのリレーション
     public function item()
     {
