@@ -5,39 +5,15 @@ import Header from "../../components/Header/Header"
 import noImage from '../../assets/noimage.png'
 import heart from '../../assets/heart.svg'
 import bubble from '../../assets/speech-bubble.png'
-
-// カテゴリーの型定義
-type Category = {
-  id: number
-  name: string
-}
-
-// 商品の型定義
-type Item = {
-  id: number
-  name: string
-  brand: string
-  price: number
-  description: string
-  image_url: string
-  condition: number
-  status: string
-  favorites_count: number
-  comments_count: number
-  comments?: {
-    id: number
-    content: string
-    user_name: string
-  }
-  categories: Category[]
-  color: string
-}
+// import type { Category } from '../../types/category'
+import type { Item } from '../../types/item'
 
 export default function ItemDetail() {
   const { id } = useParams()
   const [item, setItem] = useState<Item | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [comment, setComment] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -66,12 +42,41 @@ export default function ItemDetail() {
       }
     }
 
-  fetchData()
+    fetchData()
 
-  return () => {
-    cancelled = true
+    return () => {
+      cancelled = true
+    }
+  }, [id])
+
+  /** コメントを送信 */
+  const handleSubmit = async () => {
+    if (!comment.trim()) return
+
+    try {
+      const res = await fetch(`/api/items/${id}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: comment }),
+      })
+
+      if (!res.ok) throw new Error()
+
+      const newComment = await res.json()
+
+      setItem(prev => prev && {
+        ...prev,
+        comments_count: prev.comments_count + 1,
+        comments: [...prev.comments, newComment],
+      })
+
+      setComment('')
+    } catch {
+      alert('コメント送信失敗')
+    }
   }
-}, [id])
 
   if (loading) return <p>Loading...</p>
 
@@ -160,21 +165,24 @@ export default function ItemDetail() {
               コメント({item.comments_count})
             </h2>
 
-            <div className="bg-gray-100 p-3 rounded text-sm">
-              {/* ユーザー情報 */}
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 bg-gray-300 rounded-full" />
-                <p className="font-bold">
-                  {item.comments?.user_name ?? ''}
+            {item.comments.map(comment => (
+              <div key={comment.id} className="bg-gray-100 p-3 rounded text-sm mb-2">
+                
+                {/* ユーザー情報 */}
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 bg-gray-300 rounded-full" />
+                  <p className="font-bold">
+                    {comment.user.name}
+                  </p>
+                </div>
+            
+                {/* コメント本文 */}
+                <p className="text-gray-600">
+                  {comment.content}
                 </p>
+            
               </div>
-
-              {/* コメント本文 */}
-              <p className="text-gray-600">
-                {item.comments?.content ?? ''}
-              </p>
-
-            </div>
+            ))}
 
             <div className='mt-3'>
               <h2 className="font-bold">商品へのコメント</h2>
@@ -182,10 +190,17 @@ export default function ItemDetail() {
                 className="w-full border mt-4 p-2 rounded"
                 rows={4}
                 placeholder="コメントを入力"
+                value={comment}
+                onChange={e => setComment(e.target.value)}
               />
             </div>
 
-            <button className="mt-3 w-full bg-red-500 text-white py-2 rounded">
+            <button
+              onClick={handleSubmit}
+              disabled={!comment.trim()}
+              className={`mt-3 w-full py-2 rounded text-white ${comment.trim() ? 'bg-red-500' : 'bg-gray-400 cursor-not-allowed'
+              }`}
+            >
               コメントを送信する
             </button>
           </div>
