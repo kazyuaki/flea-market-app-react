@@ -32,10 +32,6 @@ export default function ItemSummary({ item }: Props) {
         </div>
       </div>
 
-      {/* ボタン */}
-      <button className="mt-6 w-full bg-red-500 text-white py-3 rounded">
-        購入手続きへ
-      </button>
     </>
   )
 }

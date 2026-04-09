@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Item\GetItemListController;
 use App\Http\Controllers\Api\Item\GetItemDetailController;
 use App\Http\Controllers\Api\Item\StoreCommentController;
+use App\Http\Controllers\Api\Purchase\GetPurchaseItemController;
 use App\Models\Item;
 use Illuminate\Support\Facades\Route;
 
@@ -10,3 +11,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/items', GetItemListController::class);
 Route::get('/items/{id}', GetItemDetailController::class);
 Route::post('/items/{item}/comments', StoreCommentController::class);
+
+Route::get(('/purchase/{item_id}'), GetPurchaseItemController::class);
