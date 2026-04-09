@@ -1,21 +1,9 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
 import Header from '../components/Header/Header'
 import noimage from '../assets/noimage.png'
+import { useParams } from 'react-router-dom'
+import { usePurchase } from '../hooks/usePurchase'
 
-type Item = {
-  id: number
-  name: string
-  price: number
-  image_url?: string
-}
 
-type Address = {
-  post_code: string
-  address: string
-  building_name: string
-}
 
 /** 購入画面
  *
@@ -26,56 +14,14 @@ type Address = {
  * ・購入処理
  */
 export const PurchasePage = () => {
+  // URLパラメータから商品IDを取得
   const { itemId } = useParams()
+  // カスタムフックから必要な状態と関数を取得
+  const { item, address, loading, error, handlePurchase, paymentMethod, setPaymentMethod } = usePurchase(itemId)
 
-  const [item, setItem] = useState<Item | null>(null)
-  const [paymentMethod, setPaymentMethod] = useState('')
-  const [address, setAddress] = useState<Address>({
-    post_code: '',
-    address: '',
-    building_name: '',
-  })
-
-  // 初期データ取得
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await axios.get(`/api/purchase/${itemId}`)
-      console.log('itemId', itemId)
-      console.log('res', res.data)
-
-      setItem(res.data.item)
-      setAddress({
-        post_code: res.data.user.post_code,
-        address: res.data.user.address,
-        building_name: res.data.user.building_name,
-      })
-    }
-
-    fetchData()
-  }, [itemId])
-
-  // 購入処理
-  const handlePurchase = async () => {
-    if (!paymentMethod) {
-      alert('支払い方法を選択してください')
-      return
-    }
-
-    if (!address.post_code) {
-      alert('住所を設定してください')
-      return
-    }
-
-    await axios.post('/api/purchase', {
-      item_id: item?.id,
-      payment_method: paymentMethod,
-      ...address,
-    })
-
-    alert('購入完了！')
-  }
-
-  if (!item) return <p>Loading...</p>
+  if (loading) return <p>Loading...</p>
+  if(error) return <p className="text-red-500">{error}</p>
+  if (!item) return null
 
 return (
   <>
