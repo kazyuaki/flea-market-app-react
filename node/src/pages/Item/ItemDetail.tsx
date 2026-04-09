@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Header from "../../components/Header/Header"
 import ItemInfo from '../../components/Item/ItemInfo.tsx'
 import CommentList from '../../components/Item/CommentList'
@@ -20,6 +20,7 @@ export default function ItemDetail() {
   const { id } = useParams()
   const { item, setItem, loading, error } = useItemDetail(id) 
   const [comment, setComment] = useState('')
+  const navigate = useNavigate()
 
   /** コメントを送信 */
   const handleSubmit = async () => {
@@ -41,6 +42,12 @@ export default function ItemDetail() {
     }
   }
 
+  /* 購入手続きへ */
+  const handlePurchaseClick = () => {
+    if (!id) return
+    navigate(`/purchase/${id}`)
+  }
+
   /* ローディング / エラー / 空状態の分岐表示 */
   if (loading) return <p>Loading...</p>
   if (error) return <p className="text-red-500">{error}</p>
@@ -60,6 +67,13 @@ export default function ItemDetail() {
         <div className="flex-1">
           {/* 商品概要コンポーネント */}
           <ItemSummary item={item} />
+
+        {/* 購入手続きへ ボタン */}
+          <button
+            onClick={handlePurchaseClick}
+            className="mt-6 w-full bg-red-500 text-white py-3 rounded">
+          購入手続きへ
+        </button>
 
           {/* 商品情報 */}
           <ItemInfo item={item} />
