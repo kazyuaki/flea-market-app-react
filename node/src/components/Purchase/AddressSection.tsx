@@ -19,7 +19,7 @@ export const AddressSection = ({ address, onClick }: Props) => {
             変更する
           </button>
         </div>
-        <p className="mt-3 text-sm">〒{address.post_code}</p>
+        <p className="mt-3 text-sm">〒{address.postal_code}</p>
         <p className="text-sm">{address.address}</p>
         <p className="text-sm">{address.building_name}</p>
       </div> 

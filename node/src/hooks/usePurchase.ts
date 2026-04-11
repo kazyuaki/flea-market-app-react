@@ -10,7 +10,7 @@ export const usePurchase = (itemId?: string) => {
   /** 商品情報、ユーザーの住所情報、支払い方法、ローディング状態、エラー状態を管理する */
   const [item, setItem] = useState<Item | null>(null)
   const [address, setAddress] = useState<Address>({
-    post_code: '',
+    postal_code: '',
     address: '',
     building_name: '',
   })
@@ -30,7 +30,7 @@ export const usePurchase = (itemId?: string) => {
 
         setItem(data.item)
         setAddress({
-          post_code: data.user.post_code,
+          postal_code: data.user.postal_code,
           address: data.user.address,
           building_name: data.user.building_name,
         })
@@ -57,7 +57,7 @@ export const usePurchase = (itemId?: string) => {
       return
     }
 
-    if (!address.post_code) {
+    if (!address.postal_code) {
       alert('住所を設定してください')
       return
     }

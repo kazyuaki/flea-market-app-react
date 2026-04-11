@@ -14,7 +14,7 @@ export const getPurchaseData = async (itemId: string): Promise<{
 export const postPurchase = async (payload: {
   item_id: number
   payment_method: string
-  post_code: string
+  postal_code: string
   address: string
   building_name: string
 }) => {

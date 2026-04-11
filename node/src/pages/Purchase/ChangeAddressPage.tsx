@@ -1,9 +1,14 @@
 import Header from '../../components/Header/Header'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { updateAddress } from '../../api/address'
 
 
 /** 配送先変更画面 */
 export const ChangeAddressPage = () => {
+  const navigate = useNavigate()
+
   // 住所フォームの状態
   const [form, setForm] = useState({
     postal_code: '',
@@ -11,10 +16,32 @@ export const ChangeAddressPage = () => {
     building_name: ''
   })
 
+  // バリデーションエラーの状態
+  const [errors, setErrors] = useState < {
+    postal_code?: string[]
+    address?: string[]
+    building_name?: string[]
+  }>({})
+
+  // エラーがあるかどうか
+  const hasErrors = Object.keys(errors).length > 0
+
   // 住所変更の送信処理
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log(form)
+
+    try {
+      await updateAddress(form)
+      navigate(-1)
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 422) {
+          setErrors(err.response.data.errors)
+        } else {
+          alert('サーバーエラーが発生しました')
+        }
+      }
+    }
   }
 
   return (
@@ -42,6 +69,9 @@ export const ChangeAddressPage = () => {
                         }
                         className="w-full border px-3 py-2 rounded"
                       />
+                      <p className="mt-2 text-sm text-red-500">
+                        {errors.postal_code?.[0]}
+                      </p>
                     </div>
                 
                     {/* 住所 */}
@@ -57,6 +87,9 @@ export const ChangeAddressPage = () => {
                         }
                         className="w-full border px-3 py-2 rounded"
                       />
+                      <p className="mt-2 text-sm text-red-500">
+                        {errors.address?.[0]}
+                      </p>
                     </div>
                 
                   {/* 建物名 */}
@@ -72,13 +105,22 @@ export const ChangeAddressPage = () => {
                         }
                         className="w-full border px-3 py-2 rounded"
                       />
+                      <p className="mt-2 text-sm text-red-500">
+                        {errors.building_name?.[0]}
+                      </p>
                     </div>
 
                   {/* 送信ボタン */}
                   <div className="flex justify-center">
                     <button
-                      type="submit"
-                      className="bg-red-500 text-white px-6 py-3 rounded  hover:bg-red-600 transition-colors"
+                    type="submit"
+                    disabled={hasErrors}
+                    className={`
+                      w-full py-3 rounded font-bold text-white
+                      ${hasErrors
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-red-500 hover:bg-red-600'}
+                    `}
                     >
                       変更を保存
                     </button>
