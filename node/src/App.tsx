@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ItemList from './pages/Item/ItemList'
 import ItemDetail from './pages/Item/ItemDetail'
-import { PurchasePage } from './pages/PurchasePage'
+import { PurchasePage } from './pages/Purchase/PurchasePage'
 
 
 function App() {

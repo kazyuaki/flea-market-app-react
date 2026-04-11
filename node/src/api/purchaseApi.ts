@@ -2,6 +2,7 @@ import axios from 'axios'
 import type { Item } from '../types/item'
 import type { Address } from '../types/address'
 
+/** 購入に関するAPI */
 export const getPurchaseData = async (itemId: string): Promise<{
   item: Item
   user: Address

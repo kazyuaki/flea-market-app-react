@@ -7,6 +7,7 @@ import { getPurchaseData, postPurchase } from '../api/purchaseApi'
 
 /** 購入に関するロジックを管理するカスタムフック */
 export const usePurchase = (itemId?: string) => {
+  /** 商品情報、ユーザーの住所情報、支払い方法、ローディング状態、エラー状態を管理する */
   const [item, setItem] = useState<Item | null>(null)
   const [address, setAddress] = useState<Address>({
     post_code: '',
@@ -17,7 +18,7 @@ export const usePurchase = (itemId?: string) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // 商品とユーザーの住所情報をまとめて取得する
+  /** 商品とユーザーの住所情報をまとめて取得する */
   useEffect(() => {
     if (!itemId) return
 
