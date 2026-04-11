@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import Header from "../../components/Header/Header"
+import Header from "../../components/Layouts/Header/Header"
 import ItemInfo from '../../components/Item/ItemInfo.tsx'
 import CommentList from '../../components/Item/CommentList'
 import CommentForm from '../../components/Item/CommentForm'

@@ -1,4 +1,4 @@
-import Header from '../../components/Header/Header'
+import Header from '../../components/Layouts/Header/Header'
 import { useParams } from 'react-router-dom'
 import { usePurchase } from '../../hooks/usePurchase'
 import { PurchaseItemInfo } from '../../components/Purchase/PurchaseItemInfo'

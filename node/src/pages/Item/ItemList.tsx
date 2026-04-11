@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom'
-import Header from "../../components/Header/Header"
+import Header from "../../components/Layouts/Header/Header"
 import './ItemList.css'
 import { useItemList } from '../../hooks/useItemList'
 import ItemTabs from '../../components/Item/ItemTabs'
