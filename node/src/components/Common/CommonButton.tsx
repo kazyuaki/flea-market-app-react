@@ -7,7 +7,7 @@ type ButtonProps = {
   onClick?: () => void
 }
 
-export const ChangeButton = ({
+export const CommonButton = ({
   children,
   type = 'button',
   disabled = false,
