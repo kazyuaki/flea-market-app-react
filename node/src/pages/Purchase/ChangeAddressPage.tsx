@@ -1,6 +1,6 @@
 import type { SubmitEvent } from "react";
 import { InputField } from "../../components/Common/InputField";
-import { ChangeButton } from "../../components/Address/ChangeButton";
+import { CommonButton } from "../../components/Common/CommonButton";
 import { FormContainer } from "../../components/Common/FormContainer";
 import { FormLayout } from "../../components/Layouts/FormLayout";
 import { useAddressForm } from "../../hooks/useAddressForm";
@@ -51,9 +51,9 @@ export const ChangeAddressPage = () => {
           ))}
 
           {/* 送信ボタン */}
-          <ChangeButton type="submit" disabled={isSubmitDisabled}>
+          <CommonButton type="submit" disabled={isSubmitDisabled}>
             変更を保存
-          </ChangeButton>
+          </CommonButton>
         </form>
       </FormContainer>
     </FormLayout>
