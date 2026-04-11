@@ -6,6 +6,7 @@ import { PaymentSelect } from '../../components/Purchase/PaymentSelect'
 import { AddressSection } from '../../components/Purchase/AddressSection'
 import { PurchaseSummary } from '../../components/Purchase/PurchaseSummary'
 import { PurchaseButton } from '../../components/Purchase/PurchaseButton'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -22,6 +23,13 @@ export const PurchasePage = () => {
   const { itemId } = useParams()
   // カスタムフックから必要な状態と関数を取得
   const { item, address, loading, error, handlePurchase, paymentMethod, setPaymentMethod } = usePurchase(itemId)
+
+  const navigate = useNavigate()
+
+  const handleChangeAddress = () => {
+    if (!itemId) return
+    navigate(`/purchase/address/${itemId}`)
+  }
 
   if (loading) return <p>Loading...</p>
   if(error) return <p className="text-red-500">{error}</p>
@@ -42,7 +50,10 @@ return (
             setPaymentMethod={setPaymentMethod}
           />
           {/* 配送先 */}
-          <AddressSection address={address} />
+          <AddressSection
+            address={address}
+            onClick={handleChangeAddress}
+          />
         </div>
 
         {/* 右エリア */}
