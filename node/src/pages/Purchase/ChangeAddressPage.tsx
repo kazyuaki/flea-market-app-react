@@ -4,31 +4,74 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { updateAddress } from '../../api/address'
 
+type AddressErrors = {
+  postal_code?: string[]
+  address?: string[]
+  building_name?: string[]
+}
+
+type AddressForm = {
+  postal_code: string
+  address: string
+  building_name: string
+}
+
+/** 配送先変更バリデーション */
+const validateAddress = (form: AddressForm): AddressErrors => {
+  const nextErrors: AddressErrors = {}
+
+  if (!form.postal_code.trim()) {
+    nextErrors.postal_code = ['郵便番号を入力してください']
+  } else if (!/^\d{3}-\d{4}$/.test(form.postal_code)) {
+    nextErrors.postal_code = ['郵便番号は「123-4567」の形式で入力してください']
+  }
+
+  if (!form.address.trim()) {
+    nextErrors.address = ['住所を入力してください']
+  } else if (form.address.length > 255) {
+    nextErrors.address = ['住所は255文字以内で入力してください']
+  }
+
+  if (form.building_name.length > 255) {
+    nextErrors.building_name = ['建物名は255文字以内で入力してください']
+  }
+
+  return nextErrors
+}
+
 
 /** 配送先変更画面 */
 export const ChangeAddressPage = () => {
   const navigate = useNavigate()
 
   // 住所フォームの状態
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<AddressForm>({
     postal_code: '',
     address: '',
     building_name: ''
   })
 
   // バリデーションエラーの状態
-  const [errors, setErrors] = useState < {
-    postal_code?: string[]
-    address?: string[]
-    building_name?: string[]
-  }>({})
+  const [errors, setErrors] = useState<AddressErrors>({})
+
+  const clientErrors = validateAddress(form)
+  const displayErrors = {
+    ...clientErrors,
+    ...errors,
+  }
 
   // エラーがあるかどうか
-  const hasErrors = Object.keys(errors).length > 0
+  const hasErrors =
+    Object.keys(clientErrors).length > 0 ||
+    Object.keys(errors).length > 0
 
   // 住所変更の送信処理
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (hasErrors) {
+      return
+    }
 
     try {
       await updateAddress(form)
@@ -64,13 +107,14 @@ export const ChangeAddressPage = () => {
                       <input
                         type="text"
                         value={form.postal_code}
-                        onChange={(e) => 
-                          setForm({ ...form, postal_code: e.target.value})
-                        }
+                        onChange={(e) => {
+                          setForm({ ...form, postal_code: e.target.value })
+                          setErrors((prev) => ({ ...prev, postal_code: undefined }))
+                        }}
                         className="w-full border px-3 py-2 rounded"
                       />
                       <p className="mt-2 text-sm text-red-500">
-                        {errors.postal_code?.[0]}
+                        {displayErrors.postal_code?.[0]}
                       </p>
                     </div>
                 
@@ -82,13 +126,14 @@ export const ChangeAddressPage = () => {
                       <input
                         type="text"
                         value={form.address}
-                        onChange={(e) => 
-                          setForm({ ...form, address: e.target.value})
-                        }
+                        onChange={(e) => {
+                          setForm({ ...form, address: e.target.value })
+                          setErrors((prev) => ({ ...prev, address: undefined }))
+                        }}
                         className="w-full border px-3 py-2 rounded"
                       />
                       <p className="mt-2 text-sm text-red-500">
-                        {errors.address?.[0]}
+                        {displayErrors.address?.[0]}
                       </p>
                     </div>
                 
@@ -100,13 +145,14 @@ export const ChangeAddressPage = () => {
                       <input
                         type="text"
                         value={form.building_name}
-                        onChange={(e) => 
-                          setForm({ ...form, building_name: e.target.value})
-                        }
+                        onChange={(e) => {
+                          setForm({ ...form, building_name: e.target.value })
+                          setErrors((prev) => ({ ...prev, building_name: undefined }))
+                        }}
                         className="w-full border px-3 py-2 rounded"
                       />
                       <p className="mt-2 text-sm text-red-500">
-                        {errors.building_name?.[0]}
+                        {displayErrors.building_name?.[0]}
                       </p>
                     </div>
 
