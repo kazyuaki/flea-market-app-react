@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../lib/axios";
+import { isAxiosError } from "axios";
 import { login as loginApi } from "../api/auth";
 import { usePersistentForm } from "./usePersistentForm";
 import { validateLogin } from "../utils/validation/login";
@@ -73,7 +73,7 @@ export const useLoginForm = () => {
       clearStoredForm();
       return true;
     } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
+      if (isAxiosError(err)) {
         if (err.response?.status === 422) {
           setErrors(err.response.data.errors ?? {});
         } else {

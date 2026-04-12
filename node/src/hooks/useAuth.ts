@@ -13,6 +13,7 @@ export const useAuth = () => {
 
   /** ユーザー情報取得（ログイン状態チェック） */
   const fetchUser = async () => {
+    setLoading(true);
     try {
       const data = await getUser();
       setUser(data);
@@ -31,9 +32,12 @@ export const useAuth = () => {
 
   /** ログアウトする */
   const logout = async () => {
-    await logoutApi();
-    setUser(null);
-  }
+    try {
+      await logoutApi();
+    } finally {
+      setUser(null);
+    }
+  };
 
   useEffect(() => {
     fetchUser();
