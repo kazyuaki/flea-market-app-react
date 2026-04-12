@@ -35,7 +35,7 @@ export const ChangeAddressPage = () => {
   return (
     <FormLayout title="住所変更">
       {/* 住所変更フォーム */}
-      <FormContainer className="max-w-[600px] mx-auto">
+      <FormContainer>
         <form onSubmit={handleSubmitWithRedirect}>
           {/* フォーム入力項目（fieldsから生成） */}
           {/* 郵便番号、住所、建物名（任意） */}
