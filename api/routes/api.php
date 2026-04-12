@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\Item\GetItemListController;
 use App\Http\Controllers\Api\Item\GetItemDetailController;
 use App\Http\Controllers\Api\Item\StoreCommentController;
 use App\Http\Controllers\Api\Purchase\GetPurchaseItemController;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*** ユーザー取得（これ追加）***/
@@ -30,4 +30,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/purchase/address/{item_id}', GetAddressController::class);
     Route::post('/purchase/address', UpdateAddressController::class);
 });
-

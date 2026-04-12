@@ -1,8 +1,18 @@
-import logo from '../../../assets/logo.svg'
-import './Header.css'
-
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../../../assets/logo.svg";
+import "./Header.css";
+import { useAuthContext } from "../../../context/useAuthContext";
 
 export default function Header() {
+  const { logout, user } = useAuthContext();
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
+
   return (
     <header className="header">
       {/* 左 */}
@@ -10,19 +20,40 @@ export default function Header() {
         <img src={logo} alt="ロゴ" className="header-logo" />
       </div>
 
-      {/* 右 */}
-      <div className="header-right">
+      {/* 中央 */}
+      <div className="header-center">
         <input
           type="text"
           placeholder="なにをお探しですか？"
           className="header-search"
         />
-        <span className="header-link">ログアウト</span>
-        <span className="header-link">マイページ</span>
-        <button className="header-button" type="button">
-          出品
-        </button>
+      </div>
+
+      {/* 右 */}
+      <div className="header-right">
+        <div className="header-top-row">
+          <div className="header-nav">
+            {user ? (
+              <button
+                className="header-link-button"
+                type="button"
+                onClick={handleLogout}
+              >
+                ログアウト
+              </button>
+            ) : (
+              <Link to="/login" className="header-link">
+                ログイン
+              </Link>
+            )}
+            <span className="header-link">マイページ</span>
+            <button className="header-button" type="button">
+              出品
+            </button>
+          </div>
+        </div>
+        {user && <div className="header-user-name">{user.name}さん</div>}
       </div>
     </header>
-  )
+  );
 }
