@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../lib/axios";
 import { updateAddress } from "../api/address";
 import { validateAddress } from "../utils/validation/address";
 

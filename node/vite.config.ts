@@ -8,7 +8,18 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/api/auth': {
+        target: apiProxyTarget,
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api\/auth/, '')
+      },
       '/api': {
+        target: apiProxyTarget,
+        changeOrigin: true,
+        secure: false
+      },
+      '/sanctum': {
         target: apiProxyTarget,
         changeOrigin: true,
         secure: false

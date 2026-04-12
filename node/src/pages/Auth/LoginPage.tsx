@@ -26,7 +26,7 @@ export const LoginPage = () => {
     e.preventDefault();
     try {
       await login(form);
-      navigate("/");
+      navigate("/items");
     } catch {
       alert("ログインに失敗しました");
     }

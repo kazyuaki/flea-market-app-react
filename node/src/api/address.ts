@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../lib/axios';
 import type { Address } from '../types/address';
 
 /** 配送先変更API */
