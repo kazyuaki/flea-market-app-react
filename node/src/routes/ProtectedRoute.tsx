@@ -18,5 +18,9 @@ export const ProtectedRoute = ({ children }: Props) => {
     return <Navigate to="/login" replace />;
   }
 
+  if (!user.email_verified_at) {
+    return <Navigate to="/verify-email" replace />;
+  }
+
   return children;
 };

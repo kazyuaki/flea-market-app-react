@@ -8,6 +8,7 @@ import { ChangeAddressPage } from "../pages/Purchase/ChangeAddressPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PublicRoute } from "./PublicRoute";
 import { VerifyPage } from "../pages/Auth/VerifyPage";
+import { ProfilePage } from "../pages/Profile/ProfilePage";
 
 /** アプリケーションのルーティングを定義するコンポーネント */
 export const AppRoutes = () => {
@@ -36,7 +37,10 @@ export const AppRoutes = () => {
       <Route
         path="/verify-email"
         element={
-          <PublicRoute>
+          <PublicRoute
+            allowUnverifiedUser
+            redirectAuthenticatedTo="/mypage/profile"
+          >
             <VerifyPage />
           </PublicRoute>
         }
@@ -66,6 +70,15 @@ export const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <ChangeAddressPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/mypage/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         }
       />

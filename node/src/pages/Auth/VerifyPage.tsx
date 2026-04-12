@@ -2,9 +2,12 @@ import axios from "../../lib/axios";
 import { FormLayout } from "../../components/Layouts/FormLayout";
 import { CommonButton } from "../../components/Common/CommonButton";
 
+const mailhogUrl = import.meta.env.VITE_MAILHOG_URL ?? "http://localhost:8025";
 
 export const VerifyPage = () => {
-
+  const openMailhog = () => {
+    window.open(mailhogUrl, "_blank", "noopener,noreferrer");
+  };
 
   const handleResend = async () => {
     try {
@@ -18,15 +21,16 @@ export const VerifyPage = () => {
   return (
     <FormLayout title="">
       <div className="flex flex-col items-center justify-center text-center space-y-6 mt-20">
-        <p className="text-lg">
+        <p className="text-lg font-bold">
           登録していただいたメールアドレスに認証メールを送付しました。
           <br />
           メール認証を完了してください。
         </p>
 
         <CommonButton
-          onClick={() => window.location.reload()}
-          className="px-6 py-2"
+          onClick={openMailhog}
+          variant="secondary"
+          className="px-6 py-2 w-64"
         >
           認証はこちらから
         </CommonButton>

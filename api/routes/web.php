@@ -13,7 +13,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
-    return redirect('http://localhost:5173/items'); // フロントに戻す
+    return redirect('http://localhost:5173/mypage/profile'); // プロフィール入力へ誘導
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 /** 認証メール再送 */

@@ -9,6 +9,10 @@ use App\Http\Controllers\Api\Purchase\GetPurchaseItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+/*** ログイン中ユーザー取得 ***/
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 /*** 認証関連 ***/
 Route::middleware('auth:sanctum', 'verified')->group(function () {  
