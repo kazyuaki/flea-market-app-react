@@ -3,6 +3,7 @@ type props = {
   value: string
   error?: string
   placeholder?: string
+  type?: "text" | "password" | "email"
   onChange: (value: string) => void
 }
 
@@ -12,6 +13,7 @@ export const InputField = ({
   value,
   error,
   placeholder,
+  type = "text",
   onChange
 }: props) => {
   return (
@@ -20,7 +22,7 @@ export const InputField = ({
         {label}
       </label>
       <input
-        type="text"
+        type={type}
         value={value}
         placeholder={placeholder}
         onChange={(e) => {onChange(e.target.value)}}

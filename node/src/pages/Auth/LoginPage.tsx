@@ -4,63 +4,36 @@ import { CommonButton } from "../../components/Common/CommonButton";
 import { FormLayout } from "../../components/Layouts/FormLayout";
 import { FormContainer } from "../../components/Common/FormContainer";
 import type { SubmitEvent } from "react";
-import { useState } from "react";
 import { useAuthContext } from "../../context/useAuthContext";
-import { usePersistentForm } from "../../hooks/usePersistentForm";
-import axios from "../../lib/axios";
-
-const STORAGE_KEY = "login-form";
-
-const initialForm = {
-  email: "",
-  password: "",
-};
-
-type LoginErrors = {
-  email?: string[];
-  password?: string[];
-};
+import { useLoginForm } from "../../hooks/useLoginForm";
 
 export const LoginPage = () => {
+  /// ナビゲーション、認証コンテキスト、フォームの状態管理をセットアップ
   const navigate = useNavigate();
-  const { login } = useAuthContext();
-  const { form, setForm, clearStoredForm } = usePersistentForm(
-    STORAGE_KEY,
-    initialForm,
-  );
-  const [errors, setErrors] = useState<LoginErrors>({});
-
-  /// フォームの値を更新する
-  const handleChange = (key: "email" | "password", value: string) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-    setErrors((prev) => ({ ...prev, [key]: undefined }));
-  };
+  const { fetchUser } = useAuthContext();
+  const { form, displayErrors, isSubmitDisabled, handleChange, handleSubmit } =
+    useLoginForm();
 
   // フォームの送信処理
-  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+  const handleSubmitWithRedirect = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      await login(form);
-      clearStoredForm();
-      navigate("/items");
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.status === 422) {
-        setErrors(err.response.data.errors ?? {});
-        return;
-      }
+    const success = await handleSubmit();
 
-      alert("ログインに失敗しました");
+    if (success) {
+      await fetchUser();
+      navigate("/items");
     }
   };
 
   return (
     <FormLayout title="ログイン">
       <FormContainer>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmitWithRedirect}>
           <InputField
             label="メールアドレス"
             value={form.email}
-            error={errors.email?.[0]}
+            error={displayErrors.email?.[0]}
+            type="email"
             placeholder="example@email.com"
             onChange={(value) => handleChange("email", value)}
           />
@@ -68,12 +41,13 @@ export const LoginPage = () => {
           <InputField
             label="パスワード"
             value={form.password}
-            error={errors.password?.[0]}
+            error={displayErrors.password?.[0]}
+            type="password"
             placeholder="8文字以上のパスワード"
             onChange={(value) => handleChange("password", value)}
           />
 
-          <CommonButton type="submit">
+          <CommonButton type="submit" disabled={isSubmitDisabled}>
             ログイン
           </CommonButton>
         </form>
