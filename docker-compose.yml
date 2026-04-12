@@ -5,6 +5,7 @@ services:
       - ./api:/var/www
     depends_on:
       - db
+      - mailhog
 
   nginx:
     image: nginx:stable-alpine
@@ -36,6 +37,12 @@ services:
       MYSQL_ROOT_PASSWORD: root
     depends_on:
       - db
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
 
   node:
     image: node:20

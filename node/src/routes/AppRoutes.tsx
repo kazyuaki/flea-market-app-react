@@ -7,6 +7,7 @@ import { PurchasePage } from "../pages/Purchase/PurchasePage";
 import { ChangeAddressPage } from "../pages/Purchase/ChangeAddressPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PublicRoute } from "./PublicRoute";
+import { VerifyPage } from "../pages/Auth/VerifyPage";
 
 /** アプリケーションのルーティングを定義するコンポーネント */
 export const AppRoutes = () => {
@@ -22,7 +23,7 @@ export const AppRoutes = () => {
           </PublicRoute>
         }
       />
-
+      
       <Route
         path="/register"
         element={
@@ -32,6 +33,14 @@ export const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/verify-email"
+        element={
+          <PublicRoute>
+            <VerifyPage />
+          </PublicRoute>
+        }
+      />
       {/* 全ユーザーがアクセス可能 */}
       {/* 商品一覧・詳細 */}
       <Route path="/items" element={<ItemList />} />
