@@ -9,9 +9,11 @@ use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\LoginResponse;
@@ -51,6 +53,28 @@ class FortifyServiceProvider extends ServiceProvider
             };
         });
         
+        Fortify::authenticateUsing(function (Request $request) {
+            $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required', 'min:8'],
+            ], [
+                'email.required' => 'メールアドレスを入力してください。',
+                'email.email' => 'メールアドレスの形式で入力してください。',
+                'password.required' => 'パスワードを入力してください。',
+                'password.min' => 'パスワードは8文字以上で入力してください。',
+            ]);
+
+            if (! Auth::attempt([
+                'email' => $request->email,
+                'password' => $request->password,
+            ])) {
+                throw ValidationException::withMessages([
+                    'email' => ['メールアドレスまたはパスワードが正しくありません。'],
+                ]);
+            }
+
+            return Auth::user();
+        });
 
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);

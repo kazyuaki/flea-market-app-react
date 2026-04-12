@@ -26,6 +26,7 @@ export const register = async (data: {
 
 /** ログアウトする */
 export const logout = async () => {
+  await getCsrfToken();
   const res = await axios.post("/api/auth/logout");
   return res.data;
 };
