@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "../lib/axios";
 import { updateAddress } from "../api/address";
 import { validateAddress } from "../utils/validation/address";
+import { usePersistentForm } from "./usePersistentForm";
 
 /// 住所変更フォームのエラーの型定義
 export type AddressErrors = {
@@ -24,30 +25,13 @@ const initialForm: AddressForm = {
   building_name: "",
 };
 
-const loadStoredForm = (): AddressForm => {
-  const storedForm = localStorage.getItem(STORAGE_KEY);
-
-  if (!storedForm) return initialForm;
-
-  try {
-    const parsed = JSON.parse(storedForm);
-
-    return {
-      postal_code:
-        typeof parsed.postal_code === "string" ? parsed.postal_code : "",
-      address: typeof parsed.address === "string" ? parsed.address : "",
-      building_name:
-        typeof parsed.building_name === "string" ? parsed.building_name : "",
-    };
-  } catch {
-    return initialForm;
-  }
-};
-
 /** 住所変更フォームのロジックを管理するカスタムフック */
 export const useAddressForm = () => {
   // 住所フォームの状態
-  const [form, setForm] = useState<AddressForm>(loadStoredForm);
+  const { form, setForm, clearStoredForm } = usePersistentForm(
+    STORAGE_KEY,
+    initialForm,
+  );
 
   // バリデーションエラーの状態
   const [errors, setErrors] = useState<AddressErrors>({});
@@ -62,10 +46,6 @@ export const useAddressForm = () => {
 
   // クライアント側のバリデーションエラーを取得する関数
   const clientErrors = validateAddress(form);
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
-  }, [form]);
 
   // エラーを取得する関数（入力が触れられたか、または送信された場合にエラーを表示）
   const getError = (key: keyof AddressForm) => {
@@ -105,7 +85,7 @@ export const useAddressForm = () => {
 
     try {
       await updateAddress(form);
-      localStorage.removeItem(STORAGE_KEY);
+      clearStoredForm();
       return true;
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
