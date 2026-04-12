@@ -5,7 +5,9 @@ import { FormLayout } from "../../components/Layouts/FormLayout";
 import { FormContainer } from "../../components/Common/FormContainer";
 import type { SubmitEvent } from "react";
 import { useAuthContext } from "../../context/useAuthContext";
+import type { LoginForm } from "../../hooks/useLoginForm";
 import { useLoginForm } from "../../hooks/useLoginForm";
+import type { Field } from "../../types/form";
 
 export const LoginPage = () => {
   /// ナビゲーション、認証コンテキスト、フォームの状態管理をセットアップ
@@ -13,6 +15,22 @@ export const LoginPage = () => {
   const { fetchUser } = useAuthContext();
   const { form, displayErrors, isSubmitDisabled, handleChange, handleSubmit } =
     useLoginForm();
+  
+  /* フォームフィールドの定義 */
+  const fields: Field<LoginForm>[] = [
+    {
+      name: "email",
+      label: "メールアドレス",
+      type: "email",
+      placeholder: "example@email.com",
+    },
+    {
+      name: "password",
+      label: "パスワード",
+      type: "password",
+      placeholder: "8文字以上のパスワード",
+    },
+  ];
 
   // フォームの送信処理
   const handleSubmitWithRedirect = async (e: SubmitEvent<HTMLFormElement>) => {
@@ -29,23 +47,17 @@ export const LoginPage = () => {
     <FormLayout title="ログイン">
       <FormContainer>
         <form onSubmit={handleSubmitWithRedirect}>
-          <InputField
-            label="メールアドレス"
-            value={form.email}
-            error={displayErrors.email?.[0]}
-            type="email"
-            placeholder="example@email.com"
-            onChange={(value) => handleChange("email", value)}
-          />
-
-          <InputField
-            label="パスワード"
-            value={form.password}
-            error={displayErrors.password?.[0]}
-            type="password"
-            placeholder="8文字以上のパスワード"
-            onChange={(value) => handleChange("password", value)}
-          />
+          {fields.map((field) => (
+            <InputField
+              key={field.name}
+              label={field.label}
+              value={form[field.name]}
+              error={displayErrors[field.name]?.[0]}
+              type={field.type}
+              placeholder={field.placeholder}
+              onChange={(value) => handleChange(field.name, value)}
+            />
+          ))}
 
           <CommonButton type="submit" disabled={isSubmitDisabled}>
             ログイン

@@ -3,4 +3,5 @@ export type Field<T> = {
   label: string;
   placeholder?: string;
   optional?: boolean;
+  type?: "text" | "password" | "email";
 };
