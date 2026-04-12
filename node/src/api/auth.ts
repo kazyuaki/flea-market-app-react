@@ -1,14 +1,14 @@
-import axios from "axios";
+import axios from "../lib/axios";
 
 /** CSRFトークンを取得する */
 export const getCsrfToken = async () => {
-  await axios.get("/api/auth/csrf-cookie");
+  await axios.get("/sanctum/csrf-cookie");
 };
 
 /** ログインする */
 export const login = async (data: { email: string; password: string }) => {
   await getCsrfToken();
-  const res = await axios.post("/login", data);
+  const res = await axios.post("/api/auth/login", data);
   return res.data;
 };
 
@@ -20,13 +20,13 @@ export const register = async (data: {
   password_confirmation: string;
 }) => {
   await getCsrfToken();
-  const res = await axios.post("/register", data);
+  const res = await axios.post("/api/auth/register", data);
   return res.data;
 };
 
 /** ログアウトする */
 export const logout = async () => {
-  const res = await axios.post("/logout");
+  const res = await axios.post("/api/auth/logout");
   return res.data;
 };
 

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../lib/axios";
 
 /** 管理者ログインする */
 export const adminLogin = async (data: {
