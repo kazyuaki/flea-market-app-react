@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../lib/axios";
+import { isAxiosError } from "axios";
 import { updateAddress } from "../api/address";
 import { validateAddress } from "../utils/validation/address";
 import { usePersistentForm } from "./usePersistentForm";
@@ -88,7 +88,7 @@ export const useAddressForm = () => {
       clearStoredForm();
       return true;
     } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
+      if (isAxiosError(err)) {
         if (err.response?.status === 422) {
           setErrors(err.response.data.errors);
         } else {
