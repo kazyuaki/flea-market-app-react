@@ -23,6 +23,11 @@ export default defineConfig({
         target: apiProxyTarget,
         changeOrigin: true,
         secure: false
+      },
+      '/email': {
+        target: apiProxyTarget,
+        changeOrigin: true,
+        secure: false
       }
     }
   }

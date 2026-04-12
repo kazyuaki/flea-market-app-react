@@ -51,7 +51,7 @@ export const RegisterPage = () => {
 
     if (success) {
       await fetchUser();
-      navigate("/items");
+      navigate("/verify-email");
     }
   };
 

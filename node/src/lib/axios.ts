@@ -5,12 +5,16 @@ import axios from "axios";
  * baseURLは環境変数から取得し、withCredentialsをtrueに設定する
  */
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_BASE_URL,
+  baseURL: import.meta.env.VITE_APP_API_BASE_URL ?? "",
   withCredentials: true,
   headers: {
     "X-Requested-With": "XMLHttpRequest",
   }
 })
+
+if (!import.meta.env.VITE_APP_API_BASE_URL) {
+    console.warn("API baseURL is not set");
+}
 
 /**
  * レスポンスインターセプター
