@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { LoginPage } from "../pages/Auth/LoginPage";
+import { RegisterPage } from "../pages/Auth/Register";
 import ItemList from "../pages/Item/ItemList";
 import ItemDetail from "../pages/Item/ItemDetail";
 import { PurchasePage } from "../pages/Purchase/PurchasePage";
@@ -18,6 +19,15 @@ export const AppRoutes = () => {
         element={
           <PublicRoute>
             <LoginPage />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/register"
+        element={
+          <PublicRoute>
+            <RegisterPage />
           </PublicRoute>
         }
       />

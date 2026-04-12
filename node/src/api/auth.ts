@@ -1,4 +1,5 @@
 import axios from "../lib/axios";
+import type { LoginInput, RegisterInput } from "../types/auth";
 
 /** CSRFトークンを取得する */
 export const getCsrfToken = async () => {
@@ -6,19 +7,14 @@ export const getCsrfToken = async () => {
 };
 
 /** ログインする */
-export const login = async (data: { email: string; password: string }) => {
+export const login = async (data: LoginInput) => {
   await getCsrfToken();
   const res = await axios.post("/api/auth/login", data);
   return res.data;
 };
 
 /** ユーザー登録する */
-export const register = async (data: {
-  name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
-}) => {
+export const register = async (data: RegisterInput) => {
   await getCsrfToken();
   const res = await axios.post("/api/auth/register", data);
   return res.data;
