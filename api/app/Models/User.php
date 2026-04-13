@@ -16,8 +16,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
     'email',
     'password',
     'postal_code',
+    'profile_image_url',
+    'is_profile_set',
     'address',
     'building_name',
+    'phone_number',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../context/useAuthContext";
+import { isProfileCompleted } from "../utils/auth";
 
 type Props = {
   children: ReactNode;
@@ -20,6 +21,7 @@ export const PublicRoute = ({
     return null;
   }
 
+  // ユーザーが存在する場合の処理
   if (user) {
     if (!user.email_verified_at && allowUnverifiedUser) {
       return children;
@@ -27,6 +29,10 @@ export const PublicRoute = ({
 
     if (!user.email_verified_at) {
       return <Navigate to="/verify-email" replace />;
+    }
+
+    if (!isProfileCompleted(user)) {
+      return <Navigate to="/mypage/profile" replace />;
     }
 
     return <Navigate to={redirectAuthenticatedTo} replace />;

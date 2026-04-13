@@ -24,6 +24,27 @@ const initialForm: ProfileForm = {
   phone_number: "",
 };
 
+/* プロフィール画像のURLを取得するユーティリティ関数 */
+const getProfileImageUrl = (path: string) => {
+  if (!path) return null;
+
+  if (/^https?:\/\//.test(path)) {
+    return path;
+  }
+
+  const normalizedPath = path
+    .replace(/^https?:\/\/[^/]+/, "")
+    .replace(/^\/?storage\//, "");
+  const apiBaseUrl = import.meta.env.VITE_APP_API_BASE_URL ?? "";
+
+  if (/^https?:\/\//.test(apiBaseUrl)) {
+    const origin = apiBaseUrl.replace(/\/api\/?$/, "");
+    return `${origin}/storage/${normalizedPath}`;
+  }
+
+  return `/storage/${normalizedPath}`;
+};
+
 /** プロフィール編集フォームの状態管理を行うカスタムフック */
 export const useProfileForm = () => {
   const { form, setForm, clearStoredForm } = usePersistentForm(
@@ -93,7 +114,7 @@ export const useProfileForm = () => {
         });
 
         if (user.profile_image_url) {
-          setPreview(`/storage/${user.profile_image_url}`);
+          setPreview(getProfileImageUrl(user.profile_image_url));
         }
       } catch (error) {
         console.error("ユーザーデータの取得に失敗:", error);

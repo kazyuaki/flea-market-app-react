@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import { login as loginApi, logout as logoutApi, getUser } from "../api/auth";
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  email_verified_at: string | null;
-}
+import type { User } from "../types/auth";
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);

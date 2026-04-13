@@ -20,7 +20,9 @@ export default function Header() {
     <header className="header">
       {/* 左 */}
       <div className="header-logo-wrap">
-        <img src={logo} alt="ロゴ" className="header-logo" />
+        <Link to="/items" className="header-logo-link">
+          <img src={logo} alt="ロゴ" className="header-logo" />
+        </Link>
       </div>
 
       {!isVerifyPage && (
@@ -51,7 +53,9 @@ export default function Header() {
                     ログイン
                   </Link>
                 )}
-                <span className="header-link">マイページ</span>
+                <Link to="/mypage/profile" className="header-link">
+                  マイページ
+                </Link>
                 <button className="header-button" type="button">
                   出品
                 </button>
