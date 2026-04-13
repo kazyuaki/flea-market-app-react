@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/useAuthContext";
+import { isProfileCompleted } from "../utils/auth";
 
 type Props = {
   children: ReactNode;
@@ -9,6 +10,7 @@ type Props = {
 /** 認証されたユーザーのみがアクセスできるルートを保護するコンポーネント */
 export const ProtectedRoute = ({ children }: Props) => {
   const { user, loading } = useAuthContext();
+  const location = useLocation();
 
   if (loading) {
     return null;
@@ -20,6 +22,13 @@ export const ProtectedRoute = ({ children }: Props) => {
 
   if (!user.email_verified_at) {
     return <Navigate to="/verify-email" replace />;
+  }
+
+  if (
+    !isProfileCompleted(user) &&
+    location.pathname !== "/mypage/profile"
+  ) {
+    return <Navigate to="/mypage/profile" replace />;
   }
 
   return children;

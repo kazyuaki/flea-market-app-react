@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Address\UpdateAddressController;
 use App\Http\Controllers\Api\Item\GetItemListController;
 use App\Http\Controllers\Api\Item\GetItemDetailController;
 use App\Http\Controllers\Api\Item\StoreCommentController;
+use App\Http\Controllers\Api\Profile\UpdateUserProfileController;
 use App\Http\Controllers\Api\Purchase\GetPurchaseItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,4 +29,7 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
     /**** 配送先関連 ****/
     Route::get('/purchase/address/{item_id}', GetAddressController::class);
     Route::post('/purchase/address', UpdateAddressController::class);
+
+    /**** プロフィール関連 ****/
+    Route::post('/profile', UpdateUserProfileController::class);
 });
