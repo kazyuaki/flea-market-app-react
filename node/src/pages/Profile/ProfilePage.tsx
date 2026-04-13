@@ -1,21 +1,14 @@
-import { useState, type ChangeEvent, type SubmitEvent } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import { FormLayout } from "../../components/Layouts/FormLayout";
 import type { Field } from "../../types/form";
 import type { ProfileInput } from "../../types/profile";
 import { FormContainer } from "../../components/Common/FormContainer";
 import { InputField } from "../../components/Common/InputField";
 import { CommonButton } from "../../components/Common/CommonButton";
+import { useProfileForm } from "../../hooks/useProfileForm";
 
-/** プロフィール入力画面（仮） */
+/** プロフィール入力画面 */
 export const ProfilePage = () => {
-  const [form, setForm] = useState<ProfileInput>({
-    name: "",
-    postal_code: "",
-    address: "",
-    building_name: "",
-    phone_number: "",
-  });
-
   /* フォームフィールドの定義 */
   const fields: Field<ProfileInput>[] = [
     {
@@ -46,28 +39,28 @@ export const ProfilePage = () => {
     },
   ];
 
-  /* 画像アップロード用の状態管理 */
-  const [preview, setPreview] = useState<string | null>(null);
+  const {
+    form,
+    displayErrors,
+    loading,
+    isSubmitDisabled,
+    preview,
+    handleChange,
+    handleImageChange,
+    handleSubmit,
+  } = useProfileForm();
 
-  //* 画像選択時のプレビュー表示 */
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-    }
+  /* 画像入力の変更処理 */
+  const handleImageInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    handleImageChange(e.target.files?.[0] ?? null);
   };
 
-  const handleChange = (name: keyof ProfileInput, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+  /* フォームの送信処理 */
+  const handleSubmitWithRedirect = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    await handleSubmit();
   };
+
 
   return (
     <FormLayout title="プロフィール設定">
@@ -90,18 +83,19 @@ export const ProfilePage = () => {
             <input
               type="file"
               accept="image/*"
-              onChange={handleImageChange}
+              onChange={handleImageInputChange}
               className="hidden"
             />
           </label>
         </div>
 
-        <form onSubmit={handleSubmit} className="mx-auto max-w-[520px]">
+        <form onSubmit={handleSubmitWithRedirect} className="mx-auto max-w-[520px]">
           {fields.map((field) => (
             <InputField
               key={field.name}
               label={field.optional ? `${field.label}（任意）` : field.label}
               value={form[field.name] ?? ""}
+              error={displayErrors[field.name]?.[0]}
               placeholder={field.placeholder}
               type={field.type}
               className="mx-auto"
@@ -109,7 +103,9 @@ export const ProfilePage = () => {
             />
           ))}
 
-          <CommonButton type="submit">更新する</CommonButton>
+          <CommonButton type="submit" disabled={loading || isSubmitDisabled}>
+            {loading ? "更新中..." : "更新する"}
+          </CommonButton>
         </form>
       </FormContainer>
     </FormLayout>
