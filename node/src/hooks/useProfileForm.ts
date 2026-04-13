@@ -42,7 +42,7 @@ const getProfileImageUrl = (path: string) => {
     return `${origin}/storage/${normalizedPath}`;
   }
 
-  return `/storage/${normalizedPath}`;
+  return `http://127.0.0.1:8000/storage/${normalizedPath}`;
 };
 
 /** プロフィール編集フォームの状態管理を行うカスタムフック */
@@ -115,6 +115,7 @@ export const useProfileForm = () => {
 
         if (user.profile_image_url) {
           setPreview(getProfileImageUrl(user.profile_image_url));
+          console.log("プロフィール画像URL:", getProfileImageUrl(user.profile_image_url));
         }
       } catch (error) {
         console.error("ユーザーデータの取得に失敗:", error);
