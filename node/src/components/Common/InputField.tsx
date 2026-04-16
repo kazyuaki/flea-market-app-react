@@ -8,6 +8,7 @@ type props = {
   placeholder?: string
   type?: "text" | "password" | "email"
   className?: string
+  labelClassName?: string
   onChange: (value: string) => void
 }
 
@@ -19,6 +20,7 @@ export const InputField = ({
   placeholder,
   type = "text",
   className = "",
+  labelClassName = "text-xl font-bold",
   onChange
 }: props) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -26,8 +28,8 @@ export const InputField = ({
     type === "password" && isPasswordVisible ? "text" : type;
 
   return (
-    <div className={`mb-8 ${className}`}>
-      <label className="block text-xl font-bold mb-2">
+    <div className={`mb-10 ${className}`}>
+      <label className={`block mb-3 ${labelClassName}`}>
         {label}
       </label>
       <div className="relative">

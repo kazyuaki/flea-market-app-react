@@ -29,7 +29,7 @@ export type ItemForm = {
   brand: string
   description: string
   price: number | ''
-  category_id: number | null
+  category_ids: number[]
   condition: number | null
   images: File[]
 }
