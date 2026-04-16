@@ -9,7 +9,7 @@ export const useExhibitionForm = () => {
     brand: "",
     description: "",
     price: "",
-    category_id: null,
+    category_ids: [],
     condition: null,
     images: [],
   });
