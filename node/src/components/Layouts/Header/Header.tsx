@@ -16,6 +16,10 @@ export default function Header() {
     navigate("/login");
   };
 
+  const onClick = () => {
+    navigate("/sell")
+  };
+
   return (
     <header className="header">
       {/* 左 */}
@@ -56,7 +60,10 @@ export default function Header() {
                 <Link to="/mypage/profile" className="header-link">
                   マイページ
                 </Link>
-                <button className="header-button" type="button">
+                <button
+                  className="header-button" type="button"
+                  onClick={onClick}
+                >
                   出品
                 </button>
               </div>
