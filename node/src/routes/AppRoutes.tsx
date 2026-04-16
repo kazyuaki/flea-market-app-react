@@ -9,6 +9,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { PublicRoute } from "./PublicRoute";
 import { VerifyPage } from "../pages/Auth/VerifyPage";
 import { ProfilePage } from "../pages/Profile/ProfilePage";
+import { SellPage } from "../pages/Sell/SellPage";
 
 /** アプリケーションのルーティングを定義するコンポーネント */
 export const AppRoutes = () => {
@@ -55,7 +56,7 @@ export const AppRoutes = () => {
 
       {/* 認証されたユーザーのみアクセス可能 */}
 
-      {/* 購入画面・住所変更画面 */}
+      {/* 購入画面 */}
       <Route
         path="/purchase/:itemId"
         element={
@@ -65,6 +66,7 @@ export const AppRoutes = () => {
         }
       />
 
+      {/* 配送先変更画面 */}
       <Route
         path="/purchase/address/:itemId"
         element={
@@ -74,6 +76,7 @@ export const AppRoutes = () => {
         }
       />
 
+      {/* マイページ（プロフィール編集） */}
       <Route
         path="/mypage/profile"
         element={
@@ -83,6 +86,17 @@ export const AppRoutes = () => {
         }
       />
 
+      {/* 出品ページ（未実装） */}
+      <Route 
+        path="/sell"
+        element={
+          <ProtectedRoute>
+            <SellPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* その他のパスは商品一覧にリダイレクト */}
       <Route path="*" element={<ItemList />} />
     </Routes>
   );

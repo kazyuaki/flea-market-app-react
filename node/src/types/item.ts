@@ -22,3 +22,14 @@ export type Item = {
   categories: Category[]
   color: string
 }
+
+/** 商品出品フォームの型定義 */
+export type ItemForm = {
+  name: string
+  brand: string
+  description: string
+  price: number | ''
+  category_id: number | null
+  condition: number | null
+  images: File[]
+}
