@@ -1,38 +1,39 @@
-import type { ChangeEvent } from "react"
-import axios from "../../lib/axios"
-import { CommonButton } from "../../components/Common/CommonButton"
-import { CurrencyInputField } from "../../components/Common/CurrencyInputField"
-import { FormContainer } from "../../components/Common/FormContainer"
-import { ImageUploadField } from "../../components/Common/ImageUploadField"
-import { InputField } from "../../components/Common/InputField"
-import { SelectField } from "../../components/Common/SelectField"
-import { TextareaField } from "../../components/Common/TextareaField"
-import { FormLayout } from "../../components/Layouts/FormLayout"
-import { useExhibitionForm } from "../../hooks/useExhibitionForm"
-import { CATEGORY_OPTIONS } from "../../constants/category/category"
-import { CONDITION_OPTIONS } from "../../constants/condition/item"
-import { CategorySelect } from "../../components/Common/CategorySelect"
+import type { ChangeEvent } from "react";
+import axios from "../../lib/axios";
+import { CommonButton } from "../../components/Common/CommonButton";
+import { CurrencyInputField } from "../../components/Common/CurrencyInputField";
+import { FormContainer } from "../../components/Common/FormContainer";
+import { ImageUploadField } from "../../components/Common/ImageUploadField";
+import { InputField } from "../../components/Common/InputField";
+import { SelectField } from "../../components/Common/SelectField";
+import { TextareaField } from "../../components/Common/TextareaField";
+import { FormLayout } from "../../components/Layouts/FormLayout";
+import { useExhibitionForm } from "../../hooks/useExhibitionForm";
+import { CATEGORY_OPTIONS } from "../../constants/category/category";
+import { CONDITION_OPTIONS } from "../../constants/condition/item";
+import { CategorySelect } from "../../components/Common/CategorySelect";
 
 /** 商品出品ページのコンポーネント */
 export const SellPage = () => {
   const { form, handleChange } = useExhibitionForm();
-  const fieldLabelClassName = "text-sm font-semibold text-gray-800"
+  const fieldLabelClassName = "text-sm font-semibold text-gray-800";
 
   // 画像ファイルの変更を処理するハンドラー関数
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      handleChange("images", Array.from(e.target.files))
+      handleChange("images", Array.from(e.target.files));
     }
-  }
+  };
+
   // フォームの内容を検証する関数
   const validate = () => {
-    const errors: string[] = []
-    if (!form.name) errors.push("商品名は必須です")
-    if (!form.price) errors.push("価格は必須です")
-    if (form.category_ids.length === 0) errors.push("カテゴリーは必須です")
-    if (!form.condition) errors.push("商品の状態は必須です")
-    return errors
-  }
+    const errors: string[] = [];
+    if (!form.name) errors.push("商品名は必須です");
+    if (!form.price) errors.push("価格は必須です");
+    if (form.category_ids.length === 0) errors.push("カテゴリーは必須です");
+    if (!form.condition) errors.push("商品の状態は必須です");
+    return errors;
+  };
 
   // フォームの内容をサーバーに送信する関数
   const handleSubmit = async () => {
@@ -42,31 +43,31 @@ export const SellPage = () => {
       return;
     }
 
-    const formData = new FormData()
+    const formData = new FormData();
 
-    formData.append("name", form.name)
-    formData.append("brand", form.brand)
-    formData.append("description", form.description)
-    formData.append("price", form.price.toString())
+    formData.append("name", form.name);
+    formData.append("brand", form.brand);
+    formData.append("description", form.description);
+    formData.append("price", form.price.toString());
     form.category_ids.forEach((categoryId) => {
-      formData.append("category_ids[]", categoryId.toString())
-    })
+      formData.append("category_ids[]", categoryId.toString());
+    });
     if (form.condition !== null) {
-      formData.append("condition", form.condition.toString())
+      formData.append("condition", form.condition.toString());
     }
 
     if (form.images.length > 0) {
       form.images.forEach((image) => {
-        formData.append("images", image)
-      })
+        formData.append("images", image);
+      });
     }
 
     await axios.post("/api/items", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    })
-  }
+    });
+  };
 
   return (
     <FormLayout title="商品の出品">
@@ -77,6 +78,7 @@ export const SellPage = () => {
               label="商品の画像"
               selectedCount={form.images.length}
               labelClassName={fieldLabelClassName}
+              images={form.images}
               className="mb-0"
               onChange={onChange}
             />
@@ -145,4 +147,4 @@ export const SellPage = () => {
       </FormContainer>
     </FormLayout>
   );
-}
+};
