@@ -1,5 +1,5 @@
-import { useState } from "react";
-import eye from "../../assets/eye.png";
+import { useState } from "react"
+import eye from "../../assets/eye.png"
 
 type props = {
   label: string
@@ -23,9 +23,9 @@ export const InputField = ({
   labelClassName = "text-xl font-bold",
   onChange
 }: props) => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const inputType =
-    type === "password" && isPasswordVisible ? "text" : type;
+    type === "password" && isPasswordVisible ? "text" : type
 
   return (
     <div className={`mb-10 ${className}`}>

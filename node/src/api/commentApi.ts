@@ -6,9 +6,9 @@ export const postComment = async (itemId: string, content: string) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ content }),
-  })
+  });
 
-  if (!res.ok) throw new Error()
+  if (!res.ok) throw new Error();
 
-  return res.json()
-}
+  return res.json();
+};

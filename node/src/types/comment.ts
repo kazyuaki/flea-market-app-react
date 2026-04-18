@@ -1,7 +1,7 @@
 export type Comment = {
-	id: number
-	content: string
+	id: number;
+	content: string;
 	user: {
-		name: string
-	}
-}
+		name: string;
+	};
+};

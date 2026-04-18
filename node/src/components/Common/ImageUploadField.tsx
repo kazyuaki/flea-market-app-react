@@ -19,7 +19,7 @@ export const ImageUploadField = ({
   onChange,
 }: ImageUploadFieldProps) => {
   // 画像のプレビューURLを生成する
-  const previewUrls = images.map((file) => URL.createObjectURL(file));
+  const previewUrls = images.map((file) => URL.createObjectURL(file))
 
   return (
     <div className={`mb-10 ${className}`}>
@@ -55,5 +55,5 @@ export const ImageUploadField = ({
         <p className="mt-3 text-sm text-gray-500">{selectedCount}枚選択中</p>
       )}
     </div>
-  );
+  )
 }

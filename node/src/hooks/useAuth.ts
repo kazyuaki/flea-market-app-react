@@ -17,13 +17,13 @@ export const useAuth = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   /** ログインする */
   const login = async (data: { email: string; password: string }) => {
     await loginApi(data);
     await fetchUser();
-  }
+  };
 
   /** ログアウトする */
   const logout = async () => {
@@ -39,4 +39,4 @@ export const useAuth = () => {
   }, []);
 
   return { user, loading, login, logout, fetchUser };
-}
+};

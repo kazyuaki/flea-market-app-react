@@ -1,9 +1,9 @@
-import Header from "./Header/Header";
+import Header from "./Header/Header"
 
 type FormLayoutProps = {
-  title: string;
-  children: React.ReactNode;
-};
+  title: string
+  children: React.ReactNode
+}
 
 /** 認証・登録画面のコンポーネント */
 export const FormLayout = ({ title, children }: FormLayoutProps) => {
@@ -18,5 +18,5 @@ export const FormLayout = ({ title, children }: FormLayoutProps) => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}

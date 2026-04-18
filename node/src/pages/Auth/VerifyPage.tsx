@@ -1,22 +1,22 @@
-import axios from "../../lib/axios";
-import { FormLayout } from "../../components/Layouts/FormLayout";
-import { CommonButton } from "../../components/Common/CommonButton";
+import axios from "../../lib/axios"
+import { FormLayout } from "../../components/Layouts/FormLayout"
+import { CommonButton } from "../../components/Common/CommonButton"
 
-const mailhogUrl = import.meta.env.VITE_MAILHOG_URL ?? "http://localhost:8025";
+const mailhogUrl = import.meta.env.VITE_MAILHOG_URL ?? "http://localhost:8025"
 
 export const VerifyPage = () => {
   const openMailhog = () => {
-    window.open(mailhogUrl, "_blank", "noopener,noreferrer");
-  };
+    window.open(mailhogUrl, "_blank", "noopener,noreferrer")
+  }
 
   const handleResend = async () => {
     try {
-      await axios.post("/email/verification-notification");
-      alert("認証メールを再送しました。");
+      await axios.post("/email/verification-notification")
+      alert("認証メールを再送しました。")
     } catch {
-      alert("認証メールの再送に失敗しました。");
+      alert("認証メールの再送に失敗しました。")
     }
-  };
+  }
 
   return (
     <FormLayout title="">
@@ -43,5 +43,5 @@ export const VerifyPage = () => {
         </button>
       </div>
     </FormLayout>
-  );
-};
+  )
+}

@@ -1,24 +1,24 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../../../assets/logo.svg";
-import "./Header.css";
-import { useAuthContext } from "../../../context/useAuthContext";
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import logo from "../../../assets/logo.svg"
+import "./Header.css"
+import { useAuthContext } from "../../../context/useAuthContext"
 
 export default function Header() {
-  const { logout, user } = useAuthContext();
+  const { logout, user } = useAuthContext()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const location = useLocation();
-  const isVerifyPage = location.pathname === "/verify-email";
+  const location = useLocation()
+  const isVerifyPage = location.pathname === "/verify-email"
 
   const handleLogout = async () => {
-    await logout();
-    navigate("/login");
-  };
+    await logout()
+    navigate("/login")
+  }
 
   const onClick = () => {
     navigate("/sell")
-  };
+  }
 
   return (
     <header className="header">
@@ -73,5 +73,5 @@ export default function Header() {
         </>
       )}
     </header>
-  );
+  )
 }

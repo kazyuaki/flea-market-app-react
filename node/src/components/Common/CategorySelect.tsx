@@ -1,11 +1,11 @@
-import type { CategoryOption } from "../../types/category";
+import type { CategoryOption } from "../../types/category"
 
 type CategorySelectProps = {
-  label: string;
-  value: number[];
-  options: CategoryOption[];
-  labelClassName?: string;
-  onChange: (value: number[]) => void;
+  label: string
+  value: number[]
+  options: CategoryOption[]
+  labelClassName?: string
+  onChange: (value: number[]) => void
 }
 
 /** カテゴリー選択用のセレクトフィールドコンポーネント */
