@@ -1,20 +1,20 @@
-import { Link, useNavigate } from "react-router-dom";
-import { InputField } from "../../components/Common/InputField";
-import { CommonButton } from "../../components/Common/CommonButton";
-import { FormLayout } from "../../components/Layouts/FormLayout";
-import { FormContainer } from "../../components/Common/FormContainer";
-import type { SubmitEvent } from "react";
-import { useAuthContext } from "../../context/useAuthContext";
-import type { LoginForm } from "../../hooks/useLoginForm";
-import { useLoginForm } from "../../hooks/useLoginForm";
-import type { Field } from "../../types/form";
+import { Link, useNavigate } from "react-router-dom"
+import { InputField } from "../../components/Common/InputField"
+import { CommonButton } from "../../components/Common/CommonButton"
+import { FormLayout } from "../../components/Layouts/FormLayout"
+import { FormContainer } from "../../components/Common/FormContainer"
+import type { SubmitEvent } from "react"
+import { useAuthContext } from "../../context/useAuthContext"
+import type { LoginForm } from "../../hooks/useLoginForm"
+import { useLoginForm } from "../../hooks/useLoginForm"
+import type { Field } from "../../types/form"
 
 export const LoginPage = () => {
   /// ナビゲーション、認証コンテキスト、フォームの状態管理をセットアップ
-  const navigate = useNavigate();
-  const { fetchUser } = useAuthContext();
+  const navigate = useNavigate()
+  const { fetchUser } = useAuthContext()
   const { form, displayErrors, isSubmitDisabled, handleChange, handleSubmit } =
-    useLoginForm();
+    useLoginForm()
   
   /* フォームフィールドの定義 */
   const fields: Field<LoginForm>[] = [
@@ -30,18 +30,18 @@ export const LoginPage = () => {
       type: "password",
       placeholder: "8文字以上のパスワード",
     },
-  ];
+  ]
 
   // フォームの送信処理
   const handleSubmitWithRedirect = async (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const success = await handleSubmit();
+    e.preventDefault()
+    const success = await handleSubmit()
 
     if (success) {
-      await fetchUser();
-      navigate("/items");
+      await fetchUser()
+      navigate("/items")
     }
-  };
+  }
 
   return (
     <FormLayout title="ログイン">
@@ -71,5 +71,5 @@ export const LoginPage = () => {
         </form>
       </FormContainer>
     </FormLayout>
-  );
+  )
 }

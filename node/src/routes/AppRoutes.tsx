@@ -1,15 +1,15 @@
-import { Routes, Route } from "react-router-dom";
-import { LoginPage } from "../pages/Auth/LoginPage";
-import { RegisterPage } from "../pages/Auth/Register";
-import ItemList from "../pages/Item/ItemList";
-import ItemDetail from "../pages/Item/ItemDetail";
-import { PurchasePage } from "../pages/Purchase/PurchasePage";
-import { ChangeAddressPage } from "../pages/Purchase/ChangeAddressPage";
-import { ProtectedRoute } from "./ProtectedRoute";
-import { PublicRoute } from "./PublicRoute";
-import { VerifyPage } from "../pages/Auth/VerifyPage";
-import { ProfilePage } from "../pages/Profile/ProfilePage";
-import { SellPage } from "../pages/Sell/SellPage";
+import { Routes, Route } from "react-router-dom"
+import { LoginPage } from "../pages/Auth/LoginPage"
+import { RegisterPage } from "../pages/Auth/Register"
+import ItemList from "../pages/Item/ItemList"
+import ItemDetail from "../pages/Item/ItemDetail"
+import { PurchasePage } from "../pages/Purchase/PurchasePage"
+import { ChangeAddressPage } from "../pages/Purchase/ChangeAddressPage"
+import { ProtectedRoute } from "./ProtectedRoute"
+import { PublicRoute } from "./PublicRoute"
+import { VerifyPage } from "../pages/Auth/VerifyPage"
+import { ProfilePage } from "../pages/Profile/ProfilePage"
+import { SellPage } from "../pages/Sell/SellPage"
 
 /** アプリケーションのルーティングを定義するコンポーネント */
 export const AppRoutes = () => {
@@ -99,5 +99,5 @@ export const AppRoutes = () => {
       {/* その他のパスは商品一覧にリダイレクト */}
       <Route path="*" element={<ItemList />} />
     </Routes>
-  );
-};
+  )
+}

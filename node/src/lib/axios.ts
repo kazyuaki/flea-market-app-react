@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
   headers: {
     "X-Requested-With": "XMLHttpRequest",
   }
-})
+});
 
 if (!import.meta.env.VITE_APP_API_BASE_URL) {
     console.warn("API baseURL is not set");

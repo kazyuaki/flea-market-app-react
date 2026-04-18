@@ -1,21 +1,21 @@
-import type { SubmitEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { CommonButton } from "../../components/Common/CommonButton";
-import { FormContainer } from "../../components/Common/FormContainer";
-import { InputField } from "../../components/Common/InputField";
-import { FormLayout } from "../../components/Layouts/FormLayout";
-import { useAuthContext } from "../../context/useAuthContext";
-import type { RegisterInput } from "../../types/auth";
-import type { Field } from "../../types/form";
-import { useRegisterForm } from "../../hooks/useRegisterForm";
+import type { SubmitEvent } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { CommonButton } from "../../components/Common/CommonButton"
+import { FormContainer } from "../../components/Common/FormContainer"
+import { InputField } from "../../components/Common/InputField"
+import { FormLayout } from "../../components/Layouts/FormLayout"
+import { useAuthContext } from "../../context/useAuthContext"
+import type { RegisterInput } from "../../types/auth"
+import type { Field } from "../../types/form"
+import { useRegisterForm } from "../../hooks/useRegisterForm"
 
 /** 会員登録画面 */
 export const RegisterPage = () => {
   /* ナビゲーション、認証コンテキスト、フォームの状態管理をセットアップ */
-  const navigate = useNavigate();
-  const { fetchUser } = useAuthContext();
+  const navigate = useNavigate()
+  const { fetchUser } = useAuthContext()
   const { form, errors, loading, handleChange, handleSubmit } =
-    useRegisterForm();
+    useRegisterForm()
   
   //* フォームフィールドの定義 */
   const fields: Field<RegisterInput>[] = [
@@ -42,18 +42,18 @@ export const RegisterPage = () => {
       type: "password",
       placeholder: "もう一度パスワードを入力",
     },
-  ];
+  ]
 
   //* 登録処理＋リダイレクト */
   const handleSubmitWithRedirect = async (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const success = await handleSubmit();
+    e.preventDefault()
+    const success = await handleSubmit()
 
     if (success) {
-      await fetchUser();
-      navigate("/verify-email");
+      await fetchUser()
+      navigate("/verify-email")
     }
-  };
+  }
 
   return (
     <FormLayout title="会員登録">
@@ -83,5 +83,5 @@ export const RegisterPage = () => {
         </form>
       </FormContainer>
     </FormLayout>
-  );
-};
+  )
+}

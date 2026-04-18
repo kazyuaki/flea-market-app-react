@@ -1,18 +1,18 @@
-import type { ChangeEvent, SubmitEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import { FormLayout } from "../../components/Layouts/FormLayout";
-import type { Field } from "../../types/form";
-import type { ProfileInput } from "../../types/profile";
-import { FormContainer } from "../../components/Common/FormContainer";
-import { InputField } from "../../components/Common/InputField";
-import { CommonButton } from "../../components/Common/CommonButton";
-import { useProfileForm } from "../../hooks/useProfileForm";
-import { useAuthContext } from "../../context/useAuthContext";
+import type { ChangeEvent, SubmitEvent } from "react"
+import { useNavigate } from "react-router-dom"
+import { FormLayout } from "../../components/Layouts/FormLayout"
+import type { Field } from "../../types/form"
+import type { ProfileInput } from "../../types/profile"
+import { FormContainer } from "../../components/Common/FormContainer"
+import { InputField } from "../../components/Common/InputField"
+import { CommonButton } from "../../components/Common/CommonButton"
+import { useProfileForm } from "../../hooks/useProfileForm"
+import { useAuthContext } from "../../context/useAuthContext"
 
 /** プロフィール入力画面 */
 export const ProfilePage = () => {
-  const navigate = useNavigate();
-  const { fetchUser } = useAuthContext();
+  const navigate = useNavigate()
+  const { fetchUser } = useAuthContext()
 
   /* フォームフィールドの定義 */
   const fields: Field<ProfileInput>[] = [
@@ -42,7 +42,7 @@ export const ProfilePage = () => {
       label: "電話番号",
       placeholder: "例）090-1234-5678",
     },
-  ];
+  ]
 
   const {
     form,
@@ -53,23 +53,23 @@ export const ProfilePage = () => {
     handleChange,
     handleImageChange,
     handleSubmit,
-  } = useProfileForm();
+  } = useProfileForm()
 
   /* 画像入力の変更処理 */
   const handleImageInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    handleImageChange(e.target.files?.[0] ?? null);
-  };
+    handleImageChange(e.target.files?.[0] ?? null)
+  }
 
   /* フォームの送信処理 */
   const handleSubmitWithRedirect = async (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const success = await handleSubmit();
+    e.preventDefault()
+    const success = await handleSubmit()
 
     if (success) {
-      await fetchUser();
-      navigate("/items");
+      await fetchUser()
+      navigate("/items")
     }
-  };
+  }
 
 
   return (
@@ -119,5 +119,5 @@ export const ProfilePage = () => {
         </form>
       </FormContainer>
     </FormLayout>
-  );
-};
+  )
+}

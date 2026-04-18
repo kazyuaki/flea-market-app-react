@@ -31,4 +31,4 @@ export const logout = async () => {
 export const getUser = async () => {
   const res = await axios.get("/api/user");
   return res.data;
-}
+};
