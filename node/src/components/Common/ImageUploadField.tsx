@@ -44,7 +44,7 @@ export const ImageUploadField = ({
         )}
         <input
           type="file"
-          accept="image/*"
+          accept=".jpg,.jpeg,.png,.webp,.gif"
           multiple
           onChange={onChange}
           className="hidden"

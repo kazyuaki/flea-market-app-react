@@ -14,13 +14,23 @@ export const useExhibitionForm = () => {
     images: [],
   });
 
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
+
   /// フォームの値を更新するハンドラー関数
   const handleChange = <K extends keyof ItemForm>(key: K, value: ItemForm[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
+    if (errors[key]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[key];
+        return newErrors;
+      });
+    }
   };
 
   return {
     form,
+    setErrors,
     handleChange,
   };
 };

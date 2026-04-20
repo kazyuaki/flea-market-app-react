@@ -12,10 +12,12 @@ import { useExhibitionForm } from "../../hooks/useExhibitionForm"
 import { CATEGORY_OPTIONS } from "../../constants/category/category"
 import { CONDITION_OPTIONS } from "../../constants/condition/item"
 import { CategorySelect } from "../../components/Common/CategorySelect"
+import { validateItem } from "../../utils/validation/item"
+import { isAxiosError } from "axios"
 
 /** 商品出品ページのコンポーネント */
 export const SellPage = () => {
-  const { form, handleChange } = useExhibitionForm()
+  const { form, setErrors, handleChange } = useExhibitionForm()
   const fieldLabelClassName = "text-sm font-semibold text-gray-800"
 
   // 画像ファイルの変更を処理するハンドラー関数
@@ -25,24 +27,17 @@ export const SellPage = () => {
     }
   }
 
-  // フォームの内容を検証する関数
-  const validate = () => {
-    const errors: string[] = []
-    if (!form.name) errors.push("商品名は必須です")
-    if (!form.price) errors.push("価格は必須です")
-    if (form.category_ids.length === 0) errors.push("カテゴリーは必須です")
-    if (!form.condition) errors.push("商品の状態は必須です")
-    return errors
-  }
-
   // フォームの内容をサーバーに送信する関数
   const handleSubmit = async () => {
-    const errors = validate()
-    if (errors.length > 0) {
-      console.log(errors)
+    // クライアント側のバリデーションを実行し、エラーがあればフォームに表示
+    const validationErrors = validateItem(form)
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
       return
     }
 
+    // FormData オブジェクトを作成して、フォームの内容を追加
     const formData = new FormData()
 
     formData.append("name", form.name)
@@ -58,15 +53,21 @@ export const SellPage = () => {
 
     if (form.images.length > 0) {
       form.images.forEach((image) => {
-        formData.append("images", image)
+        formData.append("images[]", image)
       })
     }
 
-    await axios.post("/api/items", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    try {
+      await axios.post("/api/items", formData)
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        if (error.response?.status === 422) {
+          setErrors(error.response.data.errors ?? {})
+        } else {
+          alert("商品の出品に失敗しました")
+        }
+      }
+    }
   }
 
   return (
