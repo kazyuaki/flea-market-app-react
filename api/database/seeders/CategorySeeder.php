@@ -13,11 +13,22 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::insert([
+        Category::upsert([
             ['id' => 1, 'name' => 'ファッション'],
             ['id' => 2, 'name' => '家電'],
-            ['id' => 3, 'name' => '食品'],
-            ['id' => 4, 'name' => '雑貨'],
-        ]);
+            ['id' => 3, 'name' => 'インテリア'],
+            ['id' => 4, 'name' => 'レディース'],
+            ['id' => 5, 'name' => 'メンズ'],
+            ['id' => 6, 'name' => 'コスメ'],
+            ['id' => 7, 'name' => '本'],
+            ['id' => 8, 'name' => 'ゲーム'],
+            ['id' => 9, 'name' => 'おもちゃ'],
+            ['id' => 10, 'name' => 'スポーツ'],
+            ['id' => 11, 'name' => 'キッチン'],
+            ['id' => 12, 'name' => 'ハンドメイド'],
+            ['id' => 13, 'name' => 'アクセサリー'],
+            ['id' => 14, 'name' => 'ベビー・キッズ'],
+            ['id' => 15, 'name' => 'その他'],
+        ], ['id'], ['name']);
     }
 }
