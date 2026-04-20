@@ -12,7 +12,7 @@ import { useExhibitionForm } from "../../hooks/useExhibitionForm"
 import { CATEGORY_OPTIONS } from "../../constants/category/category"
 import { CONDITION_OPTIONS } from "../../constants/condition/item"
 import { CategorySelect } from "../../components/Common/CategorySelect"
-import { validateItem } from "../../utils/validation/item"
+import { validateItem } from "../../utils/validation/Item"
 import { isAxiosError } from "axios"
 
 /** 商品出品ページのコンポーネント */
