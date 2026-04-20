@@ -44,6 +44,12 @@ class Item extends Model
         return $this->hasMany('App\\Models\\Comment');
     }
 
+    // アイテムと画像のリレーション
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
     // アイテムとカテゴリーのリレーション
     public function categories()
     {
