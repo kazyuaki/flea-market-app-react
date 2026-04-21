@@ -1,6 +1,6 @@
 import type { ItemForm } from "../../types/item";
 
-type ItemErrors = {
+export type ItemErrors = {
   name?: string[];
   brand?: string[];
   description?: string[];
@@ -9,6 +9,14 @@ type ItemErrors = {
   condition?: string[];
   images?: string[];
 };
+
+const MAX_IMAGE_FILE_SIZE = 2 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+]);
 
 /** 商品出品画面のクライアント側バリデーション */
 export const validateItem = (form: ItemForm): ItemErrors => {
@@ -41,6 +49,18 @@ export const validateItem = (form: ItemForm): ItemErrors => {
   // 商品の状態
   if (form.condition === null) {
     nextErrors.condition = ["商品の状態を選択してください"];
+  }
+
+  // 画像は任意。選択されている場合のみ形式とサイズをチェック
+  if (form.images.length > 0) {
+    const invalidType = form.images.some((image) => !ALLOWED_IMAGE_TYPES.has(image.type));
+    const oversizedImage = form.images.some((image) => image.size > MAX_IMAGE_FILE_SIZE);
+
+    if (invalidType) {
+      nextErrors.images = ["画像はjpeg、png、webp、gif形式でアップロードしてください"];
+    } else if (oversizedImage) {
+      nextErrors.images = ["画像ファイルのサイズは2MB以下にしてください"];
+    }
   }
 
   return nextErrors;

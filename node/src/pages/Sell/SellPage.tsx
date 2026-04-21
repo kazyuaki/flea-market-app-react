@@ -1,5 +1,4 @@
-import type { ChangeEvent } from "react"
-import axios from "../../lib/axios"
+import type { ChangeEvent, FormEventHandler } from "react"
 import { CommonButton } from "../../components/Common/CommonButton"
 import { CurrencyInputField } from "../../components/Common/CurrencyInputField"
 import { FormContainer } from "../../components/Common/FormContainer"
@@ -12,12 +11,17 @@ import { useExhibitionForm } from "../../hooks/useExhibitionForm"
 import { CATEGORY_OPTIONS } from "../../constants/category/category"
 import { CONDITION_OPTIONS } from "../../constants/condition/item"
 import { CategorySelect } from "../../components/Common/CategorySelect"
-import { validateItem } from "../../utils/validation/Item"
-import { isAxiosError } from "axios"
 
 /** 商品出品ページのコンポーネント */
 export const SellPage = () => {
-  const { form, setErrors, handleChange } = useExhibitionForm()
+  const {
+    form,
+    displayErrors,
+    loading,
+    isSubmitDisabled,
+    handleChange,
+    handleSubmit,
+  } = useExhibitionForm()
   const fieldLabelClassName = "text-sm font-semibold text-gray-800"
 
   // 画像ファイルの変更を処理するハンドラー関数
@@ -27,59 +31,26 @@ export const SellPage = () => {
     }
   }
 
-  // フォームの内容をサーバーに送信する関数
-  const handleSubmit = async () => {
-    // クライアント側のバリデーションを実行し、エラーがあればフォームに表示
-    const validationErrors = validateItem(form)
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors)
-      return
-    }
-
-    // FormData オブジェクトを作成して、フォームの内容を追加
-    const formData = new FormData()
-
-    formData.append("name", form.name)
-    formData.append("brand", form.brand)
-    formData.append("description", form.description)
-    formData.append("price", form.price.toString())
-    form.category_ids.forEach((categoryId) => {
-      formData.append("category_ids[]", categoryId.toString())
-    })
-    if (form.condition !== null) {
-      formData.append("condition", form.condition.toString())
-    }
-
-    if (form.images.length > 0) {
-      form.images.forEach((image) => {
-        formData.append("images[]", image)
-      })
-    }
-
-    try {
-      await axios.post("/api/items", formData)
-    } catch (error: unknown) {
-      if (isAxiosError(error)) {
-        if (error.response?.status === 422) {
-          setErrors(error.response.data.errors ?? {})
-        } else {
-          alert("商品の出品に失敗しました")
-        }
-      }
-    }
+  // フォームの送信を処理するハンドラー関数
+  const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
+    await handleSubmit()
   }
 
   return (
     <FormLayout title="商品の出品">
       <FormContainer>
-        <div className="mx-auto w-full max-w-[560px]">
+        <form
+          onSubmit={onSubmit}
+          className="mx-auto w-full max-w-[560px]"
+        >
           <div className="mb-12">
             <ImageUploadField
               label="商品の画像"
               selectedCount={form.images.length}
               labelClassName={fieldLabelClassName}
               images={form.images}
+              error={displayErrors.images?.[0]}
               className="mb-0"
               onChange={onChange}
             />
@@ -94,6 +65,7 @@ export const SellPage = () => {
               label="カテゴリー"
               value={form.category_ids}
               options={CATEGORY_OPTIONS}
+              error={displayErrors.category_ids?.[0]}
               labelClassName={fieldLabelClassName}
               onChange={(value) => handleChange("category_ids", value)}
             />
@@ -102,6 +74,7 @@ export const SellPage = () => {
               value={form.condition ?? ""}
               options={CONDITION_OPTIONS}
               placeholder="商品の状態を選択してください"
+              error={displayErrors.condition?.[0]}
               labelClassName={fieldLabelClassName}
               onChange={(value) => handleChange("condition", value)}
               className="mb-0"
@@ -117,6 +90,7 @@ export const SellPage = () => {
               label="商品名"
               value={form.name}
               placeholder="例）スニーカー"
+              error={displayErrors.name?.[0]}
               labelClassName={fieldLabelClassName}
               onChange={(value) => handleChange("name", value)}
             />
@@ -124,6 +98,7 @@ export const SellPage = () => {
               label="ブランド"
               value={form.brand}
               placeholder="例）NIKE"
+              error={displayErrors.brand?.[0]}
               labelClassName={fieldLabelClassName}
               onChange={(value) => handleChange("brand", value)}
             />
@@ -131,6 +106,7 @@ export const SellPage = () => {
               label="商品の説明"
               value={form.description}
               placeholder="商品の状態や特徴を入力してください"
+              error={displayErrors.description?.[0]}
               labelClassName={fieldLabelClassName}
               onChange={(value) => handleChange("description", value)}
             />
@@ -138,13 +114,16 @@ export const SellPage = () => {
               label="販売価格"
               value={form.price}
               placeholder="例）3,000"
+              error={displayErrors.price?.[0]}
               labelClassName={fieldLabelClassName}
               onChange={(value) => handleChange("price", value)}
             />
           </div>
 
-          <CommonButton onClick={handleSubmit}>出品する</CommonButton>
-        </div>
+          <CommonButton type="submit" disabled={isSubmitDisabled}>
+            {loading ? "出品中..." : "出品する"}
+          </CommonButton>
+        </form>
       </FormContainer>
     </FormLayout>
   )

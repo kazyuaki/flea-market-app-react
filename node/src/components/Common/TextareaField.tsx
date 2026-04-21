@@ -1,6 +1,7 @@
 type TextareaFieldProps = {
   label: string
   value: string
+  error?: string
   placeholder?: string
   className?: string
   labelClassName?: string
@@ -12,6 +13,7 @@ type TextareaFieldProps = {
 export const TextareaField = ({
   label,
   value,
+  error,
   placeholder,
   className = "",
   labelClassName = "text-xl font-bold",
@@ -26,8 +28,13 @@ export const TextareaField = ({
         placeholder={placeholder}
         rows={rows}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full border rounded px-3 py-2"
+        className={`w-full rounded px-3 py-2 ${
+          error ? "border border-red-500" : "border border-gray-300"
+        }`}
       />
+      {error && (
+        <p className="mt-2 text-sm text-red-500">{error}</p>
+      )}
     </div>
   )
 }
