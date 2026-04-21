@@ -1,6 +1,7 @@
 type CurrencyInputFieldProps = {
   label: string
   value: number | ""
+  error?: string
   placeholder?: string
   className?: string
   labelClassName?: string
@@ -16,6 +17,7 @@ const formatPrice = (value: number | "") => {
 export const CurrencyInputField = ({
   label,
   value,
+  error,
   placeholder,
   className = "",
   labelClassName = "text-xl font-bold",
@@ -37,9 +39,14 @@ export const CurrencyInputField = ({
             const numericValue = e.target.value.replace(/[^\d]/g, "")
             onChange(numericValue === "" ? "" : Number(numericValue))
           }}
-          className="w-full border rounded px-9 py-2 text-left"
+          className={`w-full rounded px-9 py-2 text-left ${
+            error ? "border border-red-500" : "border border-gray-300"
+          }`}
         />
       </div>
+      {error && (
+        <p className="mt-2 text-sm text-red-500">{error}</p>
+      )}
     </div>
   )
 }

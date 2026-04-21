@@ -38,7 +38,9 @@ export const InputField = ({
           value={value}
           placeholder={placeholder}
           onChange={(e) => {onChange(e.target.value)}}
-          className="w-full border rounded px-3 py-2 pr-12"
+          className={`w-full rounded px-3 py-2 pr-12 ${
+            error ? "border border-red-500" : "border border-gray-300"
+          }`}
         />
         {type === "password" && (
           <button

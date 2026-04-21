@@ -4,6 +4,7 @@ type CategorySelectProps = {
   label: string
   value: number[]
   options: CategoryOption[]
+  error?: string
   labelClassName?: string
   onChange: (value: number[]) => void
 }
@@ -13,6 +14,7 @@ export const CategorySelect = ({
   label,
   value,
   options,
+  error,
   labelClassName = "text-xl font-bold",
   onChange,
 }: CategorySelectProps) => {
@@ -47,6 +49,9 @@ export const CategorySelect = ({
           )
         })}
       </div>
+      {error && (
+        <p className="mt-2 text-sm text-red-500">{error}</p>
+      )}
     </div>
   )
 }

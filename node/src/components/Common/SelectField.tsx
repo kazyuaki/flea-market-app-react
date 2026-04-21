@@ -8,6 +8,7 @@ type SelectFieldProps = {
   value: number | ""
   options: SelectOption[]
   placeholder: string
+  error?: string
   className?: string
   labelClassName?: string
   onChange: (value: number | null) => void
@@ -19,6 +20,7 @@ export const SelectField = ({
   value,
   options,
   placeholder,
+  error,
   className = "",
   labelClassName = "text-xl font-bold",
   onChange,
@@ -33,7 +35,9 @@ export const SelectField = ({
         onChange={(e) =>
           onChange(e.target.value ? Number(e.target.value) : null)
         }
-        className={`w-full border rounded px-3 py-2 bg-white ${
+        className={`w-full rounded px-3 py-2 bg-white ${
+          error ? "border border-red-500" : "border border-gray-300"
+        } ${
           isPlaceholder ? 'text-gray-400' : 'text-gray-700'
         }`}
       >
@@ -46,6 +50,9 @@ export const SelectField = ({
           </option>
         ))}
       </select>
+      {error && (
+        <p className="mt-2 text-sm text-red-500">{error}</p>
+      )}
     </div>
   )
 }

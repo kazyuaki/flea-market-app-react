@@ -4,6 +4,7 @@ type ImageUploadFieldProps = {
   label: string
   selectedCount: number
   images?: File[]
+  error?: string
   className?: string
   labelClassName?: string
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
@@ -14,6 +15,7 @@ export const ImageUploadField = ({
   label,
   selectedCount,
   images= [],
+  error,
   className = "",
   labelClassName = "text-xl font-bold",
   onChange,
@@ -25,7 +27,9 @@ export const ImageUploadField = ({
     <div className={`mb-10 ${className}`}>
       <label className={`block mb-3 ${labelClassName}`}>{label}</label>
 
-      <label className="block cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-12  hover:bg-gray-50">
+      <label className={`block cursor-pointer rounded-lg border-2 border-dashed p-12 hover:bg-gray-50 ${
+        error ? "border-red-500" : "border-gray-300"
+      }`}>
         {previewUrls.length === 0 ? (
           <div className="py-10 text-center text-gray-400">
             クリックして画像を選択
@@ -53,6 +57,9 @@ export const ImageUploadField = ({
 
       {selectedCount > 0 && (
         <p className="mt-3 text-sm text-gray-500">{selectedCount}枚選択中</p>
+      )}
+      {error && (
+        <p className="mt-2 text-sm text-red-500">{error}</p>
       )}
     </div>
   )
