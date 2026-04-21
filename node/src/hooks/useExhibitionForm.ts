@@ -91,8 +91,7 @@ export const useExhibitionForm = () => {
   const hasErrors = Object.values(clientErrors).some(
     (value) => value && value.length > 0,
   );
-  const hasTouchedFields = Object.values(touched).some(Boolean);
-  const isSubmitDisabled = loading || ((hasTouchedFields || submitted) && hasErrors);
+  const isSubmitDisabled = loading || hasErrors;
 
   /// フォームの値を更新するハンドラー関数
   const handleChange = <K extends keyof ItemForm>(key: K, value: ItemForm[K]) => {
