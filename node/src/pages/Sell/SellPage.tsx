@@ -1,4 +1,5 @@
 import type { ChangeEvent, FormEventHandler } from "react"
+import { useNavigate } from "react-router-dom"
 import { CommonButton } from "../../components/Common/CommonButton"
 import { FormContainer } from "../../components/Common/FormContainer"
 import { FormLayout } from "../../components/Layouts/FormLayout"
@@ -9,6 +10,7 @@ import { useExhibitionForm } from "../../hooks/useExhibitionForm"
 
 /** 商品出品ページのコンポーネント */
 export const SellPage = () => {
+  const navigate = useNavigate()
   const {
     form,
     displayErrors,
@@ -28,7 +30,11 @@ export const SellPage = () => {
   // フォームの送信を処理するハンドラー関数
   const handleFormSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
-    await handleSubmit()
+    const success = await handleSubmit()
+
+    if (success) {
+      navigate("/items")
+    }
   }
 
   return (

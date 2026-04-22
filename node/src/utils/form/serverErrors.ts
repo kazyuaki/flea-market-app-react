@@ -1,4 +1,4 @@
-import type { ItemErrors } from "../types/utils/validation/item";
+import type { ItemErrors } from "../validation/item";
 
 /** サーバーからのエラーをクライアント側のエラー形式に変換する関数 */
 export const normalizeServerErrors = (

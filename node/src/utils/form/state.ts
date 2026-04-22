@@ -1,4 +1,4 @@
-import type { ItemForm } from "../types/ItemForm";
+import type { ItemForm } from "../../types/item";
 
 export const createInitialTouched = (): Record<keyof ItemForm, boolean> => ({
   name: false,

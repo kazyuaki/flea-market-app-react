@@ -1,4 +1,4 @@
-import type { ItemForm } from "../types/ItemForm";
+import type { ItemForm } from "../../types/item";
 
 export const buildFormData = (form: ItemForm): FormData => {
   const formData = new FormData();
@@ -13,11 +13,11 @@ export const buildFormData = (form: ItemForm): FormData => {
 
   if (form.condition !== null) {
     formData.append("condition", form.condition.toString());
-  };
+  }
 
-	form.images.forEach((image) => {
-		formData.append("images[]", image);
-	});
+  form.images.forEach((image) => {
+    formData.append("images[]", image);
+  });
 
-	return formData;
+  return formData;
 };
