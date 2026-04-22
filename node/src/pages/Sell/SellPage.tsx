@@ -32,8 +32,16 @@ export const SellPage = () => {
     e.preventDefault()
     const success = await handleSubmit()
 
+    // 出品成功時は商品一覧ページに遷移し、トーストで成功メッセージを表示
     if (success) {
-      navigate("/items")
+      navigate("/items", {
+        state: {
+          toast: {
+            variant: "success",
+            message: "出品に成功しました",
+          },
+        },
+      })
     }
   }
 
