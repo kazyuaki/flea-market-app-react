@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import { Toast } from "../../components/Common/Toast"
-import Header from "../../components/Layouts/Header/Header"
-import './ItemList.css'
-import { useItemList } from '../../hooks/useItemList'
-import ItemTabs from '../../components/Item/ItemTabs'
-import ItemListContent from '../../components/Item/ItemListContent'
+import "./ItemList.css"
+import { useItemList } from "../../hooks/useItemList"
+import ItemTabs from "../../components/Item/ItemTabs"
+import ItemListContent from "../../components/Item/ItemListContent"
+import { NormalLayout } from "../../components/Layouts/NormalLayout"
 
-type ItemTab = 'recommend' | 'mylist'
+type ItemTab = "recommend" | "mylist"
 type ToastVariant = "success" | "error"
 
 type ItemListLocationState = {
@@ -19,18 +19,22 @@ type ItemListLocationState = {
 
 /** 商品一覧ページのコンポーネント */
 export default function ItemList() {
-  /** タブの状態をURLクエリから取得 */
+  /** 1. ルーティング・パラメータ管理 */
   const [searchParams] = useSearchParams()
   const location = useLocation()
   const navigate = useNavigate()
-  const tab = searchParams.get('tab')
-  const activeTab: ItemTab = tab === 'mylist' ? 'mylist' : 'recommend'
+
+  /** 2. タブ状態の管理 */
+  const tab = searchParams.get("tab")
+  const activeTab: ItemTab = tab === "mylist" ? "mylist" : "recommend"
+
+  /** 3. トースト通知の状態管理 */
   const toastState = (location.state as ItemListLocationState | null)?.toast
   const [toast, setToast] = useState<ItemListLocationState["toast"] | null>(
     () => toastState ?? null,
   )
-  
-  /** 状態管理 */ 
+
+  /** 4. データ取得（API連携） */
   const { items, loading, error } = useItemList(activeTab)
 
   /** タブ切り替え時にURLクエリを更新する */
@@ -63,26 +67,22 @@ export default function ItemList() {
   }, [toast])
 
   return (
-    <div className="page">
-      <Header />
-      <Toast
-        message={toast?.message ?? ""}
-        isVisible={toast !== null}
-        variant={toast?.variant ?? "success"}
-      />
-      { /* メインコンテンツ */ }
-      <div className="container">
-       {/* タブ切り替え */ }
-       <ItemTabs activeTab={activeTab} />
-        {/* 商品一覧 */ }
-        <div className="items">
-          <ItemListContent
-            items={items}
-            loading={loading}
-            error={error}
-          />
-        </div>
-      </div>
-    </div>
+    <>
+      {/* メインコンテンツ */}
+      <NormalLayout showMyPageHeader={true}>
+        {/* トースト通知 */}
+        <Toast
+          message={toast?.message ?? ""}
+          isVisible={toast !== null}
+          variant={toast?.variant ?? "success"}
+        />
+
+        {/* タブ切り替え */}
+        <ItemTabs activeTab={activeTab} />
+
+        {/* 商品一覧 */}
+        <ItemListContent items={items} loading={loading} error={error} />
+      </NormalLayout>
+    </>
   )
 }
