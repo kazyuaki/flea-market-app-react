@@ -1,0 +1,19 @@
+{
+	"tabWidth": 2,
+	"semi": true,
+	"overrides": [
+		{
+			"files": "*.tsx",
+			"options": {
+				"semi": false
+			}
+		},
+		{
+			"files": "*.php",
+			"options": {
+				"tabWidth": 4
+			}
+		}
+	]
+
+}
