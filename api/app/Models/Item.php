@@ -55,4 +55,9 @@ class Item extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
