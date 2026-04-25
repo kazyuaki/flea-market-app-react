@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Item extends Model
 {
@@ -25,6 +26,20 @@ class Item extends Model
     protected $casts = [
         'price' => 'integer',
     ];
+
+    // アイテムの属性に追加のアクセサを定義
+    protected $appends = ['is_favorited'];
+
+    // is_favorited属性のアクセサ
+    public function getIsFavoritedAttribute()
+    {
+        // ログインユーザーがこのアイテムをお気に入りしているかどうかを返す
+        $user = Auth::user();
+        if (!$user) {
+            return false;
+        }
+        return $this->favorites()->where('user_id', $user->id)->exists();
+    }
 
     // アイテムとユーザーのリレーション
     public function user()
