@@ -3,7 +3,11 @@ import logo from "../../../assets/logo.svg"
 import "./Header.css"
 import { useAuthContext } from "../../../context/useAuthContext"
 
-export default function Header() {
+type Props = {
+  showMyPage?: boolean
+}
+
+export default function Header({ showMyPage = true }: Props) {
   const { logout, user } = useAuthContext()
 
   const navigate = useNavigate()
@@ -57,11 +61,14 @@ export default function Header() {
                     ログイン
                   </Link>
                 )}
-                <Link to="/mypage/profile" className="header-link">
-                  マイページ
-                </Link>
+                {showMyPage && user && (
+                  <Link to="/mypage" className="header-link">
+                    マイページ
+                  </Link>
+                )}
                 <button
-                  className="header-button" type="button"
+                  className="header-button"
+                  type="button"
                   onClick={onClick}
                 >
                   出品
