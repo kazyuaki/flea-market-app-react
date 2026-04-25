@@ -14,7 +14,7 @@ class StoreCommentController extends Controller
         // 仮実装: ユーザーIDは固定で1、ユーザー名も固定
         $comment = $item->comments()->create([
             'user_id' => 1,
-            'content' => $request->content,
+            'content' => $request->description,
             
         ]);
 

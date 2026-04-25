@@ -5,9 +5,9 @@ export type MyPageItemTab = "listed" | "purchased";
 
 /** マイページの商品一覧取得 */
 export const getMyPageItems = async (tab: MyPageItemTab): Promise<Item[]> => {
-  const res = await axios.get("/api/mypage/items", {
-    params: { tab },
-  });
+  const endpoint =
+    tab === "listed" ? "/api/mypage/listed" : "/api/mypage/purchases";
+  const res = await axios.get(endpoint);
 
   return res.data.data;
 };

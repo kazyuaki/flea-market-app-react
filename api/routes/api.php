@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Item\GetItemListController;
 use App\Http\Controllers\Api\Item\GetItemDetailController;
 use App\Http\Controllers\Api\Item\StoreItemController;
 use App\Http\Controllers\Api\Item\StoreCommentController;
+use App\Http\Controllers\Api\MyPage\GetMyListedItemsController ;
+use App\Http\Controllers\Api\MyPage\GetMyPurchasedItemsController;
 use App\Http\Controllers\Api\Profile\UpdateUserProfileController;
 use App\Http\Controllers\Api\Purchase\GetPurchaseItemController;
 use Illuminate\Http\Request;
@@ -39,6 +41,11 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
     // 配送先情報の更新
     Route::post('/purchase/address', UpdateAddressController::class);
 
-    /**** プロフィール関連 ****/
-    Route::post('/profile', UpdateUserProfileController::class);
+    /**** マイページ関連 ****/
+    // 出品した商品一覧
+    Route::get('/mypage/listed', GetMyListedItemsController::class);
+    // 購入した商品一覧
+    Route::get('/mypage/purchases', GetMyPurchasedItemsController::class);
+    Route::post('/mypage/profile', UpdateUserProfileController::class);
+
 });
