@@ -4,6 +4,7 @@ import { updateProfile, getUser } from "../api/profile";
 import { validateProfile, type ProfileErrors } from "../utils/validation/profile";
 import type { ProfileInput } from "../types/profile";
 import { usePersistentForm } from "./usePersistentForm";
+import { getProfileImageUrl } from "../utils/profileImage";
 
 /// プロフィールフォームの値の型定義
 export type ProfileForm = {
@@ -22,27 +23,6 @@ const initialForm: ProfileForm = {
   address: "",
   building_name: "",
   phone_number: "",
-};
-
-/* プロフィール画像のURLを取得するユーティリティ関数 */
-const getProfileImageUrl = (path: string) => {
-  if (!path) return null;
-
-  if (/^https?:\/\//.test(path)) {
-    return path;
-  }
-
-  const normalizedPath = path
-    .replace(/^https?:\/\/[^/]+/, "")
-    .replace(/^\/?storage\//, "");
-  const apiBaseUrl = import.meta.env.VITE_APP_API_BASE_URL ?? "";
-
-  if (/^https?:\/\//.test(apiBaseUrl)) {
-    const origin = apiBaseUrl.replace(/\/api\/?$/, "");
-    return `${origin}/storage/${normalizedPath}`;
-  }
-
-  return `http://127.0.0.1:8000/storage/${normalizedPath}`;
 };
 
 /** プロフィール編集フォームの状態管理を行うカスタムフック */
@@ -114,8 +94,7 @@ export const useProfileForm = () => {
         });
 
         if (user.profile_image_url) {
-          setPreview(getProfileImageUrl(user.profile_image_url));
-          console.log("プロフィール画像URL:", getProfileImageUrl(user.profile_image_url));
+          setPreview(getProfileImageUrl(user.profile_image_url) ?? null);
         }
       } catch (error) {
         console.error("ユーザーデータの取得に失敗:", error);

@@ -8,8 +8,9 @@ import { ChangeAddressPage } from "../pages/Purchase/ChangeAddressPage"
 import { ProtectedRoute } from "./ProtectedRoute"
 import { PublicRoute } from "./PublicRoute"
 import { VerifyPage } from "../pages/Auth/VerifyPage"
-import { ProfilePage } from "../pages/Profile/ProfilePage"
+import { ProfilePage } from "../pages/MyPage/ProfilePage"
 import { SellPage } from "../pages/Sell/SellPage"
+import { MyPage } from "../pages/MyPage/Mypage"
 
 /** アプリケーションのルーティングを定義するコンポーネント */
 export const AppRoutes = () => {
@@ -77,6 +78,15 @@ export const AppRoutes = () => {
       />
 
       {/* マイページ（プロフィール編集） */}
+      <Route 
+        path="/mypage"
+        element={
+          <ProtectedRoute>
+            <MyPage />
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="/mypage/profile"
         element={
