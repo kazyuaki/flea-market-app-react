@@ -14,6 +14,7 @@ class GetMyPurchasedItemsController extends Controller
 
         // 購入した商品を取得
         $items = Item::whereHas('transactions', function ($query) use ($user) {
+            // トランザクションの中で、購入者(user_id)が自分であるものを絞り込む
             $query->where('user_id', $user->id);
         })
         ->with(['images','categories',])
@@ -25,4 +26,3 @@ class GetMyPurchasedItemsController extends Controller
         ]);
     }
 }
-

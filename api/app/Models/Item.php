@@ -50,6 +50,12 @@ class Item extends Model
         return $this->hasMany(Image::class);
     }
 
+    // アイテムと取引のリレーション
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     // アイテムとカテゴリーのリレーション
     public function categories()
     {
