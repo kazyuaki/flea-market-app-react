@@ -3,27 +3,23 @@
 namespace App\Http\Controllers\Api\Item;
 
 use App\Http\Controllers\Controller;
-use App\Models\Item;
+use App\Services\Item\ItemService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GetItemListController extends Controller
 {
+    public function __construct(protected ItemService $itemService){}
+
     public function __invoke(Request $request)
     {
-        $user = Auth::user();
+        $keyword = $request->query('keyword');
 
-        // 商品を取得するクエリを作成
-        $items = Item::query()
-            ->when($user, function($query) use ($user) {
-                // 自分の商品以外の商品を取得する
-                $query->where('user_id', '!=', $user->id);
-            })
-            ->get();
+        $items = $this->itemService->getItemList(Auth::id(), $keyword);
 
         return response()->json([
-            'message' => 'Item index',
-            'data' => $items,
+            'message' => '商品一覧の取得に成功しました',
+            'items' => $items,
         ]);
     }
 }
