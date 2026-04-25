@@ -27,6 +27,7 @@ export default function ItemList() {
   /** 2. タブ状態の管理 */
   const tab = searchParams.get("tab")
   const activeTab: ItemTab = tab === "mylist" ? "mylist" : "recommend"
+  const keyword = searchParams.get("keyword") ?? ""
 
   /** 3. トースト通知の状態管理 */
   const toastState = (location.state as ItemListLocationState | null)?.toast
@@ -35,7 +36,7 @@ export default function ItemList() {
   )
 
   /** 4. データ取得（API連携） */
-  const { items, loading, error } = useItemList(activeTab)
+  const { items, loading, error } = useItemList(activeTab, keyword)
 
   /** タブ切り替え時にURLクエリを更新する */
   useEffect(() => {
@@ -78,7 +79,7 @@ export default function ItemList() {
         />
 
         {/* タブ切り替え */}
-        <ItemTabs activeTab={activeTab} />
+        <ItemTabs activeTab={activeTab} keyword={keyword} />
 
         {/* 商品一覧 */}
         <ItemListContent items={items} loading={loading} error={error} />

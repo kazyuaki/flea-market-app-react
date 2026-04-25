@@ -1,4 +1,6 @@
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import type { FormEvent } from "react"
+import { useEffect, useState } from "react"
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import logo from "../../../assets/logo.svg"
 import "./Header.css"
 import { useAuthContext } from "../../../context/useAuthContext"
@@ -11,9 +13,15 @@ export default function Header({ showMyPage = true }: Props) {
   const { logout, user } = useAuthContext()
 
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const [keyword, setKeyword] = useState(searchParams.get("keyword") ?? "")
 
   const location = useLocation()
   const isVerifyPage = location.pathname === "/verify-email"
+
+  useEffect(() => {
+    setKeyword(searchParams.get("keyword") ?? "")
+  }, [searchParams])
 
   const handleLogout = async () => {
     await logout()
@@ -22,6 +30,22 @@ export default function Header({ showMyPage = true }: Props) {
 
   const onClick = () => {
     navigate("/sell")
+  }
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const params = new URLSearchParams()
+    const trimmedKeyword = keyword.trim()
+
+    if (trimmedKeyword) {
+      params.set("keyword", trimmedKeyword)
+    }
+
+    navigate({
+      pathname: "/items",
+      search: params.toString(),
+    })
   }
 
   return (
@@ -36,13 +60,15 @@ export default function Header({ showMyPage = true }: Props) {
       {!isVerifyPage && (
         <>
           {/* 中央 */}
-          <div className="header-center">
+          <form className="header-center" onSubmit={handleSearch}>
             <input
               type="text"
               placeholder="なにをお探しですか？"
               className="header-search"
+              value={keyword}
+              onChange={(event) => setKeyword(event.target.value)}
             />
-          </div>
+          </form>
 
           {/* 右 */}
           <div className="header-right">
