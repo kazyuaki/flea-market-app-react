@@ -10,13 +10,13 @@ type Item = {
 
 export default function ItemCard({ item }: { item: Item }) {
   return (
-    <div style={{ width: '150px', position: 'relative' }}>
+    <div style={{ width: '200px', position: 'relative' }}>
       <Link to ={`/items/${item.id}`}>
         {/* 画像 */}
         <img
           src={item.image_url || noImage}
           alt={item.name}
-          className="w-[150px] h-[150px] object-cover"
+          className="w-[180px] h-[180px] object-cover"
         />
 
         {/* 商品名 */}
