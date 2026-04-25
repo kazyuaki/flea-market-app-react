@@ -4,8 +4,8 @@ import type { Item } from '../types/item';
 /**
  * 商品一覧取得
  */
-export const fetchItems = async (tab: string): Promise<Item[]> => {
-  const res = await axios.get(`/api/items?tab=${tab}`);
+export const fetchItems = async (): Promise<Item[]> => {
+  const res = await axios.get(`/api/items`);
   return res.data.data;
 };
 

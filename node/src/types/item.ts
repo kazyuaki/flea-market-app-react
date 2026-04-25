@@ -21,6 +21,7 @@ export type Item = {
   }[];
   categories: Category[];
   color: string;
+  is_favorited: boolean;
 };
 
 /** 商品出品フォームの型定義 */

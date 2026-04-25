@@ -19,7 +19,7 @@ export default function ItemTabs({ activeTab }: Props) {
         to="/items?tab=mylist"
         className={`tab ${activeTab === 'mylist' ? 'active-mylist' : ''}`}
       >
-        マイリスト
+        お気に入り
       </Link>
     </div>
   )
