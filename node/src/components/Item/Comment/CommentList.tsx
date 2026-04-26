@@ -8,12 +8,12 @@ type Props = {
 export default function CommentList({ comments, count }: Props) {
   return (
     <>
-      <h2 className="text-xl text-gray-600 font-bold mb-2">
+      <h2 className="text-2xl text-gray-600 font-bold mb-2">
         コメント({count})
       </h2>
 
       {comments.map(comment => (
-        <div key={comment.id} className="bg-gray-100 p-3 rounded text-sm mb-2">
+        <div key={comment.id} className="bg-gray-100 p-3 rounded text-base mb-2">
           
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 bg-gray-300 rounded-full" />

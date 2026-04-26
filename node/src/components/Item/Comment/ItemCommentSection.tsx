@@ -18,7 +18,7 @@ export default function ItemCommentSection({
   onSubmit,
 }: CommentProps) {
   return (
-    <section className="mt-8" aria-label="商品コメント">
+    <section className="mt-16" aria-label="商品コメント">
       <CommentList comments={comments} count={count} />
       <CommentForm
         comment={comment}
