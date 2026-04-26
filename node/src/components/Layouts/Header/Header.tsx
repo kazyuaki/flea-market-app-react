@@ -1,6 +1,10 @@
 import type { FormEvent } from "react"
-import { useEffect, useState } from "react"
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom"
 import logo from "../../../assets/logo.svg"
 import "./Header.css"
 import { useAuthContext } from "../../../context/useAuthContext"
@@ -14,14 +18,15 @@ export default function Header({ showMyPage = true }: Props) {
 
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const [keyword, setKeyword] = useState(searchParams.get("keyword") ?? "")
+  const keyword = searchParams.get("keyword") ?? ""
 
   const location = useLocation()
   const isVerifyPage = location.pathname === "/verify-email"
+  const isMyPage = location.pathname === "/mypage"
+  const isItemsPage = location.pathname === "/items"
 
-  useEffect(() => {
-    setKeyword(searchParams.get("keyword") ?? "")
-  }, [searchParams])
+  // 検索バーを表示する条件
+  const showSearchBar = isItemsPage || isMyPage
 
   const handleLogout = async () => {
     await logout()
@@ -35,6 +40,8 @@ export default function Header({ showMyPage = true }: Props) {
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+    const formData = new FormData(event.currentTarget)
+    const keyword = String(formData.get("keyword") ?? "")
     const params = new URLSearchParams()
     const trimmedKeyword = keyword.trim()
 
@@ -60,15 +67,18 @@ export default function Header({ showMyPage = true }: Props) {
       {!isVerifyPage && (
         <>
           {/* 中央 */}
-          <form className="header-center" onSubmit={handleSearch}>
-            <input
-              type="text"
-              placeholder="なにをお探しですか？"
-              className="header-search"
-              value={keyword}
-              onChange={(event) => setKeyword(event.target.value)}
-            />
-          </form>
+          {showSearchBar && (
+            <form className="header-center" onSubmit={handleSearch}>
+              <input
+                key={keyword}
+                type="text"
+                name="keyword"
+                placeholder="なにをお探しですか？"
+                className="header-search"
+                defaultValue={keyword}
+              />
+            </form>
+          )}
 
           {/* 右 */}
           <div className="header-right">

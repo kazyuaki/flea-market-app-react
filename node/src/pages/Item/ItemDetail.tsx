@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import Header from "../../components/Layouts/Header/Header"
-import ItemInfo from '../../components/Item/ItemInfo.tsx'
-import CommentList from '../../components/Item/CommentList'
-import CommentForm from '../../components/Item/CommentForm'
-import { useItemDetail } from '../../hooks/useItemDetail.ts'
-import ItemSummary from '../../components/Item/ItemSummary.tsx'
-import ItemImage from '../../components/Item/ItemImage.tsx'
-import { postComment } from '../../api/commentApi.ts'
+import { useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import ItemInfo from "../../components/Item/ItemInfo.tsx"
+import { useItemDetail } from "../../hooks/useItemDetail.ts"
+import ItemSummary from "../../components/Item/ItemSummary.tsx"
+import ItemImage from "../../components/Item/ItemImage.tsx"
+import { postComment } from "../../api/commentApi.ts"
+import ItemDetailLayout from "../../components/Layouts/ItemDetailLayout.tsx"
+import { PurchaseButton } from "../../components/Purchase/PurchaseButton.tsx"
+import ItemCommentSection from "../../components/Item/Comment/ItemCommentSection.tsx"
 
 /** 商品詳細画面
  *
@@ -18,8 +18,8 @@ import { postComment } from '../../api/commentApi.ts'
 export default function ItemDetail() {
   /** 状態管理 */
   const { id } = useParams()
-  const { item, setItem, loading, error } = useItemDetail(id) 
-  const [comment, setComment] = useState('')
+  const { item, setItem, loading, error } = useItemDetail(id)
+  const [comment, setComment] = useState("")
   const navigate = useNavigate()
 
   /** コメントを送信 */
@@ -36,9 +36,9 @@ export default function ItemDetail() {
         comments: [...item.comments, newComment],
       })
       // フォームをリセット
-      setComment('')
+      setComment("")
     } catch {
-      alert('コメント送信失敗')
+      alert("コメント送信失敗")
     }
   }
 
@@ -53,46 +53,36 @@ export default function ItemDetail() {
   if (error) return <p className="text-red-500">{error}</p>
   if (!item) return null
 
-  /** 商品が取得できた状態のUI */
+  /**
+   * 商品詳細コンポーネント
+   * レイアウトコンポーネントに画像と情報を渡す
+   * 購入ボタンをクリックすると購入画面へ遷移
+   * コメントリストとコメントフォームも表示
+   */
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <Header />
-      {/* メインコンテンツ */}
-      <div className="max-w-[1000px] mx-auto p-10 flex gap-10">
-        
-        {/* 左：画像 */}
-        <ItemImage src={item.image_url} alt={item.name} />
-
-        {/* 右：情報 */}
-        <div className="flex-1">
-          {/* 商品概要コンポーネント */}
-          <ItemSummary item={item} />
-
-        {/* 購入手続きへ ボタン */}
-          <button
-            onClick={handlePurchaseClick}
-            className="mt-6 w-full bg-red-500 text-white py-3 rounded">
-          購入手続きへ
-        </button>
-
-          {/* 商品情報 */}
-          <ItemInfo item={item} />
-
-          {/* コメント */}
-          <div className="mt-8">
-            <CommentList
+    <>
+      <ItemDetailLayout
+        /** 左：画像 */
+        image={<ItemImage src={item.image_url} alt={item.name} />}
+        /** 右：情報 */
+        content={
+          <>
+            <ItemSummary item={item} />
+            <PurchaseButton
+              onClick={handlePurchaseClick}
+              label="購入手続きへ"
+            />
+            <ItemInfo item={item} />
+            <ItemCommentSection
               comments={item.comments}
               count={item.comments_count}
-            />
-            <CommentForm
               comment={comment}
               setComment={setComment}
               onSubmit={handleSubmit}
             />
-          </div>
-
-        </div>
-      </div>
-    </div>
+          </>
+        }
+      ></ItemDetailLayout>
+    </>
   )
 }
