@@ -66,6 +66,7 @@ return (
           {/* 購入ボタン */}
           <PurchaseButton
             onClick={handlePurchase}
+            label="購入する"
           />
         </div>
       </div>
