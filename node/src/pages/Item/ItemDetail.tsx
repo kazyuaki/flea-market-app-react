@@ -8,7 +8,7 @@ import { postComment } from "../../api/commentApi.ts"
 import ItemDetailLayout from "../../components/Layouts/ItemDetailLayout.tsx"
 import { PurchaseButton } from "../../components/Purchase/PurchaseButton.tsx"
 import ItemCommentSection from "../../components/Item/Comment/ItemCommentSection.tsx"
-
+import { postLike, deleteLike } from "../../api/likeApi.ts"
 /** 商品詳細画面
  *
  * ・商品情報の表示
@@ -21,6 +21,35 @@ export default function ItemDetail() {
   const { item, setItem, loading, error } = useItemDetail(id)
   const [comment, setComment] = useState("")
   const navigate = useNavigate()
+
+  /* いいねのトグル処理 */
+  const handleLikeClick = async () => {
+    if (!item) return
+
+    const previousItem = { ...item }
+    const isAdding = !item.is_favorited
+
+    setItem({
+      ...item,
+      is_favorited: isAdding,
+      favorites_count: isAdding
+        ? item.favorites_count + 1
+        : item.favorites_count - 1,
+    })
+
+    try {
+      if (isAdding) {
+        await postLike(id!)
+      } else {
+        await deleteLike(id!)
+      }
+      console.log("いいねの更新に成功")
+    } catch (err) {
+      console.error("いいねの更新に失敗", err)
+      setItem(previousItem)
+      alert("いいねの更新に失敗しました")
+    }
+  }
 
   /** コメントを送信 */
   const handleSubmit = async () => {
@@ -67,7 +96,7 @@ export default function ItemDetail() {
         /** 右：情報 */
         content={
           <>
-            <ItemSummary item={item} />
+            <ItemSummary item={item} onLikeClick={handleLikeClick} />
             <PurchaseButton
               onClick={handlePurchaseClick}
               label="購入手続きへ"
