@@ -3,5 +3,6 @@ export type Comment = {
 	content: string;
 	user: {
 		name: string;
+		profile_image_url?: string | null;
 	};
 };
