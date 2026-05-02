@@ -13,6 +13,10 @@ class CreateCheckoutSessionController extends Controller
     {
         $item = Item::findOrFail($itemId);
 
+        if ($item->user_id === $request->user()->id) {
+            abort(403, '自分の商品は購入できません。');
+        }
+
         Stripe::setApiKey(config('services.stripe.secret'));
 
         $session = Session::create([

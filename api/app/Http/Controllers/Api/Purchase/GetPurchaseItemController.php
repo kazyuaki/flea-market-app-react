@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api\Purchase;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class GetPurchaseItemController extends Controller
 {
@@ -15,9 +13,12 @@ class GetPurchaseItemController extends Controller
      */
     public function __invoke(Request $request, $item_id)
     {
-        $item = Item::find($item_id);
-        // 認証されていない場合は最初のユーザーを取得（テスト用）
-        $user = Auth::user() ?? User::first(); 
+        $item = Item::findOrFail($item_id);
+        $user = $request->user();
+
+        if ($item->user_id === $user->id) {
+            abort(403, '自分の商品は購入できません。');
+        }
 
         return response()->json([
             'item' => $item,

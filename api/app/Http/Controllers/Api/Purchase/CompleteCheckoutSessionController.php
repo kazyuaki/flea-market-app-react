@@ -36,6 +36,10 @@ class CompleteCheckoutSessionController extends Controller
 
         $item = Item::findOrFail($itemId);
 
+        if ($item->user_id === $request->user()->id) {
+            abort(403, '自分の商品は購入できません。');
+        }
+
         Transaction::firstOrCreate([
             'item_id' => $item->id,
             'user_id' => $request->user()->id,
