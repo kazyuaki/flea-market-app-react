@@ -27,3 +27,9 @@ export const postPurchase = async (payload: {
 
   return res.data.checkout_url;
 };
+
+export const completeCheckout = async (sessionId: string) => {
+  await axios.post("/api/purchase/checkout/complete", {
+    session_id: sessionId,
+  });
+};

@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Item\StoreCommentController;
 use App\Http\Controllers\Api\MyPage\GetMyListedItemsController ;
 use App\Http\Controllers\Api\MyPage\GetMyPurchasedItemsController;
 use App\Http\Controllers\Api\Profile\UpdateUserProfileController;
+use App\Http\Controllers\Api\Purchase\CompleteCheckoutSessionController;
 use App\Http\Controllers\Api\Purchase\CreateCheckoutSessionController;
 use App\Http\Controllers\Api\Purchase\GetPurchaseItemController;
 use Illuminate\Http\Request;
@@ -40,8 +41,9 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
     /**** 購入関連 ****/
     // 購入する商品の情報を取得
     Route::get(('/purchase/{item_id}'), GetPurchaseItemController::class);
-    // StripeのCheckout Sessionを作成
+    // StripeのCheckout Sessionを作成・完了
     Route::post('/purchase/{item_id}/checkout', CreateCheckoutSessionController::class);
+    Route::post('/purchase/checkout/complete', CompleteCheckoutSessionController::class);
 
     
     /**** 配送先関連 ****/

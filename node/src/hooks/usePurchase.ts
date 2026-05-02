@@ -67,8 +67,6 @@ export const usePurchase = (itemId?: string) => {
         ...address,
       });
       window.location.href = checkoutUrl;
-
-      alert("購入完了！");
     } catch (err) {
       console.error(err);
       alert("購入に失敗しました");

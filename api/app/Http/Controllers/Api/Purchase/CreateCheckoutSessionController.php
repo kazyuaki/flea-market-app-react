@@ -18,6 +18,10 @@ class CreateCheckoutSessionController extends Controller
         $session = Session::create([
             'payment_method_types' => ['card'],
             'mode' => 'payment',
+            'metadata' => [
+                'item_id' => (string) $item->id,
+                'user_id' => (string) $request->user()->id,
+            ],
             'line_items' => [
                 [
                     'price_data' => [
@@ -30,7 +34,7 @@ class CreateCheckoutSessionController extends Controller
                     'quantity' => 1,
                 ]
             ],
-            'success_url' => config('services.frontend.url') . '/items',
+            'success_url' => config('services.frontend.url') . '/purchase/success?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => config('services.frontend.url') . '/purchase/' . $itemId,
         ]);
         return response()->json([
