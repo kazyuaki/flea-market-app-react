@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isAxiosError } from "axios";
 import { updateAddress } from "../api/address";
 import { validateAddress } from "../utils/validation/address";
 import { usePersistentForm } from "./usePersistentForm";
+import { getUser } from "../api/auth";
 
 /// 住所変更フォームのエラーの型定義
 export type AddressErrors = {
@@ -62,9 +63,7 @@ export const useAddressForm = () => {
   };
 
   // エラーがあるかどうか
-  const hasErrors = Object.values(clientErrors).some(
-    (v) => v && v.length > 0,
-  );
+  const hasErrors = Object.values(clientErrors).some((v) => v && v.length > 0);
   const hasTouchedFields = Object.values(touched).some(Boolean);
   const isSubmitDisabled = (hasTouchedFields || submitted) && hasErrors;
 
@@ -100,6 +99,35 @@ export const useAddressForm = () => {
 
     return false;
   };
+
+  // コンポーネントの初期化時にユーザー情報を取得してフォームに反映する
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await getUser();
+
+        setForm((prev) => {
+          const hasDraft = Object.values(prev).some(
+            (value) => value.trim() !== "",
+          );
+
+          if (hasDraft) {
+            return prev;
+          }
+
+
+          return {
+            postal_code: user.postal_code ?? "",
+            address: user.address ?? "",
+            building_name: user.building_name ?? "",
+          };
+        });
+      } catch (err) {
+        console.error("ユーザー情報の取得に失敗:", err);
+      }
+    };
+    fetchUser();
+  }, [setForm]);
 
   return {
     form,
