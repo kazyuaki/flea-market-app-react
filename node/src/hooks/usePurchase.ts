@@ -1,20 +1,18 @@
-import { useEffect, useState } from 'react';
-import type { Item } from '../types/item';
-import type { Address } from '../types/address';
-import { getPurchaseData, postPurchase } from '../api/purchaseApi';
-
-
+import { useEffect, useState } from "react";
+import type { Item } from "../types/item";
+import type { Address } from "../types/address";
+import { getPurchaseData, postPurchase } from "../api/purchaseApi";
 
 /** 購入に関するロジックを管理するカスタムフック */
 export const usePurchase = (itemId?: string) => {
   /** 商品情報、ユーザーの住所情報、支払い方法、ローディング状態、エラー状態を管理する */
   const [item, setItem] = useState<Item | null>(null);
   const [address, setAddress] = useState<Address>({
-    postal_code: '',
-    address: '',
-    building_name: '',
+    postal_code: "",
+    address: "",
+    building_name: "",
   });
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,7 +34,7 @@ export const usePurchase = (itemId?: string) => {
         });
       } catch (err) {
         console.error(err);
-        setError('データの取得に失敗しました');
+        setError("データの取得に失敗しました");
       } finally {
         setLoading(false);
       }
@@ -48,31 +46,32 @@ export const usePurchase = (itemId?: string) => {
   // 購入処理
   const handlePurchase = async () => {
     if (!paymentMethod) {
-      alert('支払い方法を選択してください');
+      alert("支払い方法を選択してください");
       return;
     }
 
     if (!item) {
-      alert('商品情報が取得できていません');
+      alert("商品情報が取得できていません");
       return;
     }
 
     if (!address.postal_code) {
-      alert('住所を設定してください');
+      alert("住所を設定してください");
       return;
     }
 
-   try {
-      await postPurchase({
+    try {
+      const checkoutUrl = await postPurchase({
         item_id: item.id,
         payment_method: paymentMethod,
         ...address,
       });
+      window.location.href = checkoutUrl;
 
-      alert('購入完了！');
+      alert("購入完了！");
     } catch (err) {
       console.error(err);
-      alert('購入に失敗しました');
+      alert("購入に失敗しました");
     }
   };
 
