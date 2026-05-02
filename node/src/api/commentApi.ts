@@ -1,14 +1,14 @@
+import axios from "../lib/axios";
+
 /** 商品に対するAPI */
 export const postComment = async (itemId: string, content: string) => {
-  const res = await fetch(`/api/items/${itemId}/comments`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ content }),
-  });
+  const res = await axios.post(`/api/items/${itemId}/comments`, { content });
 
-  if (!res.ok) throw new Error();
+  return res.data.data;
+};
 
-  return res.json();
+export const deleteComment = async (commentId: number) => {
+  await axios.delete(`/api/comments/${commentId}`);
+
+  return true;
 };

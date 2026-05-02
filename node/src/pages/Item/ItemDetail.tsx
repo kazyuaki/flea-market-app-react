@@ -4,7 +4,7 @@ import ItemInfo from "../../components/Item/ItemInfo.tsx"
 import { useItemDetail } from "../../hooks/useItemDetail.ts"
 import ItemSummary from "../../components/Item/ItemSummary.tsx"
 import ItemImage from "../../components/Item/ItemImage.tsx"
-import { postComment } from "../../api/commentApi.ts"
+import { postComment, deleteComment } from "../../api/commentApi.ts"
 import ItemDetailLayout from "../../components/Layouts/ItemDetailLayout.tsx"
 import { PurchaseButton } from "../../components/Purchase/PurchaseButton.tsx"
 import ItemCommentSection from "../../components/Item/Comment/ItemCommentSection.tsx"
@@ -77,6 +77,22 @@ export default function ItemDetail() {
     }
   }
 
+  const handleDeleteComment = async (commentId: number) => {
+    if (!item) return
+
+    try {
+      await deleteComment(commentId)
+      
+      setItem({
+        ...item,
+        comments_count: item.comments_count - 1,
+        comments: item.comments.filter((c) => c.id !== commentId),
+      })
+    } catch {
+      alert("コメントの削除に失敗しました")
+    }
+  }
+
   /* 購入手続きへ */
   const handlePurchaseClick = () => {
     if (!id) return
@@ -114,6 +130,7 @@ export default function ItemDetail() {
               comment={comment}
               setComment={setComment}
               onSubmit={handleSubmit}
+              onDelete={handleDeleteComment}
             />
           </>
         }

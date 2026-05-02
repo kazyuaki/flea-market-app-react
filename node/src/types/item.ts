@@ -17,6 +17,7 @@ export type Item = {
     content: string;
     user: {
       name: string;
+      profile_image_url?: string | null;
     };
   }[];
   categories: Category[];
