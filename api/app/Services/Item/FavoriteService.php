@@ -5,14 +5,14 @@ namespace App\Services\Item;
 use App\Models\Item;
 use App\Models\User;
 
-class LikeService
+class FavoriteService
 {
     /** 
      * ユーザーがお気に入り登録した商品を取得し、既にお気に入り登録されているかどうかを確認
      * @param User $user
      * @param Item $item
      */
-    public function toggleLike(User $user, Item $item)
+    public function toggleFavorite(User $user, Item $item)
     {
         if ($user->favorites()->whereKey($item->id)->exists()) {
             $user->favorites()->detach($item->id);

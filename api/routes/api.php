@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\Address\GetAddressController;
 use App\Http\Controllers\Api\Address\UpdateAddressController;
 use App\Http\Controllers\Api\Item\GetItemListController;
 use App\Http\Controllers\Api\Item\GetItemDetailController;
-use App\Http\Controllers\Api\Item\LikeController;
+use App\Http\Controllers\Api\Item\FavoriteController;
 use App\Http\Controllers\Api\Item\StoreItemController;
 use App\Http\Controllers\Api\Item\StoreCommentController;
 use App\Http\Controllers\Api\MyPage\GetMyListedItemsController ;
@@ -29,8 +29,8 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
     Route::get('/items/{id}', GetItemDetailController::class);
     // 商品出品
     Route::post('/items', StoreItemController::class);
-    // 商品へのいいね
-    Route::post('/items/{item}/like', LikeController::class);
+    // 商品へのお気に入り
+    Route::post('/items/{item}/favorite', FavoriteController::class);
     // 商品へのコメント投稿
     Route::post('/items/{item}/comments', StoreCommentController::class);
     

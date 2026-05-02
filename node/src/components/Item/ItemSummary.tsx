@@ -5,11 +5,11 @@ import bubble from '../../assets/speech-bubble.png'
 
 type Props = {
   item: Item
-  onLikeClick: () => void
+  onFavoriteClick: () => void
 }
 
 /** 商品の概要を表示するコンポーネント */
-export default function ItemSummary({ item, onLikeClick }: Props) {
+export default function ItemSummary({ item, onFavoriteClick }: Props) {
   return (
     <>
       {/* 商品名 */}
@@ -27,7 +27,7 @@ export default function ItemSummary({ item, onLikeClick }: Props) {
         <div className="flex flex-col items-center">
           <button
             type="button"
-            onClick={onLikeClick}
+            onClick={onFavoriteClick}
             className="focus:outline-none hover:opacity"
           >
             <img
