@@ -68,8 +68,8 @@ export const ProfilePage = () => {
     const success = await handleSubmit()
 
     if (success) {
-      await fetchUser()
       navigate("/items")
+      void fetchUser()
     }
   }
 
