@@ -26,6 +26,8 @@ export default function ItemDetail() {
   const [showLoginToast, setShowLoginToast] = useState(false)
   const navigate = useNavigate()
 
+  const isOwner = user && item ? user.id === item.user_id : false
+
   /* お気に入りのトグル処理 */
   const handleFavoriteClick = async () => {
     if (!item) return
@@ -112,6 +114,8 @@ export default function ItemDetail() {
   const handlePurchaseClick = () => {
     if (!id) return
 
+    if (isOwner) return
+
     if (!user) {
       setShowLoginToast(true)
       return
@@ -162,6 +166,7 @@ export default function ItemDetail() {
             <PurchaseButton
               onClick={handlePurchaseClick}
               label="購入手続きへ"
+              disabled={isOwner}
             />
             <ItemInfo item={item} />
             <ItemCommentSection
