@@ -1,4 +1,3 @@
-import Header from '../../components/Layouts/Header/Header'
 import { useParams } from 'react-router-dom'
 import { usePurchase } from '../../hooks/usePurchase'
 import { PurchaseItemInfo } from '../../components/Purchase/PurchaseItemInfo'
@@ -7,6 +6,7 @@ import { AddressSection } from '../../components/Purchase/AddressSection'
 import { PurchaseSummary } from '../../components/Purchase/PurchaseSummary'
 import { PurchaseButton } from '../../components/Purchase/PurchaseButton'
 import { useNavigate } from 'react-router-dom'
+import { PurchaseLayout } from '../../components/Layouts/PurchaseLayout'
 
 
 
@@ -36,41 +36,32 @@ export const PurchasePage = () => {
   if (!item) return null
 
 return (
-  <>
-    <Header />
-    <div className="bg-gray-100 min-h-screen py-10">
-      <div className="max-w-[1000px] mx-auto flex gap-10">
-        {/* 左エリア */}
-        <div className="flex-1">
-          {/* 商品情報 */}
-          <PurchaseItemInfo item={item} />
-          {/* 支払い方法 */}
-          <PaymentSelect
-            paymentMethod={paymentMethod}
-            setPaymentMethod={setPaymentMethod}
-          />
-          {/* 配送先 */}
-          <AddressSection
-            address={address}
-            onClick={handleChangeAddress}
-          />
-        </div>
-
-        {/* 右エリア */}
-        <div className="w-[300px]">
-          {/* 購入サマリー */}
-          <PurchaseSummary
-            item={item}
-            paymentMethod={paymentMethod}
-          />
-          {/* 購入ボタン */}
-          <PurchaseButton
-            onClick={handlePurchase}
-            label="購入する"
-          />
-        </div>
-      </div>
-    </div>
-  </>
+  <PurchaseLayout
+    main={
+      <>
+        <PurchaseItemInfo item={item} />
+        <PaymentSelect
+          paymentMethod={paymentMethod}
+          setPaymentMethod={setPaymentMethod}
+        />
+        <AddressSection
+          address={address}
+          onClick={handleChangeAddress}
+        />
+      </>
+    }
+    sidebar={
+      <>
+        <PurchaseSummary
+          item={item}
+          paymentMethod={paymentMethod}
+        />
+        <PurchaseButton
+          onClick={handlePurchase}
+          label="購入する"
+        />
+      </>
+    }
+  />
 )
 }
