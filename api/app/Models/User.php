@@ -42,4 +42,10 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    // ユーザーがお気に入り登録した商品を取得
+    public function favorites()
+    {
+        return $this->belongsToMany(Item::class, 'favorites', 'user_id', 'item_id')->withTimestamps();
+    }
+
 }

@@ -8,7 +8,7 @@ import { postComment } from "../../api/commentApi.ts"
 import ItemDetailLayout from "../../components/Layouts/ItemDetailLayout.tsx"
 import { PurchaseButton } from "../../components/Purchase/PurchaseButton.tsx"
 import ItemCommentSection from "../../components/Item/Comment/ItemCommentSection.tsx"
-
+import { toggleFavorite } from "../../api/favoriteApi.ts"
 /** 商品詳細画面
  *
  * ・商品情報の表示
@@ -21,6 +21,41 @@ export default function ItemDetail() {
   const { item, setItem, loading, error } = useItemDetail(id)
   const [comment, setComment] = useState("")
   const navigate = useNavigate()
+
+  /* お気に入りのトグル処理 */
+  const handleFavoriteClick = async () => {
+    if (!item) return
+
+    const previousItem = { ...item }
+    const isAdding = !item.is_favorited
+
+    setItem({
+      ...item,
+      is_favorited: isAdding,
+      favorites_count: isAdding
+        ? item.favorites_count + 1
+        : item.favorites_count - 1,
+    })
+
+    try {
+      const result = await toggleFavorite(id!)
+
+      setItem((current) => {
+        if (!current) return current
+
+        return {
+          ...current,
+          is_favorited: result.is_favorited,
+          favorites_count: result.favorites_count,
+        }
+      })
+      console.log("お気に入りの更新に成功:", result)
+    } catch (error) {
+      console.error("お気に入りの更新に失敗:", error)
+      setItem(previousItem)
+      alert("お気に入りの更新に失敗しました")
+    }
+  }
 
   /** コメントを送信 */
   const handleSubmit = async () => {
@@ -67,7 +102,7 @@ export default function ItemDetail() {
         /** 右：情報 */
         content={
           <>
-            <ItemSummary item={item} />
+            <ItemSummary item={item} onFavoriteClick={handleFavoriteClick} />
             <PurchaseButton
               onClick={handlePurchaseClick}
               label="購入手続きへ"
