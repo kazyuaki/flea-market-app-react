@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Address\GetAddressController;
 use App\Http\Controllers\Api\Address\UpdateAddressController;
+use App\Http\Controllers\Api\Item\DeleteCommentController;
 use App\Http\Controllers\Api\Item\GetItemListController;
 use App\Http\Controllers\Api\Item\GetItemDetailController;
 use App\Http\Controllers\Api\Item\FavoriteController;
@@ -31,8 +32,9 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
     Route::post('/items', StoreItemController::class);
     // 商品へのお気に入り
     Route::post('/items/{item}/favorite', FavoriteController::class);
-    // 商品へのコメント投稿
+    // 商品へのコメント投稿/削除
     Route::post('/items/{item}/comments', StoreCommentController::class);
+    Route::delete('/comments/{comment}', DeleteCommentController::class);
     
     /**** 購入関連 ****/
     // 購入する商品の情報を取得
