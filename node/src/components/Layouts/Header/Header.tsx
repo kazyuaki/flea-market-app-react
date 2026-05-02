@@ -1,4 +1,4 @@
-import type { FormEvent } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   Link,
   useLocation,
@@ -13,47 +13,74 @@ type Props = {
   showMyPage?: boolean
 }
 
+/**
+ * ヘッダーコンポーネント
+ * @param showMyPage マイページのリンクを表示するかどうか（デフォルトはtrue）
+ */
 export default function Header({ showMyPage = true }: Props) {
+  /** ログアウト機能 */
   const { logout, user } = useAuthContext()
-
+  /* ルーティング関係 */
   const navigate = useNavigate()
+  const location = useLocation()
+  /* 検索キーワード */
   const [searchParams] = useSearchParams()
   const keyword = searchParams.get("keyword") ?? ""
-
-  const location = useLocation()
+  /* 検索キーワードの状態 */
+  const [searchKeyword, setSearchKeyword] = useState(keyword)
+  const isFirstSearchEffect = useRef(true)
+  /* 画面判定（メール認証・商品一覧） */
   const isVerifyPage = location.pathname === "/verify-email"
-  const isMyPage = location.pathname === "/mypage"
   const isItemsPage = location.pathname === "/items"
 
   // 検索バーを表示する条件
-  const showSearchBar = isItemsPage || isMyPage
+  const showSearchBar = isItemsPage
 
+  // ログアウト処理
   const handleLogout = async () => {
     await logout()
     navigate("/login")
   }
 
-  const onClick = () => {
+  // 出品ページへ遷移
+  const handleSell = () => {
     navigate("/sell")
   }
 
-  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  /** 検索キーワードの変更を監視して、URLを更新する */
+  useEffect(() => {
+    if (!showSearchBar) return
 
-    const formData = new FormData(event.currentTarget)
-    const keyword = String(formData.get("keyword") ?? "")
-    const params = new URLSearchParams()
-    const trimmedKeyword = keyword.trim()
-
-    if (trimmedKeyword) {
-      params.set("keyword", trimmedKeyword)
+    if (isFirstSearchEffect.current) {
+      isFirstSearchEffect.current = false
+      return
     }
 
-    navigate({
-      pathname: "/items",
-      search: params.toString(),
-    })
-  }
+    const trimmedKeyword = searchKeyword.trim()
+
+    // ０.5秒のディレイを設けて、ユーザーが入力を完了するのを待つ
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams()
+
+      if (trimmedKeyword.length >= 1) {
+        params.set("keyword", trimmedKeyword)
+      }
+
+      if (trimmedKeyword.length === 0) {
+        navigate({
+          pathname: "/items",
+          search: "",
+        })
+      }
+      if (trimmedKeyword.length >= 1) {
+        navigate({
+          pathname: "/items",
+          search: params.toString(),
+        })
+      }
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [searchKeyword, navigate, showSearchBar])
 
   return (
     <header className="header">
@@ -68,16 +95,15 @@ export default function Header({ showMyPage = true }: Props) {
         <>
           {/* 中央 */}
           {showSearchBar && (
-            <form className="header-center" onSubmit={handleSearch}>
-              <input
-                key={keyword}
-                type="text"
-                name="keyword"
-                placeholder="なにをお探しですか？"
-                className="header-search"
-                defaultValue={keyword}
-              />
-            </form>
+            <input
+              key={keyword}
+              type="text"
+              name="keyword"
+              placeholder="なにをお探しですか？"
+              className="header-search"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
           )}
 
           {/* 右 */}
@@ -105,7 +131,7 @@ export default function Header({ showMyPage = true }: Props) {
                 <button
                   className="header-button"
                   type="button"
-                  onClick={onClick}
+                  onClick={handleSell}
                 >
                   出品
                 </button>
