@@ -33,6 +33,7 @@ class StoreItemController extends Controller
                 'user_id' => $request->user()->id,
                 'name' => $validated['name'],
                 'brand' => $validated['brand'] ?? null,
+                'color' => $validated['color'] ?? null,
                 'price' => $validated['price'],
                 'description' => $validated['description'] ?? null,
                 'image_url' => isset($paths[0]) ? Storage::url($paths[0]) : null, // 最初の画像を代表画像として保存

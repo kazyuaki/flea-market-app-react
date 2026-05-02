@@ -15,6 +15,7 @@ class Item extends Model
         'user_id',
         'name',
         'brand',
+        'color',
         'price',
         'description',
         'image_url',

@@ -16,6 +16,7 @@ class StoreItemRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'brand' => ['nullable', 'string', 'max:255'],
+            'color' => ['nullable', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'integer', 'min:1'],
             'category_ids' => ['required', 'array', 'min:1'],
@@ -35,6 +36,8 @@ class StoreItemRequest extends FormRequest
             'name.max' => '商品名は255文字以内でなければなりません。',
             'brand.string' => 'ブランドは文字列でなければなりません。',
             'brand.max' => 'ブランドは255文字以内でなければなりません。',
+            'color.string' => 'カラーは文字列でなければなりません。',
+            'color.max' => 'カラーは100文字以内でなければなりません。',
             'description.string' => '説明は文字列でなければなりません。',
             'price.required' => '価格は必須です。',
             'price.integer' => '価格は整数でなければなりません。',
