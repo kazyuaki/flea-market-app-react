@@ -8,7 +8,7 @@ import { postComment } from "../../api/commentApi.ts"
 import ItemDetailLayout from "../../components/Layouts/ItemDetailLayout.tsx"
 import { PurchaseButton } from "../../components/Purchase/PurchaseButton.tsx"
 import ItemCommentSection from "../../components/Item/Comment/ItemCommentSection.tsx"
-import { postLike, deleteLike } from "../../api/likeApi.ts"
+import { toggleLike } from "../../api/likeApi.ts"
 /** 商品詳細画面
  *
  * ・商品情報の表示
@@ -38,14 +38,20 @@ export default function ItemDetail() {
     })
 
     try {
-      if (isAdding) {
-        await postLike(id!)
-      } else {
-        await deleteLike(id!)
-      }
-      console.log("いいねの更新に成功")
-    } catch (err) {
-      console.error("いいねの更新に失敗", err)
+      const result = await toggleLike(id!)
+
+      setItem((current) => {
+        if (!current) return current
+
+        return {
+          ...current,
+          is_favorited: result.is_favorited,
+          favorites_count: result.favorites_count,
+        }
+      })
+      console.log("いいねの更新に成功:", result)
+    } catch (error) {
+      console.error("いいねの更新に失敗:", error)
       setItem(previousItem)
       alert("いいねの更新に失敗しました")
     }
