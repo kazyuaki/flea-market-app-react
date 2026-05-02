@@ -13,6 +13,7 @@ class GetItemDetailController extends Controller
         $item = Item::with([
             'categories',
             'comments.user', // コメントとそのユーザー情報を一緒に取得
+            'user:id,name,profile_image_url', // 出品者の情報を取得
         ])
             ->withCount(['favorites', 'comments'])
             ->findOrFail($id);
