@@ -8,6 +8,7 @@ import {
 import logo from "../../../assets/logo.svg"
 import "./Header.css"
 import { useAuthContext } from "../../../context/useAuthContext"
+import { Toast } from "../../Common/Toast"
 
 type Props = {
   showMyPage?: boolean
@@ -28,6 +29,7 @@ export default function Header({ showMyPage = true }: Props) {
   const keyword = searchParams.get("keyword") ?? ""
   /* 検索キーワードの状態 */
   const [searchKeyword, setSearchKeyword] = useState(keyword)
+  const [showLoginToast, setShowLoginToast] = useState(false)
   const isFirstSearchEffect = useRef(true)
   /* 画面判定（メール認証・商品一覧） */
   const isVerifyPage = location.pathname === "/verify-email"
@@ -44,8 +46,26 @@ export default function Header({ showMyPage = true }: Props) {
 
   // 出品ページへ遷移
   const handleSell = () => {
+    if (!user) {
+      setShowLoginToast(true)
+      return
+    }
+
     navigate("/sell")
   }
+
+  /** 未ログイン時のトースト表示を自動消去する */
+  useEffect(() => {
+    if (!showLoginToast) return
+
+    const timeoutId = window.setTimeout(() => {
+      setShowLoginToast(false)
+    }, 1000)
+
+    return () => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [showLoginToast])
 
   /** 検索キーワードの変更を監視して、URLを更新する */
   useEffect(() => {
@@ -58,7 +78,7 @@ export default function Header({ showMyPage = true }: Props) {
 
     const trimmedKeyword = searchKeyword.trim()
 
-    // ０.5秒のディレイを設けて、ユーザーが入力を完了するのを待つ
+    // 0.5秒のディレイを設けて、ユーザーが入力を完了するのを待つ
     const timer = setTimeout(() => {
       const params = new URLSearchParams()
 
@@ -84,6 +104,12 @@ export default function Header({ showMyPage = true }: Props) {
 
   return (
     <header className="header">
+      <Toast
+        message="ログインしてください"
+        isVisible={showLoginToast}
+        variant="error"
+      />
+
       {/* 左 */}
       <div className="header-logo-wrap">
         <Link to="/items" className="header-logo-link">
