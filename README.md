@@ -9,10 +9,16 @@ React + Laravel で構築しているフリマアプリです。フロントエ�
 - プロフィール登録、編集
 - 商品一覧、商品詳細
 - マイリスト表示
+- 商品検索
+- 商品へのいいね
 - 商品へのコメント投稿
+- コメント削除
 - 商品出品
+- Stripe Checkout による購入、購入完了処理
 - 購入画面、配送先変更
 - マイページでの出品商品 / 購入商品一覧
+- 未ログイン操作時のトースト通知
+- 出品者による自分の商品購入をフロント / API の両方で制限
 
 ## 技術スタック
 
@@ -77,6 +83,15 @@ MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_FROM_ADDRESS=hello@example.com
 MAIL_FROM_NAME="${APP_NAME}"
+
+FRONTEND_URL=http://localhost:5173
+```
+
+Stripe Checkout を使う場合は、あわせて次の値も設定します。
+
+```env
+STRIPE_KEY=pk_test_xxx
+STRIPE_SECRET=sk_test_xxx
 ```
 
 ### 3. DB 初期化
@@ -133,8 +148,12 @@ docker compose exec php php artisan test
 | GET | `/api/items` | 商品一覧 |
 | GET | `/api/items/{id}` | 商品詳細 |
 | POST | `/api/items` | 商品出品 |
+| POST | `/api/items/{item}/favorite` | いいね切り替え |
 | POST | `/api/items/{item}/comments` | コメント投稿 |
+| DELETE | `/api/comments/{comment}` | コメント削除 |
 | GET | `/api/purchase/{item_id}` | 購入画面用データ取得 |
+| POST | `/api/purchase/{item_id}/checkout` | Stripe Checkout Session 作成 |
+| POST | `/api/purchase/checkout/complete` | Stripe Checkout 完了処理 |
 | GET | `/api/purchase/address/{item_id}` | 配送先取得 |
 | POST | `/api/purchase/address` | 配送先更新 |
 | GET | `/api/mypage/listed` | 出品商品一覧 |
@@ -143,8 +162,9 @@ docker compose exec php php artisan test
 
 ログイン / 登録 / ログアウトは Fortify のルートを Vite 側で `/api/auth/*` からプロキシしています。
 
-## 現状メモ
+## 実装メモ
 
-- フロントのプロフィール更新APIは `node/src/api/profile.ts` で `/api/profile` を呼んでいますが、Laravel 側のルートは `/api/mypage/profile` です。
-- フロントには購入確定の `POST /api/purchase` 呼び出しがありますが、Laravel 側のAPIルートにはまだ定義がありません。
+- `/api/purchase/*`、商品出品、いいね、コメント投稿 / 削除、マイページ系 API は `auth:sanctum` と `verified` が必要です。
+- 出品者は自分の商品を購入できません。商品詳細の購入ボタンを無効化し、購入画面データ取得、Checkout Session 作成、Checkout 完了処理でも 403 を返します。
+- 未ログイン状態で出品、購入、いいね、コメント投稿を行うと、フロント側で「ログインしてください」のトーストを表示します。
 - `api/.env.example` は Laravel 標準の SQLite 設定なので、Docker で使う場合は上記の MySQL / MailHog 設定へ変更が必要です。
