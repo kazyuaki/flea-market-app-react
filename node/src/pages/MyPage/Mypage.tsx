@@ -1,6 +1,5 @@
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import ItemListContent from "../../components/Item/ItemListContent"
-import { useEffect } from "react"
 import { ProfileSection } from "../../components/MyPage/ProfileSection"
 import { useAuthContext } from "../../context/useAuthContext"
 import { getProfileImageUrl } from "../../utils/profileImage"
@@ -11,8 +10,6 @@ import { NormalLayout } from "../../components/Layouts/NormalLayout"
 export const MyPage = () => {
   /** 1. ルーティング・パラメータ管理 */
   const [searchParams] = useSearchParams()
-  const location = useLocation()
-  const navigate = useNavigate()
   const activeTab =
     searchParams.get("tab") === "purchased" ? "purchased" : "listed"
 
@@ -23,20 +20,6 @@ export const MyPage = () => {
   const { user } = useAuthContext()
   const avatarUrl = getProfileImageUrl(user?.profile_image_url)
   const userName = user?.name
-
-  /** タブの状態をURLクエリパラメータと同期させる */
-  useEffect(() => {
-    navigate(
-      {
-        pathname: location.pathname,
-        search: location.search,
-      },
-      {
-        replace: true,
-        state: null,
-      },
-    )
-  }, [location.pathname, location.search, navigate])
 
   return (
     <>
