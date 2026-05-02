@@ -4,6 +4,7 @@ import { RegisterPage } from "../pages/Auth/Register"
 import ItemList from "../pages/Item/ItemList"
 import ItemDetail from "../pages/Item/ItemDetail"
 import { PurchasePage } from "../pages/Purchase/PurchasePage"
+import { PurchaseSuccessPage } from "../pages/Purchase/PurchaseSuccessPage"
 import { ChangeAddressPage } from "../pages/Purchase/ChangeAddressPage"
 import { ProtectedRoute } from "./ProtectedRoute"
 import { PublicRoute } from "./PublicRoute"
@@ -73,6 +74,15 @@ export const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <ChangeAddressPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/purchase/success"
+        element={
+          <ProtectedRoute>
+            <PurchaseSuccessPage />
           </ProtectedRoute>
         }
       />
