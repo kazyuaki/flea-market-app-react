@@ -8,6 +8,7 @@ type CommentProps = {
   comment: string
   setComment: (v: string) => void
   onSubmit: () => void
+  onDelete: (commentId: number) => void
 }
 
 export default function ItemCommentSection({
@@ -16,10 +17,15 @@ export default function ItemCommentSection({
   comment,
   setComment,
   onSubmit,
+  onDelete,
 }: CommentProps) {
   return (
     <section className="mt-16" aria-label="商品コメント">
-      <CommentList comments={comments} count={count} />
+      <CommentList
+        comments={comments}
+        count={count}
+        onDelete={onDelete}
+      />
       <CommentForm
         comment={comment}
         setComment={setComment}
