@@ -18,7 +18,7 @@ export const updateProfile = async (
 	}
 
 	//* APIに送信 */
-	await axios.post("/api/profile", formData);
+	await axios.post("/api/mypage/profile", formData);
 };
 
 
