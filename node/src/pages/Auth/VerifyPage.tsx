@@ -1,4 +1,5 @@
 import axios from "../../lib/axios"
+import { getCsrfToken } from "../../api/auth"
 import { FormLayout } from "../../components/Layouts/FormLayout"
 import { CommonButton } from "../../components/Common/CommonButton"
 
@@ -11,6 +12,7 @@ export const VerifyPage = () => {
 
   const handleResend = async () => {
     try {
+      await getCsrfToken()
       await axios.post("/email/verification-notification")
       alert("認証メールを再送しました。")
     } catch {
