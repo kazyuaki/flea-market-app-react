@@ -3,6 +3,7 @@ import type { Category } from './category';
 /** 商品の型定義 */ 
 export type Item = {
   id: number;
+  user_id: number;
   name: string;
   brand: string;
   price: number;

@@ -6,7 +6,7 @@ type ToastProps = {
 
 const toastStyles = {
   success: "border-emerald-200 bg-emerald-50 text-emerald-900",
-  error: "border-red-200 bg-red-50 text-red-900",
+  error: "border-red-600 bg-red-500 text-white",
 }
 
 /** トースト通知コンポーネント */

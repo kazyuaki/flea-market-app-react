@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import ItemInfo from "../../components/Item/ItemInfo.tsx"
 import { useItemDetail } from "../../hooks/useItemDetail.ts"
@@ -9,6 +9,8 @@ import ItemDetailLayout from "../../components/Layouts/ItemDetailLayout.tsx"
 import { PurchaseButton } from "../../components/Purchase/PurchaseButton.tsx"
 import ItemCommentSection from "../../components/Item/Comment/ItemCommentSection.tsx"
 import { toggleFavorite } from "../../api/favoriteApi.ts"
+import { Toast } from "../../components/Common/Toast.tsx"
+import { useAuthContext } from "../../context/useAuthContext.ts"
 /** 商品詳細画面
  *
  * ・商品情報の表示
@@ -19,12 +21,21 @@ export default function ItemDetail() {
   /** 状態管理 */
   const { id } = useParams()
   const { item, setItem, loading, error } = useItemDetail(id)
+  const { user } = useAuthContext()
   const [comment, setComment] = useState("")
+  const [showLoginToast, setShowLoginToast] = useState(false)
   const navigate = useNavigate()
+
+  const isOwner = user && item ? user.id === item.user_id : false
 
   /* お気に入りのトグル処理 */
   const handleFavoriteClick = async () => {
     if (!item) return
+
+    if (!user) {
+      setShowLoginToast(true)
+      return
+    }
 
     const previousItem = { ...item }
     const isAdding = !item.is_favorited
@@ -61,6 +72,11 @@ export default function ItemDetail() {
   const handleSubmit = async () => {
     if (!comment.trim() || !item) return
 
+    if (!user) {
+      setShowLoginToast(true)
+      return
+    }
+
     try {
       // APIでコメントを保存
       const newComment = await postComment(id!, comment)
@@ -77,6 +93,7 @@ export default function ItemDetail() {
     }
   }
 
+  /* コメントを削除 */
   const handleDeleteComment = async (commentId: number) => {
     if (!item) return
 
@@ -96,8 +113,29 @@ export default function ItemDetail() {
   /* 購入手続きへ */
   const handlePurchaseClick = () => {
     if (!id) return
+
+    if (isOwner) return
+
+    if (!user) {
+      setShowLoginToast(true)
+      return
+    }
+
     navigate(`/purchase/${id}`)
   }
+
+  /** 未ログイン時のトースト表示を自動消去する */
+  useEffect(() => {
+    if (!showLoginToast) return
+
+    const timeoutId = window.setTimeout(() => {
+      setShowLoginToast(false)
+    }, 2000)
+
+    return () => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [showLoginToast])
 
   /* ローディング / エラー / 空状態の分岐表示 */
   if (loading) return <p>Loading...</p>
@@ -112,6 +150,12 @@ export default function ItemDetail() {
    */
   return (
     <>
+      <Toast
+        message="ログインしてください"
+        isVisible={showLoginToast}
+        variant="error"
+      />
+
       <ItemDetailLayout
         /** 左：画像 */
         image={<ItemImage src={item.image_url} alt={item.name} />}
@@ -122,6 +166,7 @@ export default function ItemDetail() {
             <PurchaseButton
               onClick={handlePurchaseClick}
               label="購入手続きへ"
+              disabled={isOwner}
             />
             <ItemInfo item={item} />
             <ItemCommentSection
