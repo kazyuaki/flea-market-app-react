@@ -22,14 +22,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+/*** 公開商品関連 ***/
+// 商品一覧
+Route::get('/items', GetItemListController::class);
+// 商品詳細
+Route::get('/items/{id}', GetItemDetailController::class);
+
 /*** 認証関連 ***/
 Route::middleware('auth:sanctum', 'verified')->group(function () {  
 
     /*** 商品関連 ***/
-    // 商品一覧
-    Route::get('/items', GetItemListController::class);
-    // 商品詳細
-    Route::get('/items/{id}', GetItemDetailController::class);
     // 商品出品
     Route::post('/items', StoreItemController::class);
     // 商品へのお気に入り
