@@ -70,7 +70,7 @@ export default function ItemList() {
   return (
     <>
       {/* メインコンテンツ */}
-      <NormalLayout showMyPageHeader={true}>
+      <NormalLayout showMyPageHeader={true} mainClassName="item-list-container">
         {/* トースト通知 */}
         <Toast
           message={toast?.message ?? ""}

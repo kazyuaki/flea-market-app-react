@@ -15,19 +15,17 @@ export default function ItemCard({ item }: { item: Item }) {
   const isUnavailable = isSold || isWithdrawn
 
   return (
-    <div style={{ width: "200px", position: "relative" }}>
-      <Link to={`/items/${item.id}`}>
+    <div className="item-card">
+      <Link to={`/items/${item.id}`} className="item-card-link">
         {/* 画像 */}
         <img
           src={item.image_url || noImage}
           alt={item.name}
-          className={`w-[180px] h-[180px] object-cover ${
-            isUnavailable ? "opacity-50" : ""
-          }`}
+          className={`item-card-image ${isUnavailable ? "opacity-50" : ""}`}
         />
 
         {/* 商品名 */}
-        <p>{item.name}</p>
+        <p className="item-card-name">{item.name}</p>
 
         {/* SOLD */}
         <SoldBadge isSold={isSold} />
