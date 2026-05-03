@@ -10,7 +10,7 @@ export type Item = {
   description: string;
   image_url: string;
   condition: number;
-  status: "selling" | "sold";
+  status: "available" | "selling" | "sold";
   favorites_count: number;
   comments_count: number;
   comments: {

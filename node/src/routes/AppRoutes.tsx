@@ -12,6 +12,7 @@ import { VerifyPage } from "../pages/Auth/VerifyPage"
 import { ProfilePage } from "../pages/MyPage/ProfilePage"
 import { SellPage } from "../pages/Sell/SellPage"
 import { MyPage } from "../pages/MyPage/Mypage"
+import { ItemEditPage } from "../pages/Item/ItemEditPage"
 
 /** アプリケーションのルーティングを定義するコンポーネント */
 export const AppRoutes = () => {
@@ -106,12 +107,21 @@ export const AppRoutes = () => {
         }
       />
 
-      {/* 出品ページ（未実装） */}
+      {/* 出品ページ */}
       <Route 
         path="/sell"
         element={
           <ProtectedRoute>
             <SellPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/items/:id/edit"
+        element={
+          <ProtectedRoute>
+            <ItemEditPage />
           </ProtectedRoute>
         }
       />
