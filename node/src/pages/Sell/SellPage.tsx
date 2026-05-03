@@ -46,11 +46,11 @@ export const SellPage = () => {
   }
 
   return (
-    <FormLayout title="商品の出品">
-      <FormContainer>
+    <FormLayout title="商品の出品" className="max-w-[1200px]">
+      <FormContainer className="max-w-[1200px]">
         <form
           onSubmit={handleFormSubmit}
-          className="mx-auto w-full max-w-[560px]"
+          className="mx-auto w-full max-w-[900px] text-base sm:text-lg"
         >
           <SellImageSection
             images={form.images}

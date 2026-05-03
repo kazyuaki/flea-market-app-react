@@ -25,6 +25,7 @@ export const SellDescriptionSection = ({
       value={form.name}
       placeholder="例）スニーカー"
       error={displayErrors.name?.[0]}
+      required
       onChange={(value) => handleChange("name", value)}
     />
     <InputField
@@ -49,6 +50,7 @@ export const SellDescriptionSection = ({
       value={form.price}
       placeholder="例）3,000"
       error={displayErrors.price?.[0]}
+      required
       onChange={(value) => handleChange("price", value)}
     />
   </FormSection>
