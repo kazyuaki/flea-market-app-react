@@ -9,15 +9,15 @@ type Props = {
 export const PurchaseItemInfo = ({ item }: Props) => {
   return (
     <>
-      <div className="flex gap-6 items-center border-b border-gray-500 pb-6">
+      <div className="flex items-center gap-10 border-b border-gray-500 pb-8">
         <img
           src={item.image_url ?? noimage}
           alt=""
-          className="w-[120px] h-[120px] object-cover bg-gray-300"
+          className="h-[240px] w-[240px] object-cover bg-gray-300"
         />
         <div>
-          <p className="text-lg font-bold">{item.name}</p>
-          <p className="text-xl font-bold mt-2">
+          <p className="text-3xl font-bold">{item.name}</p>
+          <p className="mt-3 text-3xl font-bold">
             ¥{item.price.toLocaleString()}
           </p>
         </div>
