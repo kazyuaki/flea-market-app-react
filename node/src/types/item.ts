@@ -30,6 +30,7 @@ export type Item = {
 export type ItemForm = {
   name: string;
   brand: string;
+  color: string;
   description: string;
   price: number | '';
   category_ids: number[];

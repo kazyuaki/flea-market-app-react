@@ -4,6 +4,7 @@ import type { ItemForm } from "../types/item";
 export const initialForm: ItemForm = {
   name: "",
   brand: "",
+  color: "",
   description: "",
   price: "",
   category_ids: [],
@@ -18,6 +19,7 @@ export const hydrate = (
 ): ItemForm => ({
   name: typeof parsed.name === "string" ? parsed.name : initialValue.name,
   brand: typeof parsed.brand === "string" ? parsed.brand : initialValue.brand,
+  color: typeof parsed.color === "string" ? parsed.color : initialValue.color,
   description:
     typeof parsed.description === "string"
       ? parsed.description
@@ -40,6 +42,7 @@ export const hydrate = (
 export const serialize = (draftForm: ItemForm) => ({
   name: draftForm.name,
   brand: draftForm.brand,
+  color: draftForm.color,
   description: draftForm.description,
   price: draftForm.price,
   category_ids: draftForm.category_ids,

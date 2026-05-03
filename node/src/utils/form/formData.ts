@@ -5,6 +5,7 @@ export const buildFormData = (form: ItemForm): FormData => {
 
   formData.append("name", form.name);
   formData.append("brand", form.brand);
+  formData.append("color", form.color);
   formData.append("description", form.description);
   formData.append("price", form.price.toString());
   form.category_ids.forEach((categoryId) => {
