@@ -5,6 +5,7 @@ type ImageUploadFieldProps = {
   label: string
   selectedCount: number
   images?: File[]
+  currentImageUrl?: string
   error?: string
   className?: string
   labelClassName?: string
@@ -17,6 +18,7 @@ export const ImageUploadField = ({
   label,
   selectedCount,
   images= [],
+  currentImageUrl,
   error,
   className = "",
   labelClassName = "text-xl font-bold",
@@ -36,10 +38,16 @@ export const ImageUploadField = ({
       <label className={`block cursor-pointer rounded-lg border-2 border-dashed p-12 hover:bg-gray-50 ${
         error ? "border-red-500" : "border-gray-300"
       }`}>
-        {previewUrls.length === 0 ? (
+        {previewUrls.length === 0 && !currentImageUrl ? (
           <div className="py-10 text-center text-lg text-gray-400">
             クリックして画像を選択
           </div>
+        ) : previewUrls.length === 0 && currentImageUrl ? (
+          <img
+            src={currentImageUrl}
+            alt="現在の商品画像"
+            className="mx-auto h-40 max-w-full rounded object-cover"
+          />
         ) : (
           <div className="grid grid-cols-3 gap-3">
             {previewUrls.map((url, index) => (

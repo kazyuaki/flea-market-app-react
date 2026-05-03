@@ -4,12 +4,14 @@ import { sellFieldProps } from "./sellFieldProps"
 
 type Props = {
   images: File[]
+  currentImageUrl?: string
   error?: string
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 export const SellImageSection = ({
   images,
+  currentImageUrl,
   error,
   onChange,
 }: Props) => (
@@ -19,6 +21,7 @@ export const SellImageSection = ({
       label="商品の画像"
       selectedCount={images.length}
       images={images}
+      currentImageUrl={currentImageUrl}
       error={error}
       className="mb-0"
       onChange={onChange}
