@@ -39,6 +39,7 @@ export const useExhibitionForm = () => {
   const displayErrors = {
     name: getError("name"),
     brand: getError("brand"),
+    color: getError("color"),
     description: getError("description"),
     price: getError("price"),
     category_ids: getError("category_ids"),
@@ -108,6 +109,7 @@ export const useExhibitionForm = () => {
     setTouched({
       name: false,
       brand: false,
+      color: false,
       description: false,
       price: false,
       category_ids: false,

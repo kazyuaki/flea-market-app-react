@@ -11,6 +11,7 @@ import ItemCommentSection from "../../components/Item/Comment/ItemCommentSection
 import { toggleFavorite } from "../../api/favoriteApi.ts"
 import { Toast } from "../../components/Common/Toast.tsx"
 import { useAuthContext } from "../../context/useAuthContext.ts"
+import { SoldBadge } from "../../components/Common/SoldBadge.tsx"
 /** 商品詳細画面
  *
  * ・商品情報の表示
@@ -27,6 +28,8 @@ export default function ItemDetail() {
   const navigate = useNavigate()
 
   const isOwner = user && item ? user.id === item.user_id : false
+
+  const isSold = item?.status === "sold"
 
   /* お気に入りのトグル処理 */
   const handleFavoriteClick = async () => {
@@ -99,7 +102,7 @@ export default function ItemDetail() {
 
     try {
       await deleteComment(commentId)
-      
+
       setItem({
         ...item,
         comments_count: item.comments_count - 1,
@@ -158,15 +161,28 @@ export default function ItemDetail() {
 
       <ItemDetailLayout
         /** 左：画像 */
-        image={<ItemImage src={item.image_url} alt={item.name} />}
+        image={
+          <>
+            <ItemImage
+              src={item.image_url}
+              alt={item.name}
+              className={isSold ? "grayscale opacity-50" : ""}
+            />
+            <SoldBadge isSold={isSold} />
+          </>
+        }
         /** 右：情報 */
         content={
           <>
-            <ItemSummary item={item} onFavoriteClick={handleFavoriteClick} />
+            <ItemSummary
+              item={item}
+              onFavoriteClick={handleFavoriteClick}
+              disabled={isOwner || isSold}
+            />
             <PurchaseButton
               onClick={handlePurchaseClick}
               label="購入手続きへ"
-              disabled={isOwner}
+              disabled={isOwner || isSold}
             />
             <ItemInfo item={item} />
             <ItemCommentSection

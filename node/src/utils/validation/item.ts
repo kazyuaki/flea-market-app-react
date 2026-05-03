@@ -3,6 +3,7 @@ import type { ItemForm } from "../../types/item";
 export type ItemErrors = {
   name?: string[];
   brand?: string[];
+  color?: string[];
   description?: string[];
   price?: string[];
   category_ids?: string[];
@@ -32,6 +33,11 @@ export const validateItem = (form: ItemForm): ItemErrors => {
   // ブランド（任意だけど文字数制限）
   if (form.brand && form.brand.length > 255) {
     nextErrors.brand = ["ブランド名は255文字以内で入力してください"];
+  }
+
+  // カラー（任意だけど文字数制限）
+  if (form.color && form.color.length > 100) {
+    nextErrors.color = ["カラーは100文字以内で入力してください"];
   }
 
   // 販売価格

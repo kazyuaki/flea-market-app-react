@@ -10,7 +10,7 @@ export type Item = {
   description: string;
   image_url: string;
   condition: number;
-  status: string;
+  status: "selling" | "sold";
   favorites_count: number;
   comments_count: number;
   comments: {
@@ -30,6 +30,7 @@ export type Item = {
 export type ItemForm = {
   name: string;
   brand: string;
+  color: string;
   description: string;
   price: number | '';
   category_ids: number[];

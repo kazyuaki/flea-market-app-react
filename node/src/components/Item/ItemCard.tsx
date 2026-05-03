@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
-import noImage from '../../assets/noimage.png'
+import { Link } from "react-router-dom"
+import noImage from "../../assets/noimage.png"
+import { SoldBadge } from "../Common/SoldBadge"
 
 type Item = {
   id: number
@@ -9,26 +10,26 @@ type Item = {
 }
 
 export default function ItemCard({ item }: { item: Item }) {
+  const isSold = item.status === "sold"
+
   return (
-    <div style={{ width: '200px', position: 'relative' }}>
-      <Link to ={`/items/${item.id}`}>
+    <div style={{ width: "200px", position: "relative" }}>
+      <Link to={`/items/${item.id}`}>
         {/* 画像 */}
         <img
           src={item.image_url || noImage}
           alt={item.name}
-          className="w-[180px] h-[180px] object-cover"
+          className={`w-[180px] h-[180px] object-cover ${
+            isSold ? "opacity-50" : ""
+          }`}
         />
 
         {/* 商品名 */}
         <p>{item.name}</p>
 
         {/* SOLD */}
-        {item.status === 'sold' && (
-          <div className="absolute top-0 left-0 bg-red-500 text-white text-xs px-2 py-1">
-            SOLD
-          </div>
-        )}
-        </Link>
+        <SoldBadge isSold={isSold} />
+      </Link>
     </div>
   )
 }

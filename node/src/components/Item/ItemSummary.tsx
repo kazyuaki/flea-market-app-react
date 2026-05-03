@@ -1,15 +1,20 @@
-import type { Item } from '../../types/item'
-import star from '../../assets/star.png'
-import redStar from '../../assets/red-star.png'
-import bubble from '../../assets/speech-bubble.png'
+import type { Item } from "../../types/item"
+import star from "../../assets/star.png"
+import redStar from "../../assets/red-star.png"
+import bubble from "../../assets/speech-bubble.png"
 
 type Props = {
   item: Item
   onFavoriteClick: () => void
+  disabled?: boolean
 }
 
 /** 商品の概要を表示するコンポーネント */
-export default function ItemSummary({ item, onFavoriteClick }: Props) {
+export default function ItemSummary({
+  item,
+  onFavoriteClick,
+  disabled,
+}: Props) {
   return (
     <>
       {/* 商品名 */}
@@ -28,12 +33,16 @@ export default function ItemSummary({ item, onFavoriteClick }: Props) {
           <button
             type="button"
             onClick={onFavoriteClick}
-            className="focus:outline-none hover:opacity"
+            disabled={disabled}
+            className={`focus:outline-none ${
+              disabled ? "cursor-not-allowed opacity-50" : "hover:opacity-70"
+            }`}
           >
             <img
               src={item.is_favorited ? redStar : star}
               alt="お気に入り"
-              className="w-12 h-12" />
+              className="w-12 h-12"
+            />
           </button>
           <span>{item.favorites_count}</span>
         </div>

@@ -7,8 +7,11 @@ import type { ItemForm } from "../../types/item"
 import type { ItemErrors } from "../../utils/validation/item"
 
 type Props = {
-  form: Pick<ItemForm, "name" | "brand" | "description" | "price">
-  displayErrors: Pick<ItemErrors, "name" | "brand" | "description" | "price">
+  form: Pick<ItemForm, "name" | "brand" | "color" | "description" | "price">
+  displayErrors: Pick<
+    ItemErrors,
+    "name" | "brand" | "color" | "description" | "price"
+  >
   handleChange: <K extends keyof ItemForm>(key: K, value: ItemForm[K]) => void
 }
 
@@ -35,6 +38,14 @@ export const SellDescriptionSection = ({
       placeholder="例）NIKE"
       error={displayErrors.brand?.[0]}
       onChange={(value) => handleChange("brand", value)}
+    />
+    <InputField
+      {...sellFieldProps}
+      label="カラー"
+      value={form.color}
+      placeholder="例）ブラック"
+      error={displayErrors.color?.[0]}
+      onChange={(value) => handleChange("color", value)}
     />
     <TextareaField
       {...sellFieldProps}
