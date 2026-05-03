@@ -136,8 +136,13 @@ export const ItemEditPage = () => {
   if (!item) return null
   if (user?.id !== item.user_id) return <Navigate to={`/items/${item.id}`} replace />
 
+  const isWithdrawn = item.status === "withdrawn"
+
   return (
-    <FormLayout title="商品の編集" className="max-w-[1200px]">
+    <FormLayout
+      title={isWithdrawn ? "商品の再出品" : "商品の編集"}
+      className="max-w-[1200px]"
+    >
       <FormContainer className="max-w-[1200px]">
         <form
           onSubmit={handleSubmit}
@@ -161,7 +166,13 @@ export const ItemEditPage = () => {
           />
 
           <CommonButton type="submit" disabled={saving || hasErrors}>
-            {saving ? "更新中..." : "更新する"}
+            {saving
+              ? isWithdrawn
+                ? "再出品中..."
+                : "更新中..."
+              : isWithdrawn
+                ? "編集して再出品する"
+                : "更新する"}
           </CommonButton>
         </form>
       </FormContainer>

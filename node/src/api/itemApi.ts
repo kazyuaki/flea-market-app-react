@@ -31,3 +31,11 @@ export const updateItem = async (
   const res = await axios.post(`/api/items/${id}`, formData);
   return res.data.data;
 };
+
+/**
+ * 出品した商品の取り下げ
+ */
+export const withdrawItem = async (id: string): Promise<Item> => {
+  const res = await axios.post(`/api/items/${id}/withdraw`);
+  return res.data.data;
+};

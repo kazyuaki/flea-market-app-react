@@ -10,6 +10,7 @@ class ItemRepository
     public function getItems(?int $userId, ?string $keyword)
     {
         return Item::query()
+            ->where('status', '!=', 'withdrawn')
             ->when($userId, function ($query) use ($userId) {
                 $query->where('user_id', '!=', $userId);
             })

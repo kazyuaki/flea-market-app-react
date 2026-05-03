@@ -20,6 +20,10 @@ class GetPurchaseItemController extends Controller
             abort(403, '自分の商品は購入できません。');
         }
 
+        if ($item->status !== 'available') {
+            abort(409, 'この商品は購入できません。');
+        }
+
         return response()->json([
             'item' => $item,
             'user' => [

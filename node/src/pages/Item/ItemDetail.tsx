@@ -9,10 +9,10 @@ import ItemDetailLayout from "../../components/Layouts/ItemDetailLayout.tsx"
 import { PurchaseButton } from "../../components/Purchase/PurchaseButton.tsx"
 import ItemCommentSection from "../../components/Item/Comment/ItemCommentSection.tsx"
 import { toggleFavorite } from "../../api/favoriteApi.ts"
+import { withdrawItem } from "../../api/itemApi.ts"
 import { Toast } from "../../components/Common/Toast.tsx"
 import { useAuthContext } from "../../context/useAuthContext.ts"
 import { SoldBadge } from "../../components/Common/SoldBadge.tsx"
-import { CommonButton } from "../../components/Common/CommonButton.tsx"
 import { SellerInfo } from "../../components/Item/SellerInfo.tsx"
 
 type ToastVariant = "success" | "error"
@@ -47,6 +47,8 @@ export default function ItemDetail() {
   const isOwner = user && item ? user.id === item.user_id : false
 
   const isSold = item?.status === "sold"
+  const isWithdrawn = item?.status === "withdrawn"
+  const isUnavailable = isSold || isWithdrawn
 
   /* お気に入りのトグル処理 */
   const handleFavoriteClick = async () => {
@@ -150,6 +152,27 @@ export default function ItemDetail() {
     navigate(`/items/${id}/edit`)
   }
 
+  const handleWithdrawClick = async () => {
+    if (!id || !item) return
+
+    const confirmed = window.confirm("この商品の出品を取り下げますか？")
+    if (!confirmed) return
+
+    try {
+      const withdrawnItem = await withdrawItem(id)
+      setItem(withdrawnItem)
+      setToast({
+        variant: "success",
+        message: "出品を取り下げました",
+      })
+    } catch {
+      setToast({
+        variant: "error",
+        message: "出品の取り下げに失敗しました",
+      })
+    }
+  }
+
   useEffect(() => {
     if (!toastState?.message) return
 
@@ -223,12 +246,42 @@ export default function ItemDetail() {
             <ItemImage
               src={item.image_url}
               alt={item.name}
-              className={isSold ? "grayscale opacity-50" : ""}
+              className={isUnavailable ? "grayscale opacity-50" : ""}
             />
             <SoldBadge isSold={isSold} />
+            {isWithdrawn && (
+              <div className="absolute left-0 top-0 bg-gray-700 px-2 py-1 text-xs text-white">
+                取り下げ済み
+              </div>
+            )}
             <SellerInfo
               name={item.user.name}
               profileImageUrl={item.user.profile_image_url}
+              actions={
+                isOwner ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleEditClick}
+                      className="rounded-full border border-blue-500 px-4 py-1 text-base font-bold text-blue-600 transition hover:bg-blue-50"
+                    >
+                      編集
+                    </button>
+                    <button
+                      type="button"
+                      disabled={isUnavailable}
+                      onClick={handleWithdrawClick}
+                      className={`rounded-full border px-4 py-1 text-base font-bold transition ${
+                        isUnavailable
+                          ? "cursor-not-allowed border-gray-300 text-gray-400"
+                          : "border-red-500 text-red-500 hover:bg-red-50"
+                      }`}
+                    >
+                      {isWithdrawn ? "取り下げ済み" : "取り下げ"}
+                    </button>
+                  </>
+                ) : undefined
+              }
             />
           </>
         }
@@ -238,21 +291,12 @@ export default function ItemDetail() {
             <ItemSummary
               item={item}
               onFavoriteClick={handleFavoriteClick}
-              disabled={isOwner || isSold}
+              disabled={isOwner || isUnavailable}
             />
-            {isOwner && (
-              <CommonButton
-                type="button"
-                onClick={handleEditClick}
-                className="mt-10 text-2xl"
-              >
-                商品情報を編集する
-              </CommonButton>
-            )}
             <PurchaseButton
               onClick={handlePurchaseClick}
               label="購入手続きへ"
-              disabled={isOwner || isSold}
+              disabled={isOwner || isUnavailable}
             />
             <ItemInfo item={item} />
             <ItemCommentSection

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Item\FavoriteController;
 use App\Http\Controllers\Api\Item\StoreItemController;
 use App\Http\Controllers\Api\Item\StoreCommentController;
 use App\Http\Controllers\Api\Item\UpdateItemController;
+use App\Http\Controllers\Api\Item\WithdrawItemController;
 use App\Http\Controllers\Api\MyPage\GetMyListedItemsController ;
 use App\Http\Controllers\Api\MyPage\GetMyPurchasedItemsController;
 use App\Http\Controllers\Api\Profile\UpdateUserProfileController;
@@ -37,6 +38,8 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
     Route::post('/items', StoreItemController::class);
     // 出品した商品の更新
     Route::post('/items/{item}', UpdateItemController::class);
+    // 出品した商品の取り下げ
+    Route::post('/items/{item}/withdraw', WithdrawItemController::class);
     // 商品へのお気に入り
     Route::post('/items/{item}/favorite', FavoriteController::class);
     // 商品へのコメント投稿/削除
