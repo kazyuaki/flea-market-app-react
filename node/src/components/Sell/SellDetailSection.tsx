@@ -26,6 +26,7 @@ export const SellDetailSection = ({
       value={form.category_ids}
       options={CATEGORY_OPTIONS}
       error={displayErrors.category_ids?.[0]}
+      required
       onChange={(value) => handleChange("category_ids", value)}
     />
     <SelectField
@@ -35,6 +36,7 @@ export const SellDetailSection = ({
       options={CONDITION_OPTIONS}
       placeholder="商品の状態を選択してください"
       error={displayErrors.condition?.[0]}
+      required
       onChange={(value) => handleChange("condition", value)}
       className="mb-0"
     />

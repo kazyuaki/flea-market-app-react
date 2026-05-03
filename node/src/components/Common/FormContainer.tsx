@@ -6,7 +6,7 @@ type FormContainerProps = {
 /** フォームを囲むコンテナ */
 export const FormContainer = ({ children, className = '' }: FormContainerProps) => {
   return (
-    <div className={`bg-white p-10 rounded shadow max-w-[1000px] mx-auto ${className}`}>
+    <div className={`mx-auto w-full max-w-[1000px] rounded bg-white p-6 shadow sm:p-10 ${className}`}>
       {children}
     </div>
   )

@@ -1,3 +1,5 @@
+import { RequiredBadge } from "./RequiredBadge"
+
 type TextareaFieldProps = {
   label: string
   value: string
@@ -5,6 +7,7 @@ type TextareaFieldProps = {
   placeholder?: string
   className?: string
   labelClassName?: string
+  required?: boolean
   rows?: number
   onChange: (value: string) => void
 }
@@ -17,12 +20,16 @@ export const TextareaField = ({
   placeholder,
   className = "",
   labelClassName = "text-xl font-bold",
+  required = false,
   rows = 5,
   onChange,
 }: TextareaFieldProps) => {
   return (
     <div className={`mb-10 ${className}`}>
-      <label className={`block mb-3 ${labelClassName}`}>{label}</label>
+      <label className={`mb-3 flex items-center gap-2 ${labelClassName}`}>
+        {label}
+        {required && <RequiredBadge />}
+      </label>
       <textarea
         value={value}
         placeholder={placeholder}

@@ -1,3 +1,5 @@
+import { RequiredBadge } from "./RequiredBadge"
+
 type CurrencyInputFieldProps = {
   label: string
   value: number | ""
@@ -5,6 +7,7 @@ type CurrencyInputFieldProps = {
   placeholder?: string
   className?: string
   labelClassName?: string
+  required?: boolean
   onChange: (value: number | "") => void
 }
 
@@ -21,11 +24,15 @@ export const CurrencyInputField = ({
   placeholder,
   className = "",
   labelClassName = "text-xl font-bold",
+  required = false,
   onChange,
 }: CurrencyInputFieldProps) => {
   return (
     <div className={`mb-10 ${className}`}>
-      <label className={`block mb-3 ${labelClassName}`}>{label}</label>
+      <label className={`mb-3 flex items-center gap-2 ${labelClassName}`}>
+        {label}
+        {required && <RequiredBadge />}
+      </label>
       <div className="relative">
         <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
           ¥

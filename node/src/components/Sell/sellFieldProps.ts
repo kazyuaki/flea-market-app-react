@@ -1,4 +1,4 @@
 /** フィールドのスタイル */
 export const sellFieldProps = {
-  labelClassName: "text-sm font-semibold text-gray-800",
+  labelClassName: "text-base font-semibold text-gray-800 sm:text-lg",
 };

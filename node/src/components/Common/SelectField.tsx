@@ -1,3 +1,5 @@
+import { RequiredBadge } from "./RequiredBadge"
+
 type SelectOption = {
   id: number
   name: string
@@ -11,6 +13,7 @@ type SelectFieldProps = {
   error?: string
   className?: string
   labelClassName?: string
+  required?: boolean
   onChange: (value: number | null) => void
 }
 
@@ -23,13 +26,17 @@ export const SelectField = ({
   error,
   className = "",
   labelClassName = "text-xl font-bold",
+  required = false,
   onChange,
 }: SelectFieldProps) => {
   const isPlaceholder = value === ""
 
   return (
     <div className={`mb-10 ${className}`}>
-      <label className={`block mb-3 ${labelClassName}`}>{label}</label>
+      <label className={`mb-3 flex items-center gap-2 ${labelClassName}`}>
+        {label}
+        {required && <RequiredBadge />}
+      </label>
       <select
         value={value}
         onChange={(e) =>

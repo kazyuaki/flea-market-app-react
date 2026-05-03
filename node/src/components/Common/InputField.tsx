@@ -1,5 +1,6 @@
 import { useState } from "react"
 import eye from "../../assets/eye.png"
+import { RequiredBadge } from "./RequiredBadge"
 
 type props = {
   label: string
@@ -9,6 +10,7 @@ type props = {
   type?: "text" | "password" | "email"
   className?: string
   labelClassName?: string
+  required?: boolean
   onChange: (value: string) => void
 }
 
@@ -21,6 +23,7 @@ export const InputField = ({
   type = "text",
   className = "",
   labelClassName = "text-xl font-bold",
+  required = false,
   onChange
 }: props) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -29,8 +32,9 @@ export const InputField = ({
 
   return (
     <div className={`mb-10 ${className}`}>
-      <label className={`block mb-3 ${labelClassName}`}>
+      <label className={`mb-3 flex items-center gap-2 ${labelClassName}`}>
         {label}
+        {required && <RequiredBadge />}
       </label>
       <div className="relative">
         <input

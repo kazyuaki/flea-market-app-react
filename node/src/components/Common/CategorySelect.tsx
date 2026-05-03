@@ -1,4 +1,5 @@
 import type { CategoryOption } from "../../types/category"
+import { RequiredBadge } from "./RequiredBadge"
 
 type CategorySelectProps = {
   label: string
@@ -6,6 +7,7 @@ type CategorySelectProps = {
   options: CategoryOption[]
   error?: string
   labelClassName?: string
+  required?: boolean
   onChange: (value: number[]) => void
 }
 
@@ -16,11 +18,15 @@ export const CategorySelect = ({
   options,
   error,
   labelClassName = "text-xl font-bold",
+  required = false,
   onChange,
 }: CategorySelectProps) => {
   return (
     <div className="mb-10">
-      <label className={`block mb-3 ${labelClassName}`}>{label}</label>
+      <label className={`mb-3 flex items-center gap-2 ${labelClassName}`}>
+        {label}
+        {required && <RequiredBadge />}
+      </label>
 
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
@@ -38,7 +44,7 @@ export const CategorySelect = ({
                 )
               }
               className={`
-                px-3 py-1 rounded-full border text-sm
+                rounded-full border px-4 py-2 text-base
                 ${isActive
                   ? "bg-red-500 text-white border-red-500"
                   : "bg-white text-gray-500 border-gray-300 border-dashed hover:bg-gray-100"}
