@@ -23,14 +23,20 @@ class UpdateItemController extends Controller
         $validated = $request->validated();
 
         $item = DB::transaction(function () use ($request, $validated, $item) {
-            $item->update([
+            $data = [
                 'name' => $validated['name'],
                 'brand' => $validated['brand'] ?? null,
                 'color' => $validated['color'] ?? null,
                 'price' => $validated['price'],
                 'description' => $validated['description'] ?? null,
                 'condition' => $validated['condition'],
-            ]);
+            ];
+
+            if ($item->status === 'withdrawn') {
+                $data['status'] = 'available';
+            }
+
+            $item->update($data);
 
             $item->categories()->sync($validated['category_ids']);
 
@@ -51,7 +57,9 @@ class UpdateItemController extends Controller
                 ]);
             }
 
-            return $item->load(['categories', 'images']);
+            return $item
+                ->load(['categories', 'images', 'comments.user', 'user:id,name,profile_image_url'])
+                ->loadCount(['favorites', 'comments']);
         });
 
         return response()->json([
