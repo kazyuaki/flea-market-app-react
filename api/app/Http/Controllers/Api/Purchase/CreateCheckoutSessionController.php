@@ -17,6 +17,10 @@ class CreateCheckoutSessionController extends Controller
             abort(403, '自分の商品は購入できません。');
         }
 
+        if ($item->status !== 'available') {
+            abort(409, 'この商品は購入できません。');
+        }
+
         Stripe::setApiKey(config('services.stripe.secret'));
 
         $session = Session::create([

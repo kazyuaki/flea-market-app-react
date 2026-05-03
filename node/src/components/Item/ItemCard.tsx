@@ -11,6 +11,8 @@ type Item = {
 
 export default function ItemCard({ item }: { item: Item }) {
   const isSold = item.status === "sold"
+  const isWithdrawn = item.status === "withdrawn"
+  const isUnavailable = isSold || isWithdrawn
 
   return (
     <div style={{ width: "200px", position: "relative" }}>
@@ -20,7 +22,7 @@ export default function ItemCard({ item }: { item: Item }) {
           src={item.image_url || noImage}
           alt={item.name}
           className={`w-[180px] h-[180px] object-cover ${
-            isSold ? "opacity-50" : ""
+            isUnavailable ? "opacity-50" : ""
           }`}
         />
 
@@ -29,6 +31,11 @@ export default function ItemCard({ item }: { item: Item }) {
 
         {/* SOLD */}
         <SoldBadge isSold={isSold} />
+        {isWithdrawn && (
+          <div className="absolute top-0 left-0 bg-gray-700 text-white text-xs px-2 py-1">
+            取り下げ済み
+          </div>
+        )}
       </Link>
     </div>
   )
