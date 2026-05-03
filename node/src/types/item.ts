@@ -21,6 +21,11 @@ export type Item = {
       profile_image_url?: string | null;
     };
   }[];
+  user: {
+    id: number;
+    name: string;
+    profile_image_url?: string | null;
+  };
   categories: Category[];
   color: string;
   is_favorited: boolean;

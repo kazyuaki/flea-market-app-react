@@ -13,6 +13,7 @@ import { Toast } from "../../components/Common/Toast.tsx"
 import { useAuthContext } from "../../context/useAuthContext.ts"
 import { SoldBadge } from "../../components/Common/SoldBadge.tsx"
 import { CommonButton } from "../../components/Common/CommonButton.tsx"
+import { SellerInfo } from "../../components/Item/SellerInfo.tsx"
 
 type ToastVariant = "success" | "error"
 
@@ -195,6 +196,7 @@ export default function ItemDetail() {
   if (error) return <p className="text-red-500">{error}</p>
   if (!item) return null
 
+
   /**
    * 商品詳細コンポーネント
    * レイアウトコンポーネントに画像と情報を渡す
@@ -224,6 +226,10 @@ export default function ItemDetail() {
               className={isSold ? "grayscale opacity-50" : ""}
             />
             <SoldBadge isSold={isSold} />
+            <SellerInfo
+              name={item.user.name}
+              profileImageUrl={item.user.profile_image_url}
+            />
           </>
         }
         /** 右：情報 */
