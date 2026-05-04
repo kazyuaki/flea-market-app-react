@@ -7,6 +7,7 @@ import { useProfileForm } from "../../hooks/useProfileForm"
 import { useAuthContext } from "../../context/useAuthContext"
 import { ProfileImageUpload } from "../../components/MyPage/ProfileImageUpload"
 import { ProfileFormFields } from "../../components/MyPage/ProfileFormFields"
+import { Toast } from "../../components/Common/Toast"
 
 /** プロフィール入力画面 */
 export const ProfilePage = () => {
@@ -18,6 +19,7 @@ export const ProfilePage = () => {
     displayErrors,
     loading,
     isSubmitDisabled,
+    toast,
     preview,
     handleChange,
     handleImageChange,
@@ -35,14 +37,25 @@ export const ProfilePage = () => {
     const success = await handleSubmit()
 
     if (success) {
-      navigate("/items")
-      void fetchUser()
+      await fetchUser()
+      navigate("/items", {
+        state: {
+          toast: {
+            message: "プロフィールを更新しました",
+            variant: "success",
+          },
+        },
+      })
     }
   }
 
-
   return (
     <FormLayout title="プロフィール設定" className="max-w-[1100px]">
+      <Toast
+        message={toast?.message ?? ""}
+        isVisible={toast !== null}
+        variant={toast?.variant ?? "error"}
+      />
       <FormContainer className="max-w-[1100px]">
         <ProfileImageUpload
           preview={preview}

@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isAxiosError } from "axios";
 import { usePersistentForm } from "./usePersistentForm";
 
 export type FormErrors<T> = Partial<Record<keyof T, string[]>>;
+type ToastState = {
+  message: string;
+  variant: "success" | "error";
+};
 
 type UseFormParams<T extends object> = {
   storageKey: string;
@@ -10,6 +14,7 @@ type UseFormParams<T extends object> = {
   validate: (form: T) => FormErrors<T>;
   submit: (form: T) => Promise<void>;
   onServerValidationError?: (errors: FormErrors<T>) => void;
+  successMessage?: string;
   errorMessage?: string;
   persist?: boolean;
 };
@@ -21,6 +26,7 @@ export const useForm = <T extends object>({
   validate,
   submit,
   onServerValidationError,
+  successMessage,
   errorMessage = "エラーが発生しました。時間を置いて再度お試しください。",
   persist = true,
 }: UseFormParams<T>) => {
@@ -42,6 +48,7 @@ export const useForm = <T extends object>({
   );
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<ToastState | null>(null);
 
   const clientErrors = validate(form);
 
@@ -64,6 +71,18 @@ export const useForm = <T extends object>({
   const hasTouchedFields = Object.values(touched).some(Boolean);
   const isSubmitDisabled = (hasTouchedFields || submitted) && hasErrors;
 
+  useEffect(() => {
+    if (!toast) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setToast(null);
+    }, 2000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [toast]);
+
   // フォームの入力変更を処理する関数
   const handleChange = (key: keyof T, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -85,6 +104,14 @@ export const useForm = <T extends object>({
     try {
       await submit(form);
       clearStoredForm();
+
+      if (successMessage) {
+        setToast({
+          message: successMessage,
+          variant: "success",
+        });
+      }
+
       return true;
     } catch (error) {
       if (isAxiosError(error)) {
@@ -94,10 +121,16 @@ export const useForm = <T extends object>({
           onServerValidationError?.(serverErrors);
           return false;
         } else {
-          alert(errorMessage);
+          setToast({
+            message: errorMessage,
+            variant: "error",
+          });
         }
       } else {
-        alert(errorMessage);
+        setToast({
+          message: errorMessage,
+          variant: "error",
+        });
       }
       return false;
     } finally {
@@ -111,6 +144,7 @@ export const useForm = <T extends object>({
     displayErrors,
     isSubmitDisabled,
     loading,
+    toast,
     handleChange,
     handleSubmit,
   };

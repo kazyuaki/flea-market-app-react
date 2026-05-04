@@ -32,6 +32,7 @@ export const useAddressForm = () => {
     setForm,
     displayErrors,
     isSubmitDisabled,
+    toast,
     handleChange,
     handleSubmit,
   } = useForm<AddressForm>({
@@ -39,6 +40,7 @@ export const useAddressForm = () => {
     initialForm,
     validate: validateAddress,
     submit: updateAddress,
+    successMessage: "配送先を変更しました",
     errorMessage: "サーバーエラーが発生しました",
   });
 
@@ -75,6 +77,7 @@ export const useAddressForm = () => {
     form,
     displayErrors,
     isSubmitDisabled,
+    toast,
     handleChange,
     handleSubmit,
   };

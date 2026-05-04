@@ -39,6 +39,7 @@ export const useProfileForm = () => {
     displayErrors,
     loading,
     isSubmitDisabled,
+    toast,
     handleChange,
     handleSubmit,
   } = useForm<ProfileForm>({
@@ -52,9 +53,8 @@ export const useProfileForm = () => {
       if (storageKey) {
         clearProfileDraft(storageKey);
       }
-
-      alert("プロフィールを更新しました");
     },
+    successMessage:"プロフィールを更新しました",
     errorMessage: "プロフィールの更新に失敗しました",
   });
 
@@ -108,6 +108,7 @@ export const useProfileForm = () => {
     displayErrors,
     loading,
     isSubmitDisabled,
+    toast,
     preview,
     handleChange,
     handleImageChange,

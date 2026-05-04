@@ -8,13 +8,14 @@ import { useAuthContext } from "../../context/useAuthContext"
 import type { RegisterInput } from "../../types/auth"
 import type { Field } from "../../types/form"
 import { useRegisterForm } from "../../hooks/useRegisterForm"
+import { Toast } from "../../components/Common/Toast"
 
 /** 会員登録画面 */
 export const RegisterPage = () => {
   /* ナビゲーション、認証コンテキスト、フォームの状態管理をセットアップ */
   const navigate = useNavigate()
   const { fetchUser } = useAuthContext()
-  const { form, displayErrors, isSubmitDisabled, loading, handleChange, handleSubmit } =
+  const { form, displayErrors, isSubmitDisabled, loading, toast, handleChange, handleSubmit } =
     useRegisterForm()
   
   /* フォームフィールドの定義 */
@@ -57,6 +58,11 @@ export const RegisterPage = () => {
 
   return (
     <FormLayout title="会員登録" className="auth-page-container">
+      <Toast
+        message={toast?.message ?? ""}
+        isVisible={toast !== null}
+        variant={toast?.variant ?? "error"}
+      />
       <FormContainer className="auth-form-container">
         <form onSubmit={handleSubmitWithRedirect} className="auth-form">
           {fields.map((field) => (
