@@ -62,6 +62,14 @@
     max-width: 1000px;
 }
 
+.address-form-page-container {
+    max-width: 800px;
+}
+
+.address-form-container {
+    max-width: 1000px;
+}
+
 /* タブ */
 .tabs {
     display: flex;
@@ -129,6 +137,34 @@
     .auth-form p {
         margin-top: 28px;
         font-size: 20px;
+    }
+
+    .address-form-page-container {
+        max-width: 1040px;
+        padding-inline: 32px;
+    }
+
+    .address-form-page-container h2 {
+        margin-bottom: 40px;
+        font-size: 48px;
+    }
+
+    .address-form-container {
+        padding: 56px;
+    }
+
+    .address-form label {
+        font-size: 28px;
+    }
+
+    .address-form input {
+        padding: 18px 20px;
+        font-size: 24px;
+    }
+
+    .address-form button[type="submit"] {
+        padding-block: 18px;
+        font-size: 28px;
     }
 
     .mypage-container {
