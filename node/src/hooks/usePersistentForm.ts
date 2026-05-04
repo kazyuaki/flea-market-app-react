@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 
-type PersistentFormOptions<T extends Record<string, unknown>> = {
+type PersistentFormOptions<T extends object> = {
   hydrate?: (parsed: Record<string, unknown>, initialValue: T) => T;
   serialize?: (form: T) => Record<string, unknown>;
+  disabled?: boolean;
 };
 
 // localStorage からフォームの値を読み取る関数
-const readStoredValue = <T extends Record<string, unknown>>(
+const readStoredValue = <T extends object>(
   storageKey: string,
   initialValue: T,
   options?: PersistentFormOptions<T>,
 ): T => {
+  if (options?.disabled) return initialValue;
+
   const storedValue = localStorage.getItem(storageKey);
 
   if (!storedValue) return initialValue;
@@ -36,7 +39,7 @@ const readStoredValue = <T extends Record<string, unknown>>(
 };
 
 /** localStorage にフォーム値を保持する共通フック */
-export const usePersistentForm = <T extends Record<string, unknown>>(
+export const usePersistentForm = <T extends object>(
   storageKey: string,
   initialValue: T,
   options?: PersistentFormOptions<T>,
@@ -46,7 +49,11 @@ export const usePersistentForm = <T extends Record<string, unknown>>(
   );
 
   useEffect(() => {
-    const serializedForm = options?.serialize ? options.serialize(form) : form;
+    if (options?.disabled) return;
+
+    const serializedForm = options?.serialize
+      ? options.serialize(form)
+      : (form as Record<string, unknown>);
     localStorage.setItem(storageKey, JSON.stringify(serializedForm));
   }, [form, options, storageKey]);
 

@@ -14,10 +14,10 @@ export const RegisterPage = () => {
   /* ナビゲーション、認証コンテキスト、フォームの状態管理をセットアップ */
   const navigate = useNavigate()
   const { fetchUser } = useAuthContext()
-  const { form, errors, loading, handleChange, handleSubmit } =
+  const { form, displayErrors, isSubmitDisabled, loading, handleChange, handleSubmit } =
     useRegisterForm()
   
-  //* フォームフィールドの定義 */
+  /* フォームフィールドの定義 */
   const fields: Field<RegisterInput>[] = [
     {
       name: "name",
@@ -56,22 +56,22 @@ export const RegisterPage = () => {
   }
 
   return (
-    <FormLayout title="会員登録">
-      <FormContainer>
-        <form onSubmit={handleSubmitWithRedirect}>
+    <FormLayout title="会員登録" className="auth-page-container">
+      <FormContainer className="auth-form-container">
+        <form onSubmit={handleSubmitWithRedirect} className="auth-form">
           {fields.map((field) => (
             <InputField
               key={field.name}
               label={field.label}
               value={form[field.name]}
-              error={errors[field.name]?.[0]}
+              error={displayErrors[field.name]?.[0]}
               type={field.type}
               placeholder={field.placeholder}
               onChange={(value) => handleChange(field.name, value)}
             />
           ))}
 
-          <CommonButton type="submit" disabled={loading}>
+          <CommonButton type="submit" disabled={loading || isSubmitDisabled}>
             {loading ? "登録中..." : "登録する"}
           </CommonButton>
 
