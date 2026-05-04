@@ -1,6 +1,6 @@
 import type { RegisterInput } from "../../types/auth";
 
-type RegisterErrors = {
+export type RegisterErrors = {
   name?: string[];
   email?: string[];
   password?: string[];
