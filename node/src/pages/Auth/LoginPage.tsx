@@ -44,9 +44,9 @@ export const LoginPage = () => {
   }
 
   return (
-    <FormLayout title="ログイン">
-      <FormContainer>
-        <form onSubmit={handleSubmitWithRedirect}>
+    <FormLayout title="ログイン" className="auth-page-container">
+      <FormContainer className="auth-form-container">
+        <form onSubmit={handleSubmitWithRedirect} className="auth-form">
           {fields.map((field) => (
             <InputField
               key={field.name}

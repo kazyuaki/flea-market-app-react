@@ -24,7 +24,7 @@ export const MyPage = () => {
   return (
     <>
       {/* メインコンテンツ */}
-      <NormalLayout showMyPageHeader={false}>
+      <NormalLayout showMyPageHeader={false} mainClassName="mypage-container">
 
         {/* プロフィールセクション */}
         <ProfileSection
