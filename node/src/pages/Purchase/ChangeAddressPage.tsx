@@ -7,11 +7,12 @@ import { useAddressForm } from "../../hooks/useAddressForm"
 import type { Field } from "../../types/form"
 import type { AddressForm } from "../../hooks/useAddressForm"
 import { useNavigate } from "react-router-dom"
+import { Toast } from "../../components/Common/Toast"
 
 /** 配送先変更画面 */
 export const ChangeAddressPage = () => {
   /// 住所変更フォームのロジックを管理するカスタムフック
-  const { form, displayErrors, isSubmitDisabled, handleChange, handleSubmit } =
+  const { form, displayErrors, isSubmitDisabled, toast, handleChange, handleSubmit } =
     useAddressForm()
 
   // 変更完了後に前のページに戻るためのナビゲーションフック
@@ -29,14 +30,23 @@ export const ChangeAddressPage = () => {
     e.preventDefault()
     const success = await handleSubmit()
 
-    if (success) navigate(-1)
+    if (success) {
+      window.setTimeout(() => {
+        navigate(-1)
+      }, 1000)
+    }
   }
 
   return (
-    <FormLayout title="住所変更">
+    <FormLayout title="住所変更" className="address-form-page-container">
+      <Toast
+        message={toast?.message ?? ""}
+        isVisible={toast !== null}
+        variant={toast?.variant ?? "error"}
+      />
       {/* 住所変更フォーム */}
-      <FormContainer>
-        <form onSubmit={handleSubmitWithRedirect}>
+      <FormContainer className="address-form-container">
+        <form onSubmit={handleSubmitWithRedirect} className="address-form">
           {/* フォーム入力項目（fieldsから生成） */}
           {/* 郵便番号、住所、建物名（任意） */}
           {fields.map((field) => (

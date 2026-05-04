@@ -8,12 +8,13 @@ import { useAuthContext } from "../../context/useAuthContext"
 import type { LoginForm } from "../../hooks/useLoginForm"
 import { useLoginForm } from "../../hooks/useLoginForm"
 import type { Field } from "../../types/form"
+import { Toast } from "../../components/Common/Toast"
 
 export const LoginPage = () => {
   /// ナビゲーション、認証コンテキスト、フォームの状態管理をセットアップ
   const navigate = useNavigate()
   const { fetchUser } = useAuthContext()
-  const { form, displayErrors, isSubmitDisabled, handleChange, handleSubmit } =
+  const { form, displayErrors, isSubmitDisabled, toast, handleChange, handleSubmit } =
     useLoginForm()
   
   /* フォームフィールドの定義 */
@@ -45,6 +46,11 @@ export const LoginPage = () => {
 
   return (
     <FormLayout title="ログイン" className="auth-page-container">
+      <Toast
+        message={toast?.message ?? ""}
+        isVisible={toast !== null}
+        variant={toast?.variant ?? "error"}
+      />
       <FormContainer className="auth-form-container">
         <form onSubmit={handleSubmitWithRedirect} className="auth-form">
           {fields.map((field) => (
