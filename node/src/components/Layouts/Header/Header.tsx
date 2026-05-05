@@ -9,6 +9,7 @@ import logo from "../../../assets/logo.svg"
 import "./Header.css"
 import { useAuthContext } from "../../../context/useAuthContext"
 import { Toast } from "../../Common/Toast"
+import { ConfirmDialog } from "../../Common/ConfirmDialog"
 
 type Props = {
   showMyPage?: boolean
@@ -30,6 +31,8 @@ export default function Header({ showMyPage = true }: Props) {
   /* 検索キーワードの状態 */
   const [searchKeyword, setSearchKeyword] = useState(keyword)
   const [showLoginToast, setShowLoginToast] = useState(false)
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
   const isFirstSearchEffect = useRef(true)
   /* 画面判定（メール認証・商品一覧） */
   const isVerifyPage = location.pathname === "/verify-email"
@@ -39,9 +42,23 @@ export default function Header({ showMyPage = true }: Props) {
   const showSearchBar = isItemsPage
 
   // ログアウト処理
-  const handleLogout = async () => {
-    await logout()
-    navigate("/login")
+  const handleLogoutClick = () => {
+    setIsLogoutDialogOpen(true)
+  }
+
+  // ログアウトの確認ダイアログで「ログアウト」を選択したときの処理
+  const handleConfirmLogout = async () => {
+    if (isLoggingOut) return
+
+    setIsLoggingOut(true)
+
+    try {
+      await logout()
+      setIsLogoutDialogOpen(false)
+      navigate("/login")
+    } finally {
+      setIsLoggingOut(false)
+    }
   }
 
   // 出品ページへ遷移
@@ -109,6 +126,16 @@ export default function Header({ showMyPage = true }: Props) {
         isVisible={showLoginToast}
         variant="error"
       />
+      <ConfirmDialog
+        isOpen={isLogoutDialogOpen}
+        title="ログアウトしますか？"
+        message=""
+        confirmLabel="ログアウト"
+        onConfirm={handleConfirmLogout}
+        onCancel={() => setIsLogoutDialogOpen(false)}
+        isProcessing={isLoggingOut}
+        variant="primary"
+      />
 
       {/* 左 */}
       <div className="header-logo-wrap">
@@ -140,7 +167,7 @@ export default function Header({ showMyPage = true }: Props) {
                   <button
                     className="header-link-button"
                     type="button"
-                    onClick={handleLogout}
+                    onClick={handleLogoutClick}
                   >
                     ログアウト
                   </button>

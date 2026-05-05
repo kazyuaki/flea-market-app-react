@@ -14,6 +14,7 @@ import { Toast } from "../../components/Common/Toast.tsx"
 import { useAuthContext } from "../../context/useAuthContext.ts"
 import { SoldBadge } from "../../components/Common/SoldBadge.tsx"
 import { SellerInfo } from "../../components/Item/SellerInfo.tsx"
+import { ConfirmDialog } from "../../components/Common/ConfirmDialog.tsx"
 
 type ToastVariant = "success" | "error"
 
@@ -37,6 +38,8 @@ export default function ItemDetail() {
   const { user } = useAuthContext()
   const [comment, setComment] = useState("")
   const [showLoginToast, setShowLoginToast] = useState(false)
+  const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false)
+  const [isWithdrawing, setIsWithdrawing] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const toastState = (location.state as ItemDetailLocationState | null)?.toast
@@ -155,12 +158,17 @@ export default function ItemDetail() {
   const handleWithdrawClick = async () => {
     if (!id || !item) return
 
-    const confirmed = window.confirm("この商品の出品を取り下げますか？")
-    if (!confirmed) return
+    setIsWithdrawDialogOpen(true)
+  }
 
+  const handleConfirmWithdraw = async () => {
+    if (!id || !item || isWithdrawing) return
+
+    setIsWithdrawing(true)
     try {
       const withdrawnItem = await withdrawItem(id)
       setItem(withdrawnItem)
+      setIsWithdrawDialogOpen(false)
       setToast({
         variant: "success",
         message: "出品を取り下げました",
@@ -170,6 +178,8 @@ export default function ItemDetail() {
         variant: "error",
         message: "出品の取り下げに失敗しました",
       })
+    } finally {
+      setIsWithdrawing(false)
     }
   }
 
@@ -237,6 +247,16 @@ export default function ItemDetail() {
         message={toast?.message ?? ""}
         isVisible={toast !== null}
         variant={toast?.variant ?? "success"}
+      />
+      <ConfirmDialog
+        isOpen={isWithdrawDialogOpen}
+        title="出品を取り下げますか？"
+        message="取り下げると商品一覧には表示されなくなります。編集ボタンから再出品できます。"
+        confirmLabel="取り下げる"
+        onConfirm={handleConfirmWithdraw}
+        onCancel={() => setIsWithdrawDialogOpen(false)}
+        isProcessing={isWithdrawing}
+        variant="danger"
       />
 
       <ItemDetailLayout

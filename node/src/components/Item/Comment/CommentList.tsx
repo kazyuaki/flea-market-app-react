@@ -1,15 +1,45 @@
+import { useState } from 'react'
 import type { Comment } from '../../../types/comment'
 import { getProfileImageUrl } from '../../../utils/profileImage'
+import { ConfirmDialog } from '../../Common/ConfirmDialog'
 
 type Props = {
   comments: Comment[]
   count: number
-  onDelete: (commentId: number) => void
+  onDelete: (commentId: number) => Promise<void> | void
 }
 
+/* コメント一覧と削除機能を提供するコンポーネント */
 export default function CommentList({ comments, count, onDelete }: Props) {
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleConfirmDelete = async () => {
+    if (deleteTargetId === null || isDeleting) return
+
+    setIsDeleting(true)
+
+    try {
+      await onDelete(deleteTargetId)
+      setDeleteTargetId(null)
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
   return (
     <>
+      <ConfirmDialog
+        isOpen={deleteTargetId !== null}
+        title="コメントを削除しますか？"
+        message="削除したコメントは元に戻せません。"
+        confirmLabel="削除する"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeleteTargetId(null)}
+        isProcessing={isDeleting}
+        variant="danger"
+      />
+
       <h2 className="text-2xl text-gray-600 font-bold mb-2">
         コメント({count})
       </h2>
@@ -34,7 +64,7 @@ export default function CommentList({ comments, count, onDelete }: Props) {
               </p>
               <button
                 type="button"
-                onClick={() => onDelete(comment.id)}
+                onClick={() => setDeleteTargetId(comment.id)}
                 className="ml-5 text-sm text-red-500">
                 削除
               </button>
