@@ -20,7 +20,7 @@ class UpdateUserProfileRequest extends FormRequest
             'address' => ['required', 'string', 'max:255'],
             'building_name' => ['nullable', 'string', 'max:255'],
             'phone_number' =>  ['required', 'regex:/^[0-9\-]+$/', 'max:20'],
-            'image' =>  ['nullable', 'image', 'mimes:jpeg,png', 'max:2048'], // 画像は任意、最大2MB
+            'image' =>  ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,webp', 'max:4048'], // 画像は任意、最大4MB
         ];
     }
 }

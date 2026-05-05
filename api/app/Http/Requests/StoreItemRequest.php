@@ -23,7 +23,7 @@ class StoreItemRequest extends FormRequest
             'category_ids.*' => ['required', 'integer', 'exists:categories,id'],
             'condition' => ['required', 'integer', 'between:1,4'],
             'images' => ['nullable', 'array'],
-            'images.*' => ['image', 'mimes:jpeg,jpg,png,webp,gif', 'max:2048'],
+            'images.*' => ['image', 'mimes:jpeg,jpg,png,webp,gif', 'max:4048'],
         ];
     }
 
