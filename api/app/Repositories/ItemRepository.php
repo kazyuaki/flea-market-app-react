@@ -6,7 +6,9 @@ use App\Models\Item;
 
 class ItemRepository
 {
-    // 自分の商品以外を取得するクエリ
+    /*      
+     * 商品一覧を取得するロジック
+     */
     public function getItems(?int $userId, ?string $keyword)
     {
         return Item::query()
@@ -18,5 +20,21 @@ class ItemRepository
                 $query->where('name', 'like', "%{$keyword}%");
             })
             ->get();
+    }
+
+    /*      
+     * 商品を保存するロジック
+     */
+    public function createItem(array $data): Item
+    {
+        return Item::create($data);
+    }
+
+    /*      
+    * 商品情報を編集するロジック
+    */
+    public function updateItem(Item $item, array $data): bool
+    {
+        return $item->update($data);
     }
 }
