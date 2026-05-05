@@ -111,7 +111,7 @@ class ItemService
                     'url' => Storage::url($path),
                 ], $paths));
                 // 代表画像を更新
-                $item->itemRepository->updateItem($item,[
+                $this->itemRepository->updateItem($item, [
                     'image_url' => Storage::url($paths[0]),
                 ]);
             }
