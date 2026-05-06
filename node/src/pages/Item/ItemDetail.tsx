@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { isAxiosError } from "axios"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import ItemInfo from "../../components/Item/ItemInfo.tsx"
 import { useItemDetail } from "../../hooks/useItemDetail.ts"
@@ -37,6 +38,7 @@ export default function ItemDetail() {
   const { item, setItem, loading, error } = useItemDetail(id)
   const { user } = useAuthContext()
   const [comment, setComment] = useState("")
+  const [commentError, setCommentError] = useState("")
   const [showLoginToast, setShowLoginToast] = useState(false)
   const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false)
   const [isWithdrawing, setIsWithdrawing] = useState(false)
@@ -102,6 +104,8 @@ export default function ItemDetail() {
       return
     }
 
+    setCommentError("")
+
     try {
       // APIでコメントを保存
       const newComment = await postComment(id!, comment)
@@ -113,8 +117,20 @@ export default function ItemDetail() {
       })
       // フォームをリセット
       setComment("")
-    } catch {
-      alert("コメント送信失敗")
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 422) {
+        const contentError = error.response.data?.errors?.content?.[0]
+
+        if (typeof contentError === "string") {
+          setCommentError(contentError)
+          return
+        }
+      }
+
+      setToast({
+        variant: "error",
+        message: "コメント送信に失敗しました",
+      })
     }
   }
 
@@ -323,7 +339,11 @@ export default function ItemDetail() {
               comments={item.comments}
               count={item.comments_count}
               comment={comment}
-              setComment={setComment}
+              setComment={(value) => {
+                setComment(value)
+                if (commentError) setCommentError("")
+              }}
+              error={commentError}
               onSubmit={handleSubmit}
               onDelete={handleDeleteComment}
             />

@@ -7,6 +7,7 @@ type CommentProps = {
   count: number
   comment: string
   setComment: (v: string) => void
+  error?: string
   onSubmit: () => void
   onDelete: (commentId: number) => void
 }
@@ -16,6 +17,7 @@ export default function ItemCommentSection({
   count,
   comment,
   setComment,
+  error,
   onSubmit,
   onDelete,
 }: CommentProps) {
@@ -29,6 +31,7 @@ export default function ItemCommentSection({
       <CommentForm
         comment={comment}
         setComment={setComment}
+        error={error}
         onSubmit={onSubmit}
       />
     </section>
