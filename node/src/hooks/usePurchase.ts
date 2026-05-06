@@ -3,6 +3,11 @@ import type { Item } from "../types/item";
 import type { Address } from "../types/address";
 import { getPurchaseData, postPurchase } from "../api/purchaseApi";
 
+type ToastState = {
+  message: string;
+  variant: "success" | "error";
+};
+
 /** 購入に関するロジックを管理するカスタムフック */
 export const usePurchase = (itemId?: string) => {
   /** 商品情報、ユーザーの住所情報、支払い方法、ローディング状態、エラー状態を管理する */
@@ -15,6 +20,7 @@ export const usePurchase = (itemId?: string) => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<ToastState | null>(null);
 
   /** 商品とユーザーの住所情報をまとめて取得する */
   useEffect(() => {
@@ -43,20 +49,39 @@ export const usePurchase = (itemId?: string) => {
     fetchData();
   }, [itemId]);
 
+  useEffect(() => {
+    if (!toast) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setToast(null);
+    }, 2000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [toast]);
+
+  const showErrorToast = (message: string) => {
+    setToast({
+      message,
+      variant: "error",
+    });
+  };
+
   // 購入処理
   const handlePurchase = async () => {
     if (!paymentMethod) {
-      alert("支払い方法を選択してください");
+      showErrorToast("支払い方法を選択してください");
       return;
     }
 
     if (!item) {
-      alert("商品情報が取得できていません");
+      showErrorToast("商品情報が取得できていません");
       return;
     }
 
     if (!address.postal_code) {
-      alert("住所を設定してください");
+      showErrorToast("住所を設定してください");
       return;
     }
 
@@ -69,7 +94,7 @@ export const usePurchase = (itemId?: string) => {
       window.location.href = checkoutUrl;
     } catch (err) {
       console.error(err);
-      alert("購入に失敗しました");
+      showErrorToast("購入に失敗しました");
     }
   };
 
@@ -79,6 +104,8 @@ export const usePurchase = (itemId?: string) => {
     setAddress,
     paymentMethod,
     setPaymentMethod,
+    toast,
+    showErrorToast,
     handlePurchase,
     loading,
     error,
