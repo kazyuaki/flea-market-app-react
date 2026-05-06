@@ -14,7 +14,7 @@ class CheckoutService
     /**
      * StripeのCheckout Sessionを作成するロジック
      */    
-    public function createSession(User $user, int $itemId): string
+    public function createSession(User $user, int $itemId, string $paymentMethod): string
     {
         $item = Item::findOrFail($itemId);
 
@@ -25,12 +25,23 @@ class CheckoutService
         if ($item->status !== 'available') {
             abort(409, 'この商品は購入できません。');
         }
+
+        if ($paymentMethod === 'konbini') {
+            $this->completePurchase($item, $user);
+
+            return config('services.frontend.url') . '/mypage?tab=purchased';
+        }
         
         Stripe::setApiKey(config('services.stripe.secret'));
 
+        $paymentMethodTypes = match ($paymentMethod) {
+            'card' => ['card'],
+            default => abort(422, '支払い方法を選択してください。'),
+        };
+
         /** @var array<string, mixed> $checkoutParams */
         $checkoutParams = [
-            'payment_method_types' => ['card'],
+            'payment_method_types' => $paymentMethodTypes,
             'mode' => 'payment',
             'metadata' => [
                 'item_id' => (string) $item->id,
@@ -91,6 +102,11 @@ class CheckoutService
             abort(409, 'すでに購入されています。');
         }
 
+        $this->completePurchase($item, $user);
+     }
+
+    private function completePurchase(Item $item, User $user): void
+    {
         // トランザクションの作成と商品のステータス更新を行う
         DB::transaction(function () use ($item, $user) {
             // トランザクションの作成
@@ -104,5 +120,5 @@ class CheckoutService
                 'status' => 'sold',
             ]);
         });
-     }
+    }
 }

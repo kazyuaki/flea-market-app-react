@@ -23,7 +23,15 @@ class StoreCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => 'required|string|max:255',
+            'content' => 'nullable|string|max:255',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'content.string' => 'コメント内容は文字列でなければなりません。',
+            'content.max' => 'コメント内容は255文字以内でなければなりません。',
         ];
     }
 }

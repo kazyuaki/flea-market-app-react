@@ -9,6 +9,7 @@ import { PurchaseButton } from '../../components/Purchase/PurchaseButton'
 import { useNavigate } from 'react-router-dom'
 import { PurchaseLayout } from '../../components/Layouts/PurchaseLayout'
 import { ConfirmDialog } from '../../components/Common/ConfirmDialog'
+import { Toast } from '../../components/Common/Toast'
 
 
 
@@ -26,7 +27,7 @@ export const PurchasePage = () => {
   const [isPurchaseDialogOpen, setIsPurchaseDialogOpen] = useState(false)
   const [isPurchasing, setIsPurchasing] = useState(false)
   // カスタムフックから必要な状態と関数を取得
-  const { item, address, loading, error, handlePurchase, paymentMethod, setPaymentMethod } = usePurchase(itemId)
+  const { item, address, loading, error, handlePurchase, paymentMethod, setPaymentMethod, toast, showErrorToast } = usePurchase(itemId)
 
   const navigate = useNavigate()
 
@@ -36,6 +37,11 @@ export const PurchasePage = () => {
   }
 
   const handlePurchaseClick = () => {
+    if (!paymentMethod) {
+      showErrorToast("支払い方法を選択してください")
+      return
+    }
+
     setIsPurchaseDialogOpen(true)
   }
 
@@ -58,6 +64,11 @@ export const PurchasePage = () => {
 
 return (
   <>
+    <Toast
+      message={toast?.message ?? ""}
+      isVisible={toast !== null}
+      variant={toast?.variant ?? "error"}
+    />
     <ConfirmDialog
       isOpen={isPurchaseDialogOpen}
       title="この商品を購入しますか？"

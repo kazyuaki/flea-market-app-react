@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react"
 
 const PAYMENT_OPTIONS = [
-  { value: "1", label: "コンビニ支払い" },
-  { value: "2", label: "カード支払い" },
+  { value: "konbini", label: "コンビニ支払い" },
+  { value: "card", label: "カード支払い" },
 ]
 
 /** 支払い方法選択コンポーネント */
