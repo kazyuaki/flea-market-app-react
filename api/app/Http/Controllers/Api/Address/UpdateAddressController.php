@@ -13,7 +13,7 @@ class UpdateAddressController extends Controller
     {
         $user = Auth::user() ?? User::first();
 
-        // バリデーションはUpdateAddressRequestで行われるため、ここでは直接更新処理を行う
+        // 更新処理
         $user->update([
             'postal_code' => $request->postal_code,
             'address' => $request->address,

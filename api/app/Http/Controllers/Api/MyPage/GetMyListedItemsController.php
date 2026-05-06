@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class GetMyListedItemsController extends Controller
 {
+    /*
+     * 自分の出品した商品の一覧を取得するコントローラー
+     */
     public function __invoke(Request $request)
     {
         $user = Auth::user();

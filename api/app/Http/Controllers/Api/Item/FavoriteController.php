@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
+    /*
+     * 商品のお気に入り登録・解除を行うコントローラー
+     */
     public function __invoke(Item $item, FavoriteService $favoriteService)
     {
         /** @var User $user */

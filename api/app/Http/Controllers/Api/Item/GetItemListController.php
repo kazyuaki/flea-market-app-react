@@ -11,6 +11,10 @@ class GetItemListController extends Controller
 {
     public function __construct(protected ItemService $itemService){}
 
+    /*
+    * 商品の一覧を取得するコントローラー
+    * クエリパラメータでキーワード検索も可能
+    */
     public function __invoke(Request $request)
     {
         $keyword = $request->query('keyword');

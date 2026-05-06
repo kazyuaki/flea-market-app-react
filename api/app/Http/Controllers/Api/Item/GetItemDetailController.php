@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class GetItemDetailController extends Controller
 {
+    /*
+     * 商品の詳細を取得するコントローラー
+     */
     public function __invoke(Request $request, $id)
     {
         $item = Item::with([

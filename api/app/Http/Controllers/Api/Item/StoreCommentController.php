@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 class StoreCommentController extends Controller
 {
+    /*
+     * 商品にコメントを投稿するコントローラー
+     */private $commentService; 
     public function __invoke(
         StoreCommentRequest $request,
         Item $item,
