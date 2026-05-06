@@ -8,6 +8,9 @@ use Illuminate\Routing\Controller;
 
 class GetMyPurchasedItemsController extends Controller
 {
+    /*
+    * 購入した商品の一覧を取得するコントローラー
+    */
     public function __invoke()
     {
         $user = Auth::user();

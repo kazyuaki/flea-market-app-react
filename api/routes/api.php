@@ -46,19 +46,18 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
     Route::post('/items/{item}/comments', StoreCommentController::class);
     Route::delete('/comments/{comment}', DeleteCommentController::class);
     
+    /**** 配送先関連 ****/
+    // 配送先情報の取得
+    Route::get('/purchase/address', GetAddressController::class);
+    // 配送先情報の更新
+    Route::post('/purchase/address', UpdateAddressController::class);
+
     /**** 購入関連 ****/
     // 購入する商品の情報を取得
-    Route::get(('/purchase/{item_id}'), GetPurchaseItemController::class);
+    Route::get('/purchase/{item_id}', GetPurchaseItemController::class);
     // StripeのCheckout Sessionを作成・完了
     Route::post('/purchase/{item_id}/checkout', CreateCheckoutSessionController::class);
     Route::post('/purchase/checkout/complete', CompleteCheckoutSessionController::class);
-
-    
-    /**** 配送先関連 ****/
-    // 配送先情報の取得
-    Route::get('/purchase/address/{item_id}', GetAddressController::class);
-    // 配送先情報の更新
-    Route::post('/purchase/address', UpdateAddressController::class);
 
     /**** マイページ関連 ****/
     // 出品した商品一覧

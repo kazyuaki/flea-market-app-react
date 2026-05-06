@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 class CompleteCheckoutSessionController extends Controller
 {
+    /*
+     * チェックアウトセッションの完了を処理するコントローラー
+     */
     public function __invoke(
         Request $request,
         CheckoutService $checkoutService,

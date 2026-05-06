@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class CreateCheckoutSessionController extends Controller
 {
+    /*
+     * チェックアウトセッションを作成するコントローラー
+     */
     public function __invoke(
         Request $request,
         int $itemId,

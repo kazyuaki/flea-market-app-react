@@ -8,6 +8,9 @@ use App\Services\Item\CommentService;
 
 class DeleteCommentController extends Controller
 {
+    /*
+    * 商品のコメントを削除するコントローラー
+    */
     public function __invoke(Comment $comment, CommentService $service)
     {
         $service->delete(request()->user(), $comment);

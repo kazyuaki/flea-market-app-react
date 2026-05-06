@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class UpdateUserProfileController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * ユーザープロフィールの更新
      *
      * @return \Illuminate\Http\Response
      */

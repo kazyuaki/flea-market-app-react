@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class GetPurchaseItemController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * 購入する商品の情報を取得するコントローラー
      */
     public function __invoke(Request $request, $item_id)
     {
