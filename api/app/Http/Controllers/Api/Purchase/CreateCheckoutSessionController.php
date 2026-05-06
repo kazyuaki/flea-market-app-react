@@ -16,7 +16,15 @@ class CreateCheckoutSessionController extends Controller
         int $itemId,
         CheckoutService $checkoutService,
     ): JsonResponse {
-        $checkoutUrl = $checkoutService->createSession($request->user(), $itemId);
+        $validated = $request->validate([
+            'payment_method' => ['required', 'string', 'in:card,konbini'],
+        ]);
+
+        $checkoutUrl = $checkoutService->createSession(
+            $request->user(),
+            $itemId,
+            $validated['payment_method'],
+        );
 
         return response()->json([
             'checkout_url' => $checkoutUrl,

@@ -20,8 +20,8 @@ export const PurchaseSummary = ({
         <div className="flex justify-between gap-4 pt-4">
           <span className="text-lg text-gray-600">支払い方法</span>
           <span className="text-xl font-semibold">
-            {paymentMethod === "1" && "コンビニ"}
-            {paymentMethod === "2" && "カード"}
+            {paymentMethod === "konbini" && "コンビニ"}
+            {paymentMethod === "card" && "カード"}
           </span>
         </div>
       </div>
